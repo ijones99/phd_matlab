@@ -1,0 +1,67 @@
+% get settings file
+stimCellName = 'stim_cell_04';
+dirName = sprintf('log_files/%s/',stimCellName); 
+out = {};
+out.configs_stim_volt = merge_settings_files(dirName);
+flistAll = print_stim_settings_data(out.configs_stim_volt, 'stimType', ...                        
+    'stimCh', 'flist' );
+
+%% Convert files and load DAC info
+fileName = 'neur_stim_volt_n_02'; 
+
+if exist(fileName, 'file')
+    junk = input('file exists!');
+end
+
+fileInd = 7;
+for m = 1
+    flist = {}; flist{1} = flistAll{fileInd};
+    cell2mat(out.configs_stim_volt.stimCh);
+    %
+    doPreFilter = 0;
+    % convert file
+    recFreqMsec = 2e1;
+    
+    out.run_name = stimCellName;
+    out.flist = flistAll;
+    out = add_field_to_structure(out,'configs_stim_light', out.configs_stim_volt);
+    out = add_field_to_structure(out,'dir_log_files_stim_light', dirName);
+    
+    for i=1:length(flist)
+        if ~exist(strrep(flist{i},'.ntk','.h5'))
+            mysort.mea.convertNTK2HDF(flist{i},'prefilter', doPreFilter);
+        else
+            fprintf('Already converted.\n');
+        end
+        fprintf('progress %3.0f\n', 100*i/length(flist));
+    end
+    % load h5 file
+    mea1 = mysort.mea.CMOSMEA(strrep(flist{1},'.ntk','.h5'), 'useFilter', 0, 'name', 'Raw');
+    out.channel_nr = mea1.getChannelNr;
+    out.el_idx = mea1.MultiElectrode.getElectrodeNumbers;
+    elPos = mea1.MultiElectrode.getElectrodePositions;
+    % mea1{1}.getChannelNr
+    out = add_field_to_structure(out,'channel_nr', mea1.getChannelNr);
+    out = add_field_to_structure(out,'x', elPos(:,1)');
+    out = add_field_to_structure(out,'y', elPos(:,2)');
+    % load dac info
+    ntkExtractedFieldsName = strrep(strrep(flist{1},'.stream','_extract_fld'),'.ntk','.mat');
+    if ~exist(ntkExtractedFieldsName,'file')
+        ntkOut = load_field_ntk(flist{1}, {'dac1', 'dac2'});
+        save(ntkExtractedFieldsName,'ntkOut');
+    else
+        load(ntkExtractedFieldsName)
+    end
+    out = add_field_to_structure(out,'dac1', ntkOut.dac1);
+    out = add_field_to_structure(out,'dac2', ntkOut.dac2);
+    
+    if sum(diff(ntkOut.dac2+ntkOut.dac1)) == 0
+        phaseType = 'Opposed';
+    else
+        phaseType = 'Same';
+    end
+    
+    out = add_field_to_structure(out,'configs_stim_light.stim_phase_type', phaseType);
+    
+    save(sprintf('%s.mat', fileName),'out');
+end

@@ -1,0 +1,41 @@
+function S = process_ds_rcg_data(timestamps, frameno, varargin)
+P.angle = 1;
+P.barHeight = 1;
+P.velocity = 1;
+P.brightness = 1;
+P.repeats = 1;
+P = mysort.util.parseInputs(P, varargin, 'error');
+
+% get start and stop times of stimuli
+acqRate = 2e4;
+interStimIntervalSec=.2;
+stimFramesTsStartStop = get_stim_start_stop_ts(frameno, interStimIntervalSec);
+startStopTimes = reshape(stimFramesTsStartStop,2,5)'; % columns: start / stop
+
+i=1;
+P.repeatTimestamps={};
+for iAngle = P.angle
+    for iBarHeight = P.barHeight
+        for iVelocity = velocity
+            for iBrightness = brightness
+                for iRepeats = repeats
+                    
+                    P.stimulus(i) = [iAngle iBarHeight iVelocity iBrightness iRepeats];
+                    P.repeatTimestamps{i} = select_spiketrain_epoch(timeStamps, startTime, stopTime);
+
+                    i=i+1;
+                end
+            end
+        end
+    end
+end
+
+
+
+
+
+
+
+
+
+end

@@ -1,0 +1,72 @@
+function y=load_params(x, varargin)
+
+y=x; 
+
+meas_params=0;
+chip_params=0;
+
+
+for i=1:size(varargin,2)
+    e=varargin{i};
+    if ischar(e)
+        if strcmp(char(e), 'recfile')
+            meas_params=1;
+        end
+        if strcmp(char(e), 'chip')
+            chip_params=1;
+        end
+        if strcmp(char(e), 'all')
+            meas_params=1;
+            chip_params=1;
+        end
+        
+    end
+end
+
+
+if meas_params
+    pathstr=pwd;
+    param_p=[pathstr '/rec_params/'];
+    
+    y.recfile_param=[];
+    
+    rec_param_ending='';
+    if evalin('caller', 'exist(''rec_param_cur_ending'', ''var'')')
+        rec_param_ending=evalin('caller', 'rec_param_cur_ending');
+    end
+    
+    
+    if isfield(y,'fname')
+        [pathstr, name, ext, versn] = fileparts(y.fname);
+        [pathstr, name, ext, versn] = fileparts(name);
+        param_f=[param_p 'param_' name rec_param_ending '.mat'];
+        fprintf('check for file: %s\n', param_f)
+        if exist(param_f, 'file')
+           load(param_f, '-mat')
+           y.recfile_param=param;
+           fprintf('loaded recording analysing parameters from file %s\n', param_f)
+        end
+    else
+        warning('hidens:whatever', 'trying to load measurement parameters without specifing a file name')
+    end
+end
+
+if chip_params
+    p=which('load_params');
+    [pathstr, name, ext, versn] = fileparts(p);
+    
+    param_p=[pathstr '/chip_params/'];
+    y.chip_param=[];
+    
+    if isfield(y,'chipid')
+        param_f=sprintf('%schipparam%03d.mat', param_p, y.chipid);
+        fprintf('check for file: %s\n', param_f)
+        if exist(param_f, 'file')
+           load(param_f, '-mat')
+           y.chip_param=param;
+           fprintf('loaded chip parameters from file %s\n', param_f)
+        end
+    else
+        warning('hidens:whatever', 'trying to load chip parameters without specifing a chip id')
+    end
+end

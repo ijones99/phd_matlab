@@ -1,0 +1,14 @@
+function [maxAmpEls]  =  find_max_amp_els(neuronsCollected, selNeur, noEls)
+% [maxAmpEls]  =  find_max_amp_els(neuronsCollected, selNeur, noEls)
+%  NEURONSCOLLECTED: 
+    maxVals = max(neuronsCollected{selNeur}.template.data,[], 1);
+    minVals = min(neuronsCollected{selNeur}.template.data,[], 1);
+    
+    templateAmps = maxVals - minVals;
+    
+    [B I] = sort(templateAmps, 'descend');
+    
+    maxAmpEls = neuronsCollected{selNeur}.el_idx([I(1:noEls)]);
+    
+
+end

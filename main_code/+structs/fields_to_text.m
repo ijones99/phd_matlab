@@ -1,0 +1,1 @@
+function fields_to_text(my

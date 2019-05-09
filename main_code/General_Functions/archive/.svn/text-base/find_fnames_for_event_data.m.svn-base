@@ -1,0 +1,10 @@
+function flist=find_fnames_for_event_data(event_data, el_idx)
+
+flist={};
+
+for i=1:length(event_data.event_map.fname)
+    if any(event_data.event_map.ts{el_idx+1}>=event_data.event_map.finfo{i}.first_frame_no & event_data.event_map.ts{el_idx+1}<=event_data.event_map.finfo{i}.last_frame_no)
+        flist{end+1}=event_data.event_map.fname{i};
+    end
+end
+

@@ -1,0 +1,69 @@
+function generate_flist(flist_name)
+
+%GENERATE_FLIST generates a simple flist from all files in ../proc/Trace*
+%   
+%   The filenames are sorted like: ls -rt
+%   Which means newest file at the bottom
+%
+%
+%   GENERATE_FLIST
+%       Creates a flist with the default name 'flist.m'. If such a file
+%       already exists, an other name will be choosen (see below).
+%
+%   GENERATE_FLIST( flist_name )
+%       Creates a flist with the specified name. If a list with this
+%       name already exists, a number gets added to the name at the end.
+%       flist_name_0. The number is choosen such that it will never
+%       override an existing file.
+%
+
+if (nargin == 0)
+    flist_name = 'flist.m';
+end
+
+% if there is no .m ending, at it
+if ( isempty( regexp(flist_name, '.m') ) )
+   flist_name = [flist_name '.m']; 
+    
+end
+%% Test the file name for flist
+%  If this flist already exists, add a _1, _2 etc to the name
+if ( exist(flist_name) == 2 )
+    num = regexp(flist_name,'(.+)_([0-9]+).m','tokens' )
+    if ( ~isempty(num) )
+        % there is a file with this name and it has already a number
+        % this means, use this filename and increment the number
+        flist_name = [num{1}{1} '_' num{1}{2}+1]
+    else
+        %%
+        % there is a file with this name but it has not a number
+        % search for the next free number...
+        % add the next free number at the end of the filename
+        flist_name
+        base_name = regexp( flist_name, '(.+).m', 'tokens') 
+        all_existing_files = dir(['./' base_name{1}{1} '*'])
+        list    = cellfun( @(param) regexp(param,'(.+)_([0-9]+).m','tokens' ) , {all_existing_files(:).name},  'UniformOutput', false )
+        notempty_list = list(find(~cellfun( @isempty , list)))
+        if ( isempty (notempty_list) )
+            realnumbers = -1;
+        else
+            [numbers] =  cellfun( @(param) param{1}(2) , notempty_list);
+            realnumbers = cellfun(@str2num, numbers);
+        end
+        flist_name = [base_name{1}{1} '_' num2str(max(realnumbers)+1) '.m']
+    end
+end
+
+files = dir('../proc/Trace*');
+
+
+% to sort the struct array:
+[values, order] = sort([files(:).datenum]);
+sorted_files    = files(order);
+
+fid = fopen(flist_name, 'w');
+cellfun( @(fname) fprintf(fid,'flist{end+1}=''%s'';\n',fname), {sorted_files(:).name}, 'UniformOutput', false)
+fclose(fid);
+
+
+open ( [flist_name] )

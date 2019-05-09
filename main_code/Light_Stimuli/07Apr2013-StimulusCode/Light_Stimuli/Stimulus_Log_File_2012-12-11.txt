@@ -1,0 +1,4 @@
+------- Stimuli Presentation Log File, 2012-12-11 -------
+
+
+20121211T191825 (2012-12-11 19:18:25) - begin stimulus:StimParams_10_Wn100PerCheckerboard.mat

@@ -1,0 +1,5 @@
+function open_tutorial
+
+%OPEN_TUTORIAL  open overview of hidens tutorials in the html-browser
+
+open hidens_Tutorial.html

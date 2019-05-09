@@ -1,0 +1,428 @@
+function y=detect_valid_channels(x, quiet_mode)
+%
+% calculate thresholds
+% detect valid channels
+%
+
+% TODO: group arrays *_broken, *_limited, etc. in one single matrix 
+% (one for each test). Example: remove(test_index), detected(test_index),
+% etc...
+
+% Options: set to zero if you don't want to plot
+plot_detected_ok = 1;
+plot_valid_channels = 1;
+plot_notvalid_channels = 1;
+
+% Modify a copy of the input NTK struct x
+y=x;
+
+% A new value for thr_base_scale was saved to file?
+saved=0;
+
+% Take a new threshold base scale from optional input argument
+%if (nargin > 2)
+%    if (y.recfile_param.thr_base_scale ~= new_thr_base_scale)
+%        y.recfile_param.thr_base_scale = thr_base_scale;
+%        save = 1;
+%    end
+%end
+
+% Logic values to select valid channels
+remove_broken = 1;
+remove_limited = 1;
+remove_small_std = 1;
+remove_close_border = 1;
+remove_large_median = 1;
+remove_large_std = 1;
+remove_at_rail = 1;
+
+%% Interactive Loop
+% Loop until results are accepted
+% They'll be automatically accepted in quite mode
+% Start by not accepting, so it's executed the first time
+accept=0;
+while not(accept)
+    
+    %% Prepare
+    % Take (again) all channels and parameters
+    if (saved)
+        y = load_params(x, 'recfile');
+    end
+    
+    rec_param_cur_ending='';
+    if evalin('caller', 'exist(''rec_param_cur_ending'', ''var'')')
+        rec_param_cur_ending=evalin('caller', 'rec_param_cur_ending');
+    end
+    
+    
+    % Default values
+    margin = 4; % x * std (median based)
+    vari_std = 5.5;
+    vari_m = 4.0;
+    
+    if (isfield(y.recfile_param, 'thr_base_scale'))
+        thr_scale = y.recfile_param.thr_base_scale;
+    else
+        thr_scale = 1;
+    end
+    
+    % Calculate std and median only a (temporal) subset of the samples
+    s_step = max([1 size(y.sig,1)/25000]);
+    s_vect = floor(1:s_step:size(y.sig,1));
+    
+    y.std=std(x.sig(s_vect,:))*thr_scale;
+    y.median_thr=median(abs(x.sig(s_vect,:)))/0.6745*thr_scale; % ref Quiroga2004, Neural Computing
+    y.thr_base=max([y.median_thr ;max(abs(x.sig(s_vect,:)))/20])*thr_scale;
+    
+    broken_channels=[];
+    if isfield(y, 'chip_param')
+        if isfield(y.chip_param, 'broken_channels')
+            broken_channels=[y.chip_param.broken_channels];
+        end
+    end
+    %channels with zeros can be dropped
+    %broken_channels=[broken_channels y.channel_nr(histc(y.sig,0)>0)];
+      
+    if isfield(y.recfile_param, 'limit_chs')
+        chs_limited=y.recfile_param.limit_chs;
+    else
+        chs_limited=y.channel_nr;
+    end
+    
+    %% Execute detection tests
+    detected_broken = [];
+    detected_limited = [];
+    detected_small_std = [];
+    detected_close_border = [];
+    detected_large_median = [];
+    detected_large_std = [];
+    detected_at_rail = [];
+    
+    % Remove values below x uV and brocken channels
+    lower_lim = 0.6;  % [uV]
+    for i=1:size(y.sig,2)
+        if (y.std(i) > lower_lim && y.thr_base(i) > lower_lim)
+            if find(broken_channels==y.channel_nr(i))
+                detected_broken = [detected_broken i];
+            elseif not(any(chs_limited==y.channel_nr(i)))
+                detected_limited = [detected_limited i];
+            end
+        else
+            detected_small_std = [detected_small_std i];
+        end
+    end  
+    
+    % Remove outliers
+    m_std = mean(y.std);
+    s_std = std(y.std);
+    m_m = mean(y.median_thr);
+    s_m = std(y.median_thr);
+    for i = 1:size(y.sig,2)
+        if (abs(y.std(i)-m_std) < vari_std*s_std || size(y.sig,2) < 5)
+            if (abs(y.median_thr(i)-m_m) < vari_m*s_m || size(y.sig,2) < 5)
+                if not(y.prehp_mean(i) > m_m*margin && y.prehp_mean(i) < (y.lsb*255-m_m*margin))
+                    detected_close_border = [detected_close_border i];
+                end
+            else
+                detected_large_median = [detected_large_median i];
+            end
+        else
+            detected_large_std = [detected_large_std i];
+        end
+    end
+    
+    if isfield(y,'at_rail_percentage')
+        for i = 1:size(y.sig,2)
+            if (y.at_rail_percentage(i)>0.05)    %removing all the channels that were at rail for more than 5% of all samples
+                detected_at_rail = [detected_at_rail i];
+            end
+        end
+    end
+    
+    % Tests finished, get channels that passed all tests
+    all_channels = 1:size(y.sig,2); % FIXME: OK???
+    detected_ok = all_channels;
+    detected_ok = setdiff(detected_ok, detected_broken);
+    detected_ok = setdiff(detected_ok, detected_limited);
+    detected_ok = setdiff(detected_ok, detected_small_std);
+    detected_ok = setdiff(detected_ok, detected_close_border);
+    detected_ok = setdiff(detected_ok, detected_large_median);
+    detected_ok = setdiff(detected_ok, detected_large_std);
+    detected_ok = setdiff(detected_ok, detected_broken);
+    detected_ok = setdiff(detected_ok, detected_at_rail);
+    
+%Too much output for spike sorter....    
+%     detected_ok     
+%     detected_broken
+%     detected_limited
+%     detected_small_std
+%     detected_close_border
+%     detected_large_median
+%     detected_large_std
+%     detected_at_rail
+    
+    
+    %% Set channels' detected values:
+    % 0: passed all tests
+    % 1: broken
+    % 2: limited
+    % 3: small std
+    % 4: close border
+    % 5: large median
+    % 6: large std
+    % 7: detected_at_rail
+    % FIXME: to speed up just a little bit, you may set the detected values
+    % directly in above test, and avoiding creating the detected_* arrays.
+    % In that case, precedence would be given to the last test
+    % (be sure to not set validity to 0 if already different from 0).
+    % However the approach with detected_* is probably preferable.
+    % TODO: make a better printing showing all detected tests failures for
+    % each channel (if to be removed).
+    detected = zeros(size(y.sig,2), 1);
+    valid = ones(size(y.sig,2), 1);
+    for i = 1:size(y.sig,2)
+        if (ismember(i, detected_broken))
+            detected(i) = 1;
+            if (remove_broken)
+                fprintf(1,'remove channel %d (in broken_channel list)\n', y.channel_nr(i));
+                valid(i) = 0;
+            end
+        elseif (ismember(i, detected_limited))
+            detected(i) = 2;
+            if (remove_limited)
+                fprintf(1,'remove channel %d (not in limited channels list)\n', y.channel_nr(i));
+                valid(i) = 0;
+            end
+        elseif (ismember(i, detected_small_std))
+            detected(i) = 3;
+            if (remove_small_std)
+                fprintf(1,'remove channel %d (too small std)\n', y.channel_nr(i));
+                valid(i) = 0;
+            end
+        elseif (ismember(i, detected_close_border))
+            detected(i) = 4;
+            if (remove_close_border)
+                fprintf(1,'remove channel %d (too close to border)\n', y.channel_nr(i));
+                valid(i) = 0;
+            end
+        elseif (ismember(i, detected_large_median))
+            detected(i) = 5;
+            if (remove_large_median)
+                fprintf(1,'remove channel %d (too large std(median))\n', y.channel_nr(i));
+                valid(i) = 0;
+            end
+        elseif (ismember(i, detected_large_std))
+            detected(i) = 6;
+            if (remove_large_std)
+                fprintf(1,'remove channel %d (too large std)\n', y.channel_nr(i));
+                valid(i) = 0;
+            end	
+        elseif (ismember(i, detected_at_rail))
+            detected(i) = 7;
+            if (remove_at_rail)
+                fprintf(1,'remove channel %d (too long at rail)\n', y.channel_nr(i));
+                valid(i) = 0;
+            end	
+        end
+    end
+ 
+    %% Set valid channels
+    valid_channels = all_channels(find(valid)); % get index of nonzero elements in valid vector
+    disp(sprintf('Number of valid channels: %d', length(valid_channels)));
+    
+    
+    %% Set not valid channels
+    % NOTE: Color precedence in the signal plotter is given to tests that 
+    % are checked first.
+    % This means that e.g. if detected_broken are added to
+    % notvalid before detected_small_std, a channel that did not pass both
+    % tests will have the color of detected_broken.
+    valid_ok = detected_ok; % redundant but used for notation consistency
+    valid = valid_ok;
+    notvalid = [];
+    if remove_broken
+        notvalid_broken = setdiff(detected_broken, notvalid);
+        notvalid = [notvalid, notvalid_broken];
+        valid_broken = [];
+    else
+        valid_broken = setdiff(detected_broken, valid);
+        valid = [valid, valid_broken];
+        notvalid_broken = [];
+    end
+    if remove_limited
+        notvalid_limited = setdiff(detected_limited, notvalid);
+        notvalid = [notvalid, notvalid_limited];
+        valid_limited = [];
+    else
+        valid_limited = setdiff(detected_limited, valid);
+        valid = [valid, valid_limited];
+        notvalid_limited = [];
+    end
+    if remove_small_std
+        notvalid_small_std = setdiff(detected_small_std, notvalid);
+        notvalid = [notvalid, notvalid_small_std];
+        valid_small_std = [];
+    else
+        valid_small_std = setdiff(detected_small_std, valid);
+        valid = [valid, valid_small_std];
+        notvalid_small_std = [];
+    end
+    if remove_close_border
+        notvalid_close_border = setdiff(detected_close_border, notvalid);
+        notvalid = [notvalid, notvalid_close_border];
+        valid_close_border = [];
+    else
+        valid_close_border = setdiff(detected_close_border, valid);
+        valid = [valid, valid_close_border];
+        notvalid_close_border = [];
+    end
+    if remove_large_median
+        notvalid_large_median = setdiff(detected_large_median, notvalid);
+        notvalid = [notvalid, notvalid_large_median];
+        valid_large_median = [];
+    else
+        valid_large_median = setdiff(detected_large_median, valid);
+        valid = [valid, valid_large_median];
+        notvalid_large_median = [];
+    end
+    if remove_large_std
+        notvalid_large_std = setdiff(detected_large_std, notvalid);
+        notvalid = [notvalid, notvalid_large_std];
+        valid_large_std = [];
+    else 
+        valid_large_std = setdiff(detected_large_std, valid);
+        valid = [valid, valid_large_std];
+        notvalid_large_std = [];
+    end
+    if remove_at_rail
+        notvalid_at_rail = setdiff(detected_at_rail, notvalid);
+        notvalid = [notvalid, notvalid_at_rail];
+        valid_at_rail = [];
+    else 
+        valid_at_rail = setdiff(detected_at_rail, valid);
+        valid = [valid, valid_at_rail];
+        notvalid_at_rail = [];
+    end
+    
+    % Automatically accept to end loop
+    accept=1;
+       
+    %% Interact (and do not accept if asked to)
+    if not(quiet_mode)
+        
+        % Prepare plots        
+        tline = 1:min([4*y.sr size(y.sig,1)]);
+        shift = 10*mean(y.std) / thr_scale;
+        
+        disp('plotting valid channels...')
+        % NOTE: signalplotter will not allow to have empty list of channels
+        % to be plotted (and will plot some anyhow).
+        % So we need to avoid calling signalplotter when a detected_* list
+        % is empty
+        
+        % Plot valid channels
+        
+        hfig_valid=[];
+        hfig_notvalid=[];
+        
+        l_color=lines(8);
+        if (plot_valid_channels)
+            %disp('Plotting valid channels...')
+            valid_colors = [];
+            valid_colors = [valid_colors; l_color(1*ones(length(valid_ok),1),:)];
+            valid_colors = [valid_colors; l_color(2*ones(length(valid_broken),1),:)];
+            valid_colors = [valid_colors; l_color(3*ones(length(valid_limited),1),:)];
+            valid_colors = [valid_colors; l_color(4*ones(length(valid_small_std),1),:)];
+            valid_colors = [valid_colors; l_color(5*ones(length(valid_close_border),1),:)];
+            valid_colors = [valid_colors; l_color(6*ones(length(valid_large_median),1),:)];
+            valid_colors = [valid_colors; l_color(7*ones(length(valid_large_std),1),:)];
+            valid_colors = [valid_colors; l_color(8*ones(length(valid_at_rail),1),:)];
+            hfig_valid = figure;
+            title('Valid channels');
+            hold on;
+            signalplotter(y, 'zeroMean', 'max_samples', size(y.sig,1), 'chidx',valid, 'Color', valid_colors);
+        end
+        
+        % Plot NOT valid channels
+        if (plot_notvalid_channels) && ~isempty(notvalid)
+            %disp('Plotting valid channels...')
+            notvalid_colors = [];
+            notvalid_colors = [notvalid_colors; l_color(2*ones(length(notvalid_broken),1),:)];
+            notvalid_colors = [notvalid_colors; l_color(3*ones(length(notvalid_limited),1),:)];
+            notvalid_colors = [notvalid_colors; l_color(4*ones(length(notvalid_small_std),1),:)];
+            notvalid_colors = [notvalid_colors; l_color(5*ones(length(notvalid_close_border),1),:)];
+            notvalid_colors = [notvalid_colors; l_color(6*ones(length(notvalid_large_median),1),:)];
+            notvalid_colors = [notvalid_colors; l_color(7*ones(length(notvalid_large_std),1),:)];
+            notvalid_colors = [notvalid_colors; l_color(8*ones(length(notvalid_at_rail),1),:)];
+          
+            hfig_notvalid = figure;
+            title('Not Valid channels');
+            hold on;
+            signalplotter(y, 'zeroMean', 'max_samples', size(y.sig,1), 'chidx',notvalid, 'Color', notvalid_colors);
+ 
+            
+%             if remove_broken && not(isempty(detected_broken))
+%                 signalplotter(y, 'zeroMean', 'max_samples', size(y.sig,1), 'chidx', detected_broken, 'text', 'none', 'Color', plot_colors{2});
+%             end
+%             if remove_limited && not(isempty(detected_limited))
+%                 signalplotter(y, 'zeroMean', 'max_samples', size(y.sig,1), 'chidx', detected_limited, 'text', 'none', 'Color', plot_colors{3});
+%             end
+%             if remove_small_std && not(isempty(detected_small_std))
+%                 signalplotter(y, 'zeroMean', 'max_samples', size(y.sig,1), 'chidx', detected_small_std, 'text', 'none', 'Color', plot_colors{4});
+%                 %plot((tline-1)/y.sr, y.sig(tline, detected_small_std), plot_colors{2});
+%             end
+%             if remove_close_border && not(isempty(detected_close_border))
+%                 signalplotter(y, 'zeroMean', 'max_samples', size(y.sig,1), 'chidx', detected_close_border, 'text', 'none', 'Color', plot_colors{5});
+%                 %plot((tline-1)/y.sr, y.sig(tline, detected_close_border), plot_colors{2});
+%             end
+%             if remove_large_median && not(isempty(detected_large_median))
+%                 signalplotter(y, 'zeroMean', 'max_samples', size(y.sig,1), 'chidx', detected_large_median, 'text', 'none', 'Color', plot_colors{6});
+%             end
+%             if remove_large_std && not(isempty(detected_large_std))
+%                 signalplotter(y, 'zeroMean', 'max_samples', size(y.sig,1), 'chidx', detected_large_std, 'text', 'none', 'Color', plot_colors{7});
+%             end	
+%             if remove_at_rail && not(isempty(detected_at_rail))
+%                 signalplotter(y, 'zeroMean', 'max_samples', size(y.sig,1), 'chidx', detected_at_rail, 'text', 'none', 'Color', plot_colors{7});
+%             end	
+
+        end
+        
+        disp('...done plotting')
+            
+        % Prompt
+        % TODO: Could be expanded to change remove_* values 
+        % (e.g. to include close to border channels to valid ones)
+        reply = input('Accept? Y/N [Y]: ', 's');
+        if isempty(reply)
+            reply = 'Y';
+        end
+        if reply ~= 'Y'
+            def = thr_scale;
+            quest=sprintf('Set new global threshold scale factor [%f]: ', def);
+            reply = input(quest);
+            if isempty(reply)
+                reply = def;
+            end
+            y.recfile_param.thr_base_scale=reply;
+            save_params(y, 'recfile');
+            saved=1;
+            accept=0; % Continue to loop
+        end
+        
+        % Close figures
+        
+        if ishandle(hfig_notvalid)
+            close(hfig_notvalid);
+        end
+        if ishandle(hfig_valid)
+            close(hfig_valid);
+        end
+        
+    end % if not(quite_mode)
+end % while not(accept)
+
+
+%% Select valid channels
+y = select_channels(y, valid_channels);
+
+

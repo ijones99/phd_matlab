@@ -1,0 +1,15 @@
+%% Matlab centering on MEA array
+
+
+x_dist=16.2;
+y_dist=19.588;
+
+
+numBlocksX = -0.5;
+numBlocksY = -0.5; 
+
+
+moveX = numBlocksX*x_dist;
+moveY = numBlocksY*y_dist;
+
+fprintf('Move %d in x direction, %d in y direction.\n', moveX, moveY);

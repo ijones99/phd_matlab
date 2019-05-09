@@ -1,0 +1,6 @@
+function y=hidens_emulator_end()
+
+ntk_end.pos=int64(-1);
+y=ntk_stream(ntk_end,0);
+
+

@@ -1,0 +1,30 @@
+function frame = make_whitenoise_frame(brightness, contrast, edgeLengthSize, numPixelsEdge, varargin)
+
+varRange = [];
+
+if ~isempty(varargin)
+    for i=1:length(varargin)
+        % set range of variable values
+        if strcmp(varargin{i},'var_range')
+            varRange = varargin{i+1}; % [low high]
+        end
+    end
+end
+
+% Create square frame with the desired random distribution
+frame = round(normrnd(brightness,contrast,numPixelsEdge, numPixelsEdge));
+
+% clip top and bottom if specified
+if ~isempty(varRange)
+    frame(find(frame>255))=varRange(1);
+    frame(find(frame<0))=varRange(2);
+end
+
+
+frame = kron(frame,ones(round(edgeLengthSize/numPixelsEdge)));
+
+
+
+
+
+end

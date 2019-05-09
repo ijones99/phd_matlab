@@ -1,0 +1,33 @@
+function [out1 out2] = find_common_electrodes(n1,n2)
+
+%FIND_COMMON_ELECTRODES  Get common electrodes for two neurons or ntk2-structures
+%
+%[els_to_use1 els_to_use2] = FIND_COMMON_ELECTRODES(S1,S2)  for two structures
+%   S1 and S2 with electrodes defined in their .el_idx-entry, this function
+%   looks for the common electrodes and gives out the indices with the common
+%   electrodes.
+
+
+a=n1.el_idx;
+b=n2.el_idx;
+
+common_els_in_n1=1:length(a);
+common_els_in_n2=[];
+
+for i=1:length(a)                   % faster(?): use intersect(a,b) 
+    
+    ind=find(a(i)==b);
+    
+    if isempty(ind)
+        common_els_in_n1(i)=-1;           % filter-channels that are valid
+    else
+        common_els_in_n2(end+1)=ind;       % now use this every time adressing an NTK-entry
+    end
+end
+
+common_els_in_n1(common_els_in_n1==-1)=[];
+
+out1=common_els_in_n1;
+out2=common_els_in_n2;
+
+

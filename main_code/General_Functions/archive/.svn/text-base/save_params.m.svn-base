@@ -1,0 +1,106 @@
+function save_params(x, varargin)
+%
+% call function with an ntk struct including params...
+%
+% 
+
+
+meas_params=0;
+chip_params=0;
+
+
+for i=1:size(varargin,2)
+    e=varargin{i};
+    if ischar(e)
+        if strcmp(char(e), 'recfile')
+            meas_params=1;
+        end
+        if strcmp(char(e), 'chip')
+            chip_params=1;
+        end
+        if strcmp(char(e), 'all')
+            meas_params=1;
+            chip_params=1;
+        end
+        
+    end
+end
+
+
+if meas_params
+    pathstr=pwd;
+    param_p=[pathstr '/rec_params/'];
+    
+    rec_param_ending='';
+    if evalin('caller', 'exist(''rec_param_cur_ending'', ''var'')')
+        rec_param_ending=evalin('caller', 'rec_param_cur_ending');
+    end
+    
+    if isfield(x,'fname')
+        [pathstr, name, ext, versn] = fileparts(x.fname);
+        [pathstr, name, ext, versn] = fileparts(name);
+        param_f=[param_p 'param_' name rec_param_ending '.mat'];
+        
+        if not(exist(param_p, 'dir'))
+            mkdir(param_p);
+        end
+        
+        if isfield(x,'recfile_param')
+            param= x.recfile_param;
+            if exist(param_f, 'file')
+                save(param_f, 'param', '-append');
+            else
+                save(param_f, 'param');
+            end
+            fprintf('saved recording analysing parameters to file %s\n', param_f)
+        else
+             warning('hidens:whatever', 'trying to save rec parameters without specifing it')
+        end
+    else
+        warning('hidens:whatever', 'trying to load rec parameters without specifing a file name')
+    end
+end
+
+if chip_params
+    p=which('load_params');
+    [pathstr, name, ext, versn] = fileparts(p);
+    
+    param_p=[pathstr '/chip_params/'];
+    
+    if isfield(x,'chipid')
+        param_f=sprintf('%schipparam%03d.mat', param_p, x.chipid);
+        param_xml=sprintf('%schipparam%03d.xml', param_p, x.chipid);
+        file_xml= fopen('param_xml','w');
+        if isfield(x,'chip_param')
+            param=x.chip_param;
+            xml = struct2xml(param);
+            
+          
+           
+            if exist(param_f, 'file')
+                save(param_f, 'param', '-append');
+                fprintf(file_xml, xml); 
+%                 Need to check how to append an xml file......
+            else
+                save(param_f, 'param');
+                fprintf(file_xml, xml);
+            end
+            fprintf('saved chip parameters to file %s\n', param_f)
+            fprintf('saved chip parameters to file %s\n', param_xml)
+        else
+            warning('hidens:whatever', 'trying to save chip parameters without specifing it')
+        end
+    else
+        warning('hidens:whatever', 'trying to load chip parameters without specifing a chip id')
+    end
+end
+
+
+
+
+
+
+
+
+
+

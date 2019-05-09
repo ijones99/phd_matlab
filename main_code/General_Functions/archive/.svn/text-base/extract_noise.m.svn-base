@@ -1,0 +1,93 @@
+function y=extract_noise(x, varargin)
+
+%EXTRACT_NOISE  extract noise signal by removing events from raw data and
+%calculate noise statistics
+%
+%   NTK2 = EXTRACT_NOISE(NTK2)  The noise signal (raw signal without spikes) is
+%   stored in NTK2.noise_sig.
+%   Additional noise statistic values:         - NTK2.noise_std
+%                                              - NTK2.noise_median_thr
+%                                              - NTK2.noise_thr_base
+%   are stored in the output ntk2-structure.
+%
+%   NTK2 = EXTRACT_NOISE(...,'thr_f',THR_F)  sets the threshold value for
+%   event detection to THR_F. Per default, THF_F = 4 is taken.
+%
+%   NTK2 = EXTRACT_NOISE(...,'continuous')  Takes the longest spike-less chunk
+%   of the signal as noise. noise_sig is therefore usually short.
+%   
+%   See also simple_event_cut, detect_valid_channels
+
+% Author: jaeckeld
+
+
+thr_f=4;
+continuous_noise=0;
+
+i=1;
+while i<=length(varargin)
+    if not(isempty(varargin{i}))
+        if strcmp(varargin{i}, 'thr_f')
+            i=i+1;
+            img=varargin{i}; 
+         elseif strcmp(varargin{i}, 'continuous')
+             continuous_noise=1;    
+        else
+            fprintf('plot_neurons: unknown argument at pos %d\n', 1+i);
+        end
+    end
+    i=i+1;
+end
+
+% do event_detction
+
+pretime=16;     % set automatically?
+posttime=16;
+
+x=detect_valid_channels(x,1);
+evts=simple_event_cut(x, thr_f, pretime, posttime);
+
+% prepare indices of the spikes
+
+ts_idx=[];
+sig=x.sig;
+
+for i=1:length(evts.ch)
+
+    ts_idx=[ts_idx evts.ts_begin(i):evts.ts_end(i)];
+    
+end
+
+
+
+% if desired, find longest noise chunk without interruption:
+
+if continuous_noise
+    sor=sort(ts_idx);
+    [a,b]=max(diff(sor));
+
+    n_idx=sor(b):sor(b+1);  % idx of longest spikeless chunk
+    sig=sig(n_idx,:);
+else
+    sig(ts_idx,:)=[];   % remove spiking times
+end
+
+% now some noise statistics
+
+noise_std=std(sig);
+noise_median_thr=median(abs(sig))/0.6745; % ref Quiroga2004, Neural Computing
+noise_thr_base=max([noise_median_thr ;max(abs(sig))/20]);
+ 
+
+
+
+y=x;
+y.noise_sig=sig;
+y.noise_std=noise_std;
+y.noise_median_thr=noise_median_thr;
+y.noise_thr_base=noise_thr_base;
+
+
+
+
+

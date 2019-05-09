@@ -1,0 +1,149 @@
+
+
+cd ~/HiDens/recordings/acute_slices/Slices_18Dec2006/Matlab
+
+clear all
+
+%% generate file lists
+
+flist=cell(0,0);
+%flist_seq6x10_um_10er_v1
+%flist_seq6x10_um_10er_v2
+%flist_exp3
+flist_exp4
+%flist_11x11seq
+
+%% event_cnt
+event_data=hidens_load_events(flist, 45);
+hidens_generate_event_map(event_data, 'freqthr', 7.5, 'bgimg', 'reg_pics/id81.jpg', 'saveas', 'eventmap.jpg');
+
+%% do spike sorting
+
+%process raw data
+for i=1:length(flist)
+    hidens_neuro_process(flist{i}, 4.5, 'ica', 'save');
+end
+
+
+%% distributed spike sorting
+jm = findResource('scheduler','configuration','jobmanager');
+p = {'/home/frey/projects/HiDens/MatLab', ...
+'/home/frey/projects/HiDens/MatLab/ICA/FastICA_25', ...
+'/home/frey/soft/neurotalker/resource/matlab/mex_ntkparser'};
+j = createJob(jm);
+set(j, 'PathDependencies', p)
+for i=1:4 %length(flist)
+    createTask(j, @hidens_neuro_process, 1, {flist{i}, 4.5, 'ica', 'save'});
+end
+submit(j);
+waitForState(j)
+results = getAllOutputArguments(j)
+
+
+%% load sorted neurons
+
+%load neurons
+nnn=[];
+for i=1:length(flist)
+    nnn=hidens_load_neurons(flist{i}, nnn);
+end
+%fixme: do mean(nnn.thr_base{i} better!!!
+nnn.neurons=merge_neurons(nnn.neurons, mean(nnn.thr_base{1}), 1);
+
+%do something with neurons
+for i=1:length(nnn.neurons)
+    nnn.neurons{i}.pos=triangulate_neuron(nnn.neurons{i});
+end
+
+%load image
+imfname=['reg_pics/' 'slice.jpg'];
+nnn.bgimage=imread(imfname);
+%bgimage=im2uint8(im2double(bgimage)/2+0.5);
+
+psfname=['../Figures/' pdfn '.ps'];
+
+plot_neuron_pdf(psfname, nnn, footprint_plots,event_plots)
+
+
+%% load raw data
+
+%plot some raw data
+ntk.fname=['../proc/' flist{1}];
+load_chunk_size=400000;
+ntk=ntk_stream(ntk,load_chunk_size);
+ntk.ntkavg.iirFactor=0.998;
+ntk.ntkavg.step=50;
+ntk2=ntk_stream_process(ntk);
+
+figure
+hold on
+for j=1:60
+plot(ntk2.x(j), ntk2.y(j), 'r.');
+text(ntk2.x(j),ntk2.y(j),num2str(j), 'HorizontalAlignment', 'Left', 'VerticalAlignment', 'Bottom', 'FontSize', 6, 'Color', [0.7 0.7 0.7]);
+end
+axis equal
+axis ij
+
+
+
+
+lcolor=lines(length(nnn.neurons));
+sel_neurons=[1 2 4];
+c=[55 43 57];
+
+
+figure
+hold on
+offset=250;
+
+for i=1:length(sel_neurons)
+    plot((0:(size(ntk2.sig,1)-1))/ntk2.sr, ntk2.sig(:,c(i))+offset*(i-1),'k')
+    [v vminpos]=min(nnn.neurons{sel_neurons(i)}.template(:,c(i)));
+    plot((nnn.neurons{sel_neurons(i)}.ts{1}(find(nnn.neurons{sel_neurons(i)}.ts{1}<size(ntk2.sig,1)))+vminpos-1)/ntk2.sr, ntk2.sig(nnn.neurons{sel_neurons(i)}.ts{1}(find(nnn.neurons{sel_neurons(i)}.ts{1}<size(ntk2.sig,1)))+vminpos-1,c(i))+offset*(i-1), '^', 'Color', lcolor(sel_neurons(i),:))
+end
+
+
+%% get all electrodes
+all=hidens_get_all_electrodes(1);
+
+
+%% select best separating
+hidens_demixing_filters
+hidens_select_best_separating
+hidens_save_neuropos(el_idx_x(ch_list),el_idx_y(ch_list),20,1, 'best_sep')
+
+
+%% create spike filter and load it
+nnn=[];
+nnn=hidens_load_neurons('Trace_id54_Mi26Jul2006_20h29m01_650.stream.ntk', nnn);
+hidens_create_spikefilter(nnn.neurons{1}.template, 'spikefilter2')
+spikefilter=hidens_load_spikefilter('spikefilter2');
+
+
+
+%% register images
+hidens_register_images('../Pics/*.jpg', 1, 'id81');
+
+
+%% Debug Parameters
+
+% reset field deletion
+
+clear global DEBUGPARAMS;
+global DEBUGPARAMS;
+
+DEBUGPARAMS.no_channel_weight=1;
+DEBUGPARAMS.no_ica_init_guess=1;
+DEBUGPARAMS.no_outlier_fix=1;
+DEBUGPARAMS.align_with_diff=1;
+DEBUGPARAMS.no_pca_before_clustering=1;
+DEBUGPARAMS.merging_with_shift=1;
+
+neurons=hidens_neuro_process(gntk_data1, 4.3, 'ica', 'pretime', 10, 'posttime', 28, 'minisi', 22, 'simul'); %,'interactive');
+eval=evaluate_algo_new(neurons,det_neur,det_data,neurons.time);
+
+
+
+
+
+

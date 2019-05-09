@@ -1,0 +1,174 @@
+function y=hidens_filter(ntk)
+
+% Apply band-pass filter on ntk signal. Part of hidens data processing.
+%  
+% either:
+%   ntk.hhp or ntkavg
+% and
+%   ntk.llp
+ 
+
+
+y=ntk;
+
+if not(isfield(ntk, 'filters'))
+    fprintf('can''t perform filtering\n');
+    return
+end
+
+if isempty(ntk.filters)
+    fprintf('can''t perform filtering\n');
+    return
+end
+
+
+
+%calc pre hp mean           %this is now done in ntk_stream_process
+%if size(y.sig,1)>0
+%    y.prehp_mean=mean(y.sig);
+%end
+
+%do bandpass if spec
+if isfield(y.filters, 'bbp')
+    fprintf('bandpass\n');
+    reset(y.filters.bbp);
+    y.filters.bbp.PersistentMemory=1;
+    m=mean( y.sig(1:min([1000 size(y.sig,1)]),:));   %first 50ms
+    y.filters.bbp.States=m([1 1],:); %2nd order bandpass (FIXME for others...)
+
+    chunk_size=5*y.sr;
+    chunk_pos=1;
+    cont=1;
+    while cont
+        if chunk_pos+chunk_size>size(y.sig,1)-200
+            t_chunk_t=chunk_pos:size(y.sig,1);
+            cont=0;
+        else
+            t_chunk_t=chunk_pos:(chunk_pos+chunk_size-1);
+        end
+        %filter(y.filters.bbp,y.sig(t_chunk_t,:)); %this fixes the
+        %filtering problem (2008b - 2009a) %changed filter generation, so
+        %this is no longer needed, anyway slows it down too much
+        y.sig(t_chunk_t,:)=filter(y.filters.bbp,y.sig(t_chunk_t,:));
+        fprintf('filtered chunk %d-%d\n', t_chunk_t(1), t_chunk_t(end));
+        chunk_pos=t_chunk_t(end)+1;
+    end
+    
+else
+    %do hp if spec
+    if isfield(y.filters, 'hhp')
+        %if hhp.PersistentMemory==0
+            %filter not settled yet
+            reset(y.filters.hhp);
+            y.filters.hhp.PersistentMemory=1;
+            %use first xsec to init filter
+            len=0.1*y.sr;
+            if size(y.sig,1)<len
+                len=size(y.sig,1);
+            end
+            fchunk=y.sig(1:len,:);
+            filtered=filter(y.filters.hhp,fchunk);
+            new_states=y.filters.hhp.States;
+            adj=1;
+            while adj>0.0005
+                disp('hp settling')
+                old_states=new_states;
+                filtered=filter(y.filters.hhp,fchunk);
+                new_states=y.filters.hhp.States;
+                adj=norm(new_states-old_states);
+            end
+        %end
+
+        chunk_size=5*y.sr;
+        chunk_pos=1;
+        cont=1;
+        while cont
+            if chunk_pos+chunk_size>size(y.sig,1)-200
+                t_chunk_t=chunk_pos:size(y.sig,1);
+                cont=0;
+            else
+                t_chunk_t=chunk_pos:(chunk_pos+chunk_size-1);
+            end
+            y.sig(t_chunk_t,:)=filter(y.filters.hhp,y.sig(t_chunk_t,:));
+            fprintf('filtered chunk %d-%d\n', t_chunk_t(1), t_chunk_t(end));
+            chunk_pos=t_chunk_t(end)+1;
+        end
+    elseif isfield(y.filters, 'ntkavg')
+        %do ntk-style hp filtering
+        if not(isfield(y.filters.ntkavg, 'iirFactor'))
+            y.filters.ntkavg.iirFactor=0.998; %default ntk value
+        end
+        if not(isfield(y.filters.ntkavg, 'zf'))
+            %final filter delays, equal avg at the end, resp used
+            %to initialize filters
+            y.filters.ntkavg.zf=mean( y.sig(1:min([1000 size(y.sig,1)]),:)); %mean of first 50ms
+        end
+        %do the hp filtering
+        b=1-y.filters.ntkavg.iirFactor;
+        a=[1 -y.filters.ntkavg.iirFactor];
+
+        chunk_size=5*y.sr;
+        chunk_pos=1;
+        cont=1;
+        while cont
+            if chunk_pos+chunk_size>size(y.sig,1)-200
+                t_chunk_t=chunk_pos:size(y.sig,1);
+                cont=0;
+            else
+                t_chunk_t=chunk_pos:(chunk_pos+chunk_size-1);
+            end
+            if isfield(y.ntkavg, 'step')
+                t_chunk_ts=t_chunk_t(1:y.filters.ntkavg.step:size(t_chunk_t,2));
+            else
+                t_chunk_ts=t_chunk_t;
+            end
+            [meansig y.filters.ntkavg.zf]=filter(b,a,y.sig(t_chunk_ts,:), y.filters.ntkavg.zf);
+            if isfield(y.filters.ntkavg, 'step')
+                exp=floor((0:size(t_chunk_t,2)-1)/y.filters.ntkavg.step)+1;
+                meansig=meansig(exp,:);
+            end
+            y.sig(t_chunk_t,:)=y.sig(t_chunk_t,:)-meansig;
+            fprintf('filtered chunk %d-%d\n', t_chunk_t(1), t_chunk_t(end));
+            chunk_pos=t_chunk_t(end)+1;
+        end
+
+    end
+
+
+    if isfield(y.filters, 'llp')
+        fprintf('lowpass\n');
+
+        chunk_size=5*y.sr;
+        chunk_pos=1;
+        cont=1;
+        while cont
+            if chunk_pos+chunk_size>size(y.sig,1)-200
+                t_chunk_t=chunk_pos:size(y.sig,1);
+                cont=0;
+            else
+                t_chunk_t=chunk_pos:(chunk_pos+chunk_size-1);
+            end
+            y.sig(t_chunk_t,:)=filter(y.filters.llp,y.sig(t_chunk_t,:));
+            fprintf('filtered chunk %d-%d\n', t_chunk_t(1), t_chunk_t(end));
+            chunk_pos=t_chunk_t(end)+1;
+        end
+
+    end
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

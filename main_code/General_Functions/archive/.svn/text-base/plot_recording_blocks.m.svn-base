@@ -1,0 +1,91 @@
+function plot_recording_blocks(flist, exp_name, varargin)
+
+%PLOT_RECORDING_BLOCKS(FLIST, exp_name)  plot the blocks that were recorded
+
+
+get_image=1;
+saveas='';
+save=1;
+nolegend=0;
+im=[];
+
+i=1;
+while i<=length(varargin)
+    if not(isempty(varargin{i}))
+        if strcmp(varargin{i}, 'dontgetimage')
+            get_image=0; 
+        elseif strcmp(varargin{i}, 'dontsave')
+            save=0;
+        elseif strcmp(varargin{i}, 'nolegend')
+            nolegend=1;
+        elseif strcmp(varargin{i}, 'saveas')
+            i=i+1;
+            saveas=varargin{i};
+        elseif strcmp(varargin{i}, 'image')
+            i=i+1;
+            im=varargin{i};
+        else
+            fprintf('unknown argument at pos %d\n', 2+i);
+        end
+    end
+    i=i+1;
+end
+
+ntk=initialize_ntkstruct(flist{1});
+
+if get_image && isempty(im)
+    imfname=['reg_pics/id' num2str(ntk.chipid) '.jpg'];
+    if exist(imfname, 'file')
+        im=imread(imfname);
+    end
+end
+ 
+if not(isempty(im))
+   image(im); hold on;
+end
+
+el=hidens_get_all_electrodes(ntk.version, 1);
+plot(el.x,el.y,'b.','Markersize',3);axis ij;axis equal;hold on;
+xlabel('\mum');ylabel('\mum');
+cmap=hsv(length(flist));
+
+cmap=hsv(length(flist));
+h=zeros(1, length(flist));
+hl=cell(1,length(flist));
+for i=1:length(flist)
+    ntk=initialize_ntkstruct(flist{i}, 'nofilters');
+    if not(ntk.eof)
+        [ntk2 ntk]=ntk_load(ntk, 2, 'nofiltering');
+        if(isfield(ntk2,'x'))
+            h(i)=plot(ntk2.x,ntk2.y,'o','Markersize',3,'Color',cmap(i,:));
+            hl{i}=['(' num2str(i) ') Gain: ' num2str(ntk2.gain, '%.1f')];
+            rectangle('Position',[min(ntk2.x),min(ntk2.y),max(ntk2.x)-min(ntk2.x),...
+                max(ntk2.y)-min(ntk2.y)],'LineWidth',1,'LineStyle','--','EdgeColor',cmap(i,:));
+            text(mean(ntk2.x),mean(ntk2.y),num2str(i),'FontSize',12,'Color',cmap(i,:));
+        end
+    end
+end
+
+if(not(nolegend)),legend(h(h~=0), hl(h~=0), 'Location', 'NorthEastOutside');end;
+title(texlabel(exp_name, 'literal'))
+
+if not(isempty(im))
+    xlim([0 size(im, 2)])
+    ylim([0 size(im, 1)])
+end
+
+if save
+    if isempty(saveas)
+        saveas=['../Figs/rec_blocks_id' num2str(ntk.chipid) '_' exp_name '.ps'];
+    end
+    eval(['print -dpsc2 ' saveas]);
+%     close 
+end
+
+
+    
+    
+    
+    
+    
+   

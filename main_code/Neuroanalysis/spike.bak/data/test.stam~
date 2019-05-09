@@ -1,0 +1,20 @@
+# Data filename
+datafile=/home/ijones/Matlab/Data_Analysis/Neuroanalysis/spike/data/test.stad;
+#
+# Site metadata
+site=1; label=unit_001; recording_tag=episodic; time_scale=1.000000; time_resolution=0.0001;
+#
+# Category metadata
+category=1; label=Contrast: 0.0000;
+category=2; label=Contrast: 0.0625;
+category=3; label=Contrast: 0.1250;
+category=4; label=Contrast: 0.2500;
+category=5; label=Contrast: 0.5000;
+category=6; label=Contrast: 1.0000;
+#
+# Trace metadata
+trace=1; catid=1; trialid=1; siteid=1; start_time=2.8870; end_time= 12.6519;
+trace=2; catid=1; trialid=2; siteid=1; start_time= 12.8854; end_time= 22.6514;
+trace=3; catid=1; trialid=3; siteid=1; start_time=  ; end_time= ;
+trace=4; catid=1; trialid=4; siteid=1; start_time= ; end_time= ;
+trace=5; catid=1; trialid=5; siteid=1; start_time=   ; end_time= ;

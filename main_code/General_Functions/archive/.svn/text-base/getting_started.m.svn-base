@@ -1,0 +1,44 @@
+% only showing some very basic data loading and visualizing.
+% Please see the Tutorial for more information and the WIKI
+% (https://wiki.systemsx.ch/display/DBSSECMOSMEA)
+
+clear all
+close all
+
+open hidens_Tutorial.html
+
+
+%getting a list of files
+files = dir('../proc/Trace*');
+flist={files(:).name};
+
+for i=1:length(flist)
+    %load data
+    ntk=initialize_ntkstruct(flist{i});
+    [ntk2 ntk]=ntk_load(ntk, 300000);
+    %load more data: [ntk2 ntk]=ntk_load(ntk, 300000);
+    
+    figure
+    subplot(1,4,1:3)
+    signalplotter(ntk2,'chidx',1:26, 'max_samples', 300000);
+    subplot(1,4,4)
+    plot(ntk2.x, ntk2.y, '.')
+    axis equal
+    axis ij
+end
+
+
+
+
+
+%doing some spike sorting
+% Keep in mind though, that the current version of the spike sorter works
+% well on acute slice data and lees good on this dissociated recordings.
+
+% hidens_neuro_process(files(2).name, 4.4, 'ica', 'save', 'maxtime', 10, 'maxloops', 14, 'pretime', 10, 'posttime', 28, 'minisi', 22, 'chunk', 200000);
+% nnn=[];
+% nnn=hidens_load_neurons(files(2).name, nnn, 0);
+% plot_neurons(nnn.neurons, 'neurons', [4 8]);
+
+
+

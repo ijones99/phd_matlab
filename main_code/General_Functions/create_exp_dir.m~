@@ -1,0 +1,9 @@
+function create_exp_dir
+
+flistFileNames = dir('../proc/Trace_id*.stream.ntk');
+
+for i=1:length(flistFileNames)
+startPos = strfind(flistFileNames(1).name,
+
+
+end

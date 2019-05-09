@@ -1,0 +1,1 @@
+[imageLoaded map alpha] = imread('~/Matlab/Light_Stimuli/LetterStimuli/a_norm.png')

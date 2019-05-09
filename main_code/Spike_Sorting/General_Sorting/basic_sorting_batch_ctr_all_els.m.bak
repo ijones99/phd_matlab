@@ -1,0 +1,136 @@
+function basic_sorting_batch_ctr_all_els(flistName ,TIME_TO_LOAD, elsInPatch )
+
+% flistName = filename (e.g. flist{flistNoForWaveforms}; % name of file ...
+... to sort for waveform shapes
+% TIME_TO_LOAD = [] (e.g.20); time to load in minutes
+% elsInPatch = [...]: electrodes that constitute the middle patch
+
+% The purpose of this file is to obtain all neuron waveform shapes within a
+% patch.
+% Selects file based on "flist_for_sorting.mat"
+
+close all
+
+% check that there is only one file to process
+% if length(flistName) > 1
+%     aa = input('Error: please select only one file to process\n');
+% end
+
+noteToUser = input(strcat('Loading ', num2str(TIME_TO_LOAD), ' mins of data', ...
+    ' from file \n', flistName)  );
+
+% ID number for file
+flistFileNameID = flistName(end-21:end-11);
+
+% ---------- Dirs ----------
+% main directory for this file
+FILE_DIR = strcat('../analysed_data/', flistFileNameID,'/');
+
+%create directory
+if ~exist(FILE_DIR,'dir')
+    mkdir(FILE_DIR);
+end
+
+% dir in which to put output files
+OUTPUT_DIR = strcat(FILE_DIR, '01_Pre_Spikesorting/');
+%create directory
+if ~exist(OUTPUT_DIR,'dir')
+    mkdir(OUTPUT_DIR);
+end
+% --------------------------
+
+% get ntk2 data field values
+siz_init=1;
+ntk_init=initialize_ntkstruct(flistName,'hpf', 500, 'lpf', 3000);
+[ntk2_init ntk_init]=ntk_load(ntk_init, siz_init, 'images_v1');
+
+% plot_electrode_map(ntk2_init, 'el_idx')
+
+% frames to load
+siz=TIME_TO_LOAD*60*2e4;
+% init ntk
+ntk=initialize_ntkstruct(flistName,'hpf', 500, 'lpf', 3000);
+
+% convert electrode #'s to channels
+[  chsInPatch] = convert_elidx_to_chs(ntk2_init,elsInPatch, 0);
+[ntk2 ntk]=ntk_load(ntk, siz, 'keep_only',  chsInPatch, 'images_v1');
+
+% remove noisy channels and flat channels
+ntk2=detect_valid_channels(ntk2,1);
+% trace name
+trace_name=ntk2.fname;
+% frequency sampling
+Fs=ntk2.sr;
+% light time stamps
+
+frameno = ntk2.images.frameno;
+save(strcat(OUTPUT_DIR,'light_ts_', flistName(end-21:end-11),'.mat'), 'frameno');
+
+% get electrode groupings
+[elsInPatch chsInPatch  indsInPatch] = get_electrodes_sorting_patches_overlapping(ntk2, 6);
+
+% %% RECALC INDICES FOR SELECTED CHANNELS
+% clear indsInPatch
+% indsInPatch{1} = 0;
+% for i=1:length(chsInPatch)
+%    for j=1:length(chsInPatch{i})
+%     indsInPatch{i}(j) = find(ntk2.channel_nr == chsInPatch{i}(j));
+%
+%
+%    end
+% end
+
+
+
+%% SPIKE SORTING
+
+thrName = {'Thr4_5/','Thr4_0/','Thr3_5/'};
+thrValue = [3.5];
+for iThr = 1
+    
+    for i=1:length(indsInPatch)
+        close all
+        fileDone = 1;
+        save('../Matlab/file_completed.mat','fileDone');
+        
+        tic
+        close all
+        clear data spikes
+        % channels to be analyzed
+        data={ntk2.sig(:,indsInPatch{i})};
+        % create parameters
+        spikes = [];
+        spikes = ss_default_params(Fs);
+        iThr
+        thrValue(iThr)
+        % modify threshold
+        spikes.params.thresh = thrValue(iThr);
+        % add additional info
+        spikes.elidx = elsInPatch{i};
+        spikes.channel_nr = chsInPatch{i};
+        spikes.fname = flistName;
+        
+        spikes.clus_of_interest=[];
+        spikes.template_of_interest=[];
+        
+        % detect spikes
+        spikes = ss_detect(data,spikes);
+       
+            
+        % align spikes
+        spikes = ss_align(spikes);
+        % cluster spikes
+        spikes = ss_kmeans(spikes);
+        spikes = ss_energy(spikes);
+        spikes = ss_aggregate(spikes);
+        
+        ctrElNoStr = num2str(elsInPatch{i}(1));
+            eval(['el_', ctrElNoStr,'=spikes;']);
+        %     save(strcat(OUTPUT_DIR,'spikes_', ctrElNoStr,'.mat'),
+        %     strcat('spikes_', ctrElNoStr) );
+        save(strcat(OUTPUT_DIR,'el', ctrElNoStr,'.mat'), strcat('el_', ctrElNoStr));
+        fprintf('-----------------------------------------------------')
+        toc
+    end
+end
+end

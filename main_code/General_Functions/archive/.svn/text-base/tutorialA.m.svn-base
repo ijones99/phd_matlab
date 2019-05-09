@@ -1,0 +1,152 @@
+%%  HiDens Tutorial I - Processing raw data
+%
+% The first Part of the Tutorial explains how to deal with HiDens data in
+% Matlab. First you have to chose the right working directory and if you analyze
+% data from multiple files you create a filelist.
+% Then you can load the recorded data as it is shown below.
+%% Chose Current Directory
+% Before you start working with recorded data, make sure you chose the correct
+% Current Directory. For the measurements Slices_18Dec2006 use the following as
+% working directory:
+cd ~/bel.svn/hima_internal/cmosmea_recordings/trunk/acute_slices/Slices_18Dec2006/Matlab
+%% Data from a single file
+%
+% To use data from a file define the filename as follows (example):
+fname='Trace_id81_Mo18Dez2006_16h30m31_278.stream.ntk';
+%%
+% *Comment:* The directory with the recorded files for the given example is:
+% ~/HiDens/recordings/acute_slices/Slices_18Dec2006/proc
+%% Data from multiple files: Create and load a filelist
+%
+% If you want to analyse an experiment with many recordings, it is usefull to
+% create a filelist - which is a cell that contains the names of the recordings
+% files you want to use. 
+% Your filelist will look similar to the following:
+
+flist{end+1}='Trace_id81_Mo18Dez2006_16h51m19_26.stream.ntk';
+flist{end+1}='Trace_id81_Mo18Dez2006_16h51m19_32.stream.ntk';
+flist{end+1}='Trace_id81_Mo18Dez2006_16h51m19_38.stream.ntk';
+flist{end+1}='Trace_id81_Mo18Dez2006_16h51m19_44.stream.ntk';
+% ...
+ 
+%% 
+% Store that code as an *.m file, for example flist_exp1.m . You can load the
+% filelist as follows:
+
+flist=cell(0,0);
+flist_exp1
+flist_exp2      % add other expiment to filelist
+
+%% Load raw/filtered data
+%
+% To load the data, use the following two functions:
+%
+% *initialize_ntkstruct* creates the structure for the data and loads the
+% correct parametes. 
+% 
+% *load_ntk* removes bad channels, converts the data into uV and applies a
+% band-pass filter if specified.
+
+size = 600000; % how many samples of data to load (30 s)
+
+% load raw data:
+ntk=initialize_ntkstruct(fname);
+[ntk2 ntk]=ntk_load(ntk, size);
+
+% load band-pass filtered data:
+ntk=initialize_ntkstruct(fname, 'hpf', 500, 'lpf', 3000);
+[ntk2 ntk]=ntk_load(ntk, size);
+
+%% 
+% The extracted information lies now in the struct ntk2. The most imortant
+% entries are shown:
+%
+%   * sig:          an array containing the data [uV]
+%   * fname:        Recording file name with correct path
+%   * x, y, el_idx: x-, y-coordinates and global index of the used electrodes
+%   * lsb:          Least significant bit [uV]
+
+%%
+% *Comment 1:* If you use a filelist, take flist{i} instead of fname.
+%
+% *Comment 2:* These functions can be used in the same way to load testbench
+%     data, where you take gntk_data1 instead of fname!
+%% Visualization Tool A: signalplotter
+%
+% The function <matlab:helpwin('signalplotter') *signalplotter*> is an nice
+% visualization tool for the recorded data. All function arguments are described
+% in its help.
+signalplotter(ntk2,'chidx',1:6, 'max_samples', 10000)
+%%
+% <<signalplotter.png>>
+%% Visualization Tool B: plot recording blocks
+%
+% The function *plot_recording_blocks* plots which electrodes were uses in each
+% measurment of a filelist. The function automatically looks for a picture of
+% the tissue and plots it in the background if available. Use the function as follows: 
+
+plot_recording_blocks(flist,'Experiment 1', 'nolegend')
+%%
+% <<blocks.png>>
+%% Visualization Tool C: activity map
+%
+% You can generate an event map of the neural activity over the whole electrode
+% array. Therefore create a filelist with all recording filenames. Use
+% <matlab:helpwin('hidens_load_events') *hidens_load_events*> to generate an
+% activity map. Chose for the parameter thr_f the desired threshold. Then plot
+% the map with <matlab:helpwin('hidens_generate_event_map')
+% *hidens_generate_event_map*>.
+
+% generate event data
+thr_f=4;                    % threshold factor what to detect as event
+event_data=hidens_load_events(flist, thr_f);
+
+% plot simple map
+hidens_generate_event_map(event_data,'imagesc','legend');
+colorbar
+%%
+% Note that hidens_generate_event_map is an elaborated function with different
+% plotting options. See the following code and the three resulting, different
+% event plots:
+figure
+subplot(2,2,1)
+hidens_generate_event_map(event_data,'imagesc','no_new_fig');
+title('imagesc')
+colorbar
+subplot(2,2,3)
+hidens_generate_event_map(event_data,'mesh','no_new_fig');
+title('mesh')
+subplot(2,2,[2 4])
+hidens_generate_event_map(event_data,'no_new_fig', 'freqthr', 0.2, 'bgimg', 'reg_pics/id81_v2.jpg', 'markerplot', 'border', 15,...
+'markerplotfreq', 'legend', 'dist_scale', 'dist_scale_len', 300, 'scalebar_simple');
+title('markerplot')
+%%
+% <<eventmaps.png>>
+%%
+% Alternatively, the events in event_data can be simply detected with
+% simple_event_cut and then be converted into suitable data using the function
+% <matlab:helpwin('convert_events') *convert_events*>. This is more straight
+% forward, as the parameters can be set directly and the complicated
+% hidens_neuro_process is not needed. 
+%
+% Example:
+thr_f=4;
+pretime=16;
+posttime=16;
+allevents=simple_event_cut(ntk2, thr_f, pretime, posttime);
+event_data2=convert_events(allevents,ntk2)
+
+figure;
+hidens_generate_event_map(event_data2,'no_new_fig', 'freqthr', 0.2, 'markerplot', 'border', 15,...
+'markerplotfreq', 'legend', 'dist_scale', 'dist_scale_len', 300, 'scalebar_simple');
+
+%% Visualization Tool D: movie of recorded data
+%
+% How to generate a movie from recorded data is shown in the script 
+% *generate_movie_example*
+
+
+
+
+
+

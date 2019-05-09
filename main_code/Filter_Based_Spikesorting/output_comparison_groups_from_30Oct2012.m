@@ -1,0 +1,13 @@
+% groupsIan 5 matches groupsFelix 4
+% groupsIan 7 matches groupsFelix 6
+% groupsIan 10 matches groupsFelix 9
+% groupsIan 45 matches groupsFelix 10
+% groupsIan 109 matches groupsFelix 10
+% groupsIan 106 matches groupsFelix 12
+% groupsIan 15 matches groupsFelix 13
+% groupsIan 16 matches groupsFelix 14
+% groupsIan 19 matches groupsFelix 16
+% groupsIan 70 matches groupsFelix 17
+% groupsIan 26 matches groupsFelix 18
+% groupsIan 67 matches groupsFelix 23
+% groupsIan 94 matches groupsFelix 29

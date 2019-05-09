@@ -1,0 +1,1571 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%Creator: MATLAB, The MathWorks, Inc. Version 7.12.0.635 (R2011a). Operating System: Linux 2.6.32-279.2.1.el6.x86_64 #1 SMP Thu Jul 5 21:08:58 EDT 2012 x86_64.
+%%Title: /home/ijones/Matlab/Data_Analysis/Spiketrain_Manipulation/Benchmark/Figs/CC Precision/Large Range of Sigma Comparision2/Cross Correlation 50 Stimulus Repeats, Range of Sigmas.eps
+%%CreationDate: 10/11/2012  11:11:19
+%%DocumentNeededFonts: Helvetica
+%%DocumentProcessColors: Cyan Magenta Yellow Black
+%%LanguageLevel: 2
+%%Pages: 1
+%%BoundingBox:  -120   -16   733   808
+%%EndComments
+
+%%BeginProlog
+% MathWorks dictionary
+/MathWorks 160 dict begin
+% definition operators
+/bdef {bind def} bind def
+/ldef {load def} bind def
+/xdef {exch def} bdef
+/xstore {exch store} bdef
+% operator abbreviations
+/c  /clip ldef
+/cc /concat ldef
+/cp /closepath ldef
+/gr /grestore ldef
+/gs /gsave ldef
+/mt /moveto ldef
+/np /newpath ldef
+/cm /currentmatrix ldef
+/sm /setmatrix ldef
+/rm /rmoveto ldef
+/rl /rlineto ldef
+/s {show newpath} bdef
+/sc {setcmykcolor} bdef
+/sr /setrgbcolor ldef
+/sg /setgray ldef
+/w /setlinewidth ldef
+/j /setlinejoin ldef
+/cap /setlinecap ldef
+/rc {rectclip} bdef
+/rf {rectfill} bdef
+% page state control
+/pgsv () def
+/bpage {/pgsv save def} bdef
+/epage {pgsv restore} bdef
+/bplot /gsave ldef
+/eplot {stroke grestore} bdef
+% orientation switch
+/portraitMode 0 def /landscapeMode 1 def /rotateMode 2 def
+% coordinate system mappings
+/dpi2point 0 def
+% font control
+/FontSize 0 def
+/FMS {/FontSize xstore findfont [FontSize 0 0 FontSize neg 0 0]
+  makefont setfont} bdef
+/reencode {exch dup where {pop load} {pop StandardEncoding} ifelse
+  exch dup 3 1 roll findfont dup length dict begin
+  { 1 index /FID ne {def}{pop pop} ifelse } forall
+  /Encoding exch def currentdict end definefont pop} bdef
+/isroman {findfont /CharStrings get /Agrave known} bdef
+/FMSR {3 1 roll 1 index dup isroman {reencode} {pop pop} ifelse
+  exch FMS} bdef
+/csm {1 dpi2point div -1 dpi2point div scale neg translate
+ dup landscapeMode eq {pop -90 rotate}
+  {rotateMode eq {90 rotate} if} ifelse} bdef
+% line types: solid, dotted, dashed, dotdash
+/SO { [] 0 setdash } bdef
+/DO { [.5 dpi2point mul 4 dpi2point mul] 0 setdash } bdef
+/DA { [6 dpi2point mul] 0 setdash } bdef
+/DD { [.5 dpi2point mul 4 dpi2point mul 6 dpi2point mul 4
+  dpi2point mul] 0 setdash } bdef
+% macros for lines and objects
+/L {lineto stroke} bdef
+/MP {3 1 roll moveto 1 sub {rlineto} repeat} bdef
+/AP {{rlineto} repeat} bdef
+/PDlw -1 def
+/W {/PDlw currentlinewidth def setlinewidth} def
+/PP {closepath eofill} bdef
+/DP {closepath stroke} bdef
+/MR {4 -2 roll moveto dup  0 exch rlineto exch 0 rlineto
+  neg 0 exch rlineto closepath} bdef
+/FR {MR stroke} bdef
+/PR {MR fill} bdef
+/L1i {{currentfile picstr readhexstring pop} image} bdef
+/tMatrix matrix def
+/MakeOval {newpath tMatrix currentmatrix pop translate scale
+0 0 1 0 360 arc tMatrix setmatrix} bdef
+/FO {MakeOval stroke} bdef
+/PO {MakeOval fill} bdef
+/PD {currentlinewidth 2 div 0 360 arc fill
+   PDlw -1 eq not {PDlw w /PDlw -1 def} if} def
+/FA {newpath tMatrix currentmatrix pop translate scale
+  0 0 1 5 -2 roll arc tMatrix setmatrix stroke} bdef
+/PA {newpath tMatrix currentmatrix pop	translate 0 0 moveto scale
+  0 0 1 5 -2 roll arc closepath tMatrix setmatrix fill} bdef
+/FAn {newpath tMatrix currentmatrix pop translate scale
+  0 0 1 5 -2 roll arcn tMatrix setmatrix stroke} bdef
+/PAn {newpath tMatrix currentmatrix pop translate 0 0 moveto scale
+  0 0 1 5 -2 roll arcn closepath tMatrix setmatrix fill} bdef
+/vradius 0 def /hradius 0 def /lry 0 def
+/lrx 0 def /uly 0 def /ulx 0 def /rad 0 def
+/MRR {/vradius xdef /hradius xdef /lry xdef /lrx xdef /uly xdef
+  /ulx xdef newpath tMatrix currentmatrix pop ulx hradius add uly
+  vradius add translate hradius vradius scale 0 0 1 180 270 arc 
+  tMatrix setmatrix lrx hradius sub uly vradius add translate
+  hradius vradius scale 0 0 1 270 360 arc tMatrix setmatrix
+  lrx hradius sub lry vradius sub translate hradius vradius scale
+  0 0 1 0 90 arc tMatrix setmatrix ulx hradius add lry vradius sub
+  translate hradius vradius scale 0 0 1 90 180 arc tMatrix setmatrix
+  closepath} bdef
+/FRR {MRR stroke } bdef
+/PRR {MRR fill } bdef
+/MlrRR {/lry xdef /lrx xdef /uly xdef /ulx xdef /rad lry uly sub 2 div def
+  newpath tMatrix currentmatrix pop ulx rad add uly rad add translate
+  rad rad scale 0 0 1 90 270 arc tMatrix setmatrix lrx rad sub lry rad
+  sub translate rad rad scale 0 0 1 270 90 arc tMatrix setmatrix
+  closepath} bdef
+/FlrRR {MlrRR stroke } bdef
+/PlrRR {MlrRR fill } bdef
+/MtbRR {/lry xdef /lrx xdef /uly xdef /ulx xdef /rad lrx ulx sub 2 div def
+  newpath tMatrix currentmatrix pop ulx rad add uly rad add translate
+  rad rad scale 0 0 1 180 360 arc tMatrix setmatrix lrx rad sub lry rad
+  sub translate rad rad scale 0 0 1 0 180 arc tMatrix setmatrix
+  closepath} bdef
+/FtbRR {MtbRR stroke } bdef
+/PtbRR {MtbRR fill } bdef
+/stri 6 array def /dtri 6 array def
+/smat 6 array def /dmat 6 array def
+/tmat1 6 array def /tmat2 6 array def /dif 3 array def
+/asub {/ind2 exch def /ind1 exch def dup dup
+  ind1 get exch ind2 get sub exch } bdef
+/tri_to_matrix {
+  2 0 asub 3 1 asub 4 0 asub 5 1 asub
+  dup 0 get exch 1 get 7 -1 roll astore } bdef
+/compute_transform {
+  dmat dtri tri_to_matrix tmat1 invertmatrix 
+  smat stri tri_to_matrix tmat2 concatmatrix } bdef
+/ds {stri astore pop} bdef
+/dt {dtri astore pop} bdef
+/db {2 copy /cols xdef /rows xdef mul dup 3 mul string
+  currentfile 
+  3 index 0 eq {/ASCIIHexDecode filter}
+  {/ASCII85Decode filter 3 index 2 eq {/RunLengthDecode filter} if }
+  ifelse exch readstring pop
+  dup 0 3 index getinterval /rbmap xdef
+  dup 2 index dup getinterval /gbmap xdef
+  1 index dup 2 mul exch getinterval /bbmap xdef pop pop}bdef
+/it {gs np dtri aload pop moveto lineto lineto cp c
+  cols rows 8 compute_transform 
+  rbmap gbmap bbmap true 3 colorimage gr}bdef
+/il {newpath moveto lineto stroke}bdef
+currentdict end def
+%%EndProlog
+
+%%BeginSetup
+MathWorks begin
+
+0 cap
+
+end
+%%EndSetup
+
+%%Page: 1 1
+%%BeginPageSetup
+%%PageBoundingBox:  -120   -16   733   808
+MathWorks begin
+bpage
+%%EndPageSetup
+
+%%BeginObject: obj1
+bplot
+
+/dpi2point 12 def
+portraitMode -1440 9696 csm
+
+    0     0 10242  9888 rc
+85 dict begin %Colortable dictionary
+/c0 { 0.000000 0.000000 0.000000 sr} bdef
+/c1 { 1.000000 1.000000 1.000000 sr} bdef
+/c2 { 0.900000 0.000000 0.000000 sr} bdef
+/c3 { 0.000000 0.820000 0.000000 sr} bdef
+/c4 { 0.000000 0.000000 0.800000 sr} bdef
+/c5 { 0.910000 0.820000 0.320000 sr} bdef
+/c6 { 1.000000 0.260000 0.820000 sr} bdef
+/c7 { 0.000000 0.820000 0.820000 sr} bdef
+c0
+1 j
+1 sg
+   0    0 10243 9889 rf
+6 w
+0 650 3428 0 0 -650 1331 1493 4 MP
+PP
+-3428 0 0 650 3428 0 0 -650 1331 1493 5 MP stroke
+4 w
+DO
+SO
+6 w
+0 sg
+1331 1493 mt 4759 1493 L
+1331  843 mt 4759  843 L
+1331 1493 mt 1331  843 L
+4759 1493 mt 4759  843 L
+1331 1493 mt 4759 1493 L
+1331 1493 mt 1331  843 L
+1331 1493 mt 1331 1458 L
+1331  843 mt 1331  877 L
+%%IncludeResource: font Helvetica
+/Helvetica /ISOLatin1Encoding 120 FMSR
+
+1195 1638 mt 
+(-20) s
+1759 1493 mt 1759 1458 L
+1759  843 mt 1759  877 L
+1623 1638 mt 
+(-15) s
+2188 1493 mt 2188 1458 L
+2188  843 mt 2188  877 L
+2052 1638 mt 
+(-10) s
+2616 1493 mt 2616 1458 L
+2616  843 mt 2616  877 L
+2513 1638 mt 
+(-5) s
+3045 1493 mt 3045 1458 L
+3045  843 mt 3045  877 L
+3012 1638 mt 
+(0) s
+3473 1493 mt 3473 1458 L
+3473  843 mt 3473  877 L
+3440 1638 mt 
+(5) s
+3902 1493 mt 3902 1458 L
+3902  843 mt 3902  877 L
+3836 1638 mt 
+(10) s
+4330 1493 mt 4330 1458 L
+4330  843 mt 4330  877 L
+4264 1638 mt 
+(15) s
+4759 1493 mt 4759 1458 L
+4759  843 mt 4759  877 L
+4693 1638 mt 
+(20) s
+1331 1433 mt 1365 1433 L
+4759 1433 mt 4724 1433 L
+1230 1477 mt 
+(0) s
+1331 1138 mt 1365 1138 L
+4759 1138 mt 4724 1138 L
+1130 1182 mt 
+(0.5) s
+1331  843 mt 1365  843 L
+4759  843 mt 4724  843 L
+1230  887 mt 
+(1) s
+1331 1493 mt 4759 1493 L
+1331  843 mt 4759  843 L
+1331 1493 mt 1331  843 L
+4759 1493 mt 4759  843 L
+gs 1331 843 3429 651 rc
+/c8 { 0.000000 0.000000 1.000000 sr} bdef
+c8
+86 -4 86 -13 86 4 85 5 86 -5 86 31 85 -35 86 4 
+86 22 85 -13 86 9 86 4 86 9 85 -13 86 13 86 0 
+85 34 86 -47 86 -26 85 593 86 -593 86 26 86 47 85 -34 
+86 0 86 -13 85 13 86 -9 86 -4 85 -9 86 13 86 -22 
+86 -4 85 35 86 -31 86 5 85 -5 86 -4 86 13 85 4 
+1331 1415 41 MP stroke
+gr
+
+c8
+0 sg
+1464  748 mt 
+(Cross Correlation for Two Stimulus Repeats, Sigma =1e-20) s
+gs 1331 843 3429 651 rc
+/c9 { 0.000000 0.000000 0.562500 sr} bdef
+c9
+-86 0 -85 0 0 -3 85 593 86 -593 0 3 2959 1433 7 MP
+PP
+0 sg
+0 0 -86 0 -85 0 0 -3 85 593 86 -593 0 3 2959 1433 8 MP stroke
+gr
+
+3902 1298 mt 
+(0.41993) s
+1 sg
+0 650 3428 0 0 -650 5841 1493 4 MP
+PP
+-3428 0 0 650 3428 0 0 -650 5841 1493 5 MP stroke
+4 w
+DO
+SO
+6 w
+0 sg
+5841 1493 mt 9269 1493 L
+5841  843 mt 9269  843 L
+5841 1493 mt 5841  843 L
+9269 1493 mt 9269  843 L
+5841 1493 mt 9269 1493 L
+5841 1493 mt 5841  843 L
+5841 1493 mt 5841 1458 L
+5841  843 mt 5841  877 L
+5705 1638 mt 
+(-20) s
+6269 1493 mt 6269 1458 L
+6269  843 mt 6269  877 L
+6133 1638 mt 
+(-15) s
+6698 1493 mt 6698 1458 L
+6698  843 mt 6698  877 L
+6562 1638 mt 
+(-10) s
+7126 1493 mt 7126 1458 L
+7126  843 mt 7126  877 L
+7023 1638 mt 
+(-5) s
+7555 1493 mt 7555 1458 L
+7555  843 mt 7555  877 L
+7522 1638 mt 
+(0) s
+7983 1493 mt 7983 1458 L
+7983  843 mt 7983  877 L
+7950 1638 mt 
+(5) s
+8412 1493 mt 8412 1458 L
+8412  843 mt 8412  877 L
+8346 1638 mt 
+(10) s
+8840 1493 mt 8840 1458 L
+8840  843 mt 8840  877 L
+8774 1638 mt 
+(15) s
+9269 1493 mt 9269 1458 L
+9269  843 mt 9269  877 L
+9203 1638 mt 
+(20) s
+5841 1433 mt 5875 1433 L
+9269 1433 mt 9234 1433 L
+5740 1477 mt 
+(0) s
+5841 1138 mt 5875 1138 L
+9269 1138 mt 9234 1138 L
+5640 1182 mt 
+(0.5) s
+5841  843 mt 5875  843 L
+9269  843 mt 9234  843 L
+5740  887 mt 
+(1) s
+5841 1493 mt 9269 1493 L
+5841  843 mt 9269  843 L
+5841 1493 mt 5841  843 L
+9269 1493 mt 9269  843 L
+gs 5841 843 3429 651 rc
+c8
+86 2 86 -7 86 -1 85 4 86 7 86 5 85 -9 86 -2 
+86 6 85 3 86 3 86 5 86 1 85 0 86 4 86 15 
+85 8 86 -17 86 100 85 147 86 -145 86 -100 86 15 85 -11 
+86 -11 86 -4 85 -2 86 0 86 -5 85 -2 86 -4 86 -5 
+86 1 85 8 86 -4 86 -6 85 -5 86 0 86 8 85 -1 
+5841 1421 41 MP stroke
+gr
+
+c8
+0 sg
+5959  748 mt 
+(Cross Correlation for Two Stimulus Repeats, Sigma =0.0005) s
+gs 5841 843 3429 651 rc
+c9
+-86 0 -85 0 0 138 85 147 86 -145 0 -140 7469 1433 7 MP
+PP
+0 sg
+0 0 -86 0 -85 0 0 138 85 147 86 -145 0 -140 7469 1433 8 MP stroke
+gr
+
+8412 1298 mt 
+(0.30353) s
+1 sg
+0 650 3428 0 0 -650 1331 2537 4 MP
+PP
+-3428 0 0 650 3428 0 0 -650 1331 2537 5 MP stroke
+4 w
+DO
+SO
+6 w
+0 sg
+1331 2537 mt 4759 2537 L
+1331 1887 mt 4759 1887 L
+1331 2537 mt 1331 1887 L
+4759 2537 mt 4759 1887 L
+1331 2537 mt 4759 2537 L
+1331 2537 mt 1331 1887 L
+1331 2537 mt 1331 2502 L
+1331 1887 mt 1331 1921 L
+1195 2682 mt 
+(-20) s
+1759 2537 mt 1759 2502 L
+1759 1887 mt 1759 1921 L
+1623 2682 mt 
+(-15) s
+2188 2537 mt 2188 2502 L
+2188 1887 mt 2188 1921 L
+2052 2682 mt 
+(-10) s
+2616 2537 mt 2616 2502 L
+2616 1887 mt 2616 1921 L
+2513 2682 mt 
+(-5) s
+3045 2537 mt 3045 2502 L
+3045 1887 mt 3045 1921 L
+3012 2682 mt 
+(0) s
+3473 2537 mt 3473 2502 L
+3473 1887 mt 3473 1921 L
+3440 2682 mt 
+(5) s
+3902 2537 mt 3902 2502 L
+3902 1887 mt 3902 1921 L
+3836 2682 mt 
+(10) s
+4330 2537 mt 4330 2502 L
+4330 1887 mt 4330 1921 L
+4264 2682 mt 
+(15) s
+4759 2537 mt 4759 2502 L
+4759 1887 mt 4759 1921 L
+4693 2682 mt 
+(20) s
+1331 2477 mt 1365 2477 L
+4759 2477 mt 4724 2477 L
+1230 2521 mt 
+(0) s
+1331 2182 mt 1365 2182 L
+4759 2182 mt 4724 2182 L
+1130 2226 mt 
+(0.5) s
+1331 1887 mt 1365 1887 L
+4759 1887 mt 4724 1887 L
+1230 1931 mt 
+(1) s
+1331 2537 mt 4759 2537 L
+1331 1887 mt 4759 1887 L
+1331 2537 mt 1331 1887 L
+4759 2537 mt 4759 1887 L
+gs 1331 1887 3429 651 rc
+c8
+86 -1 86 -2 86 0 85 2 86 4 86 0 85 -1 86 1 
+86 3 85 2 86 2 86 3 86 4 85 3 86 5 86 7 
+85 13 86 33 86 50 85 26 86 -28 86 -49 86 -31 85 -13 
+86 -8 86 -5 85 -2 86 -4 86 -3 85 -3 86 -3 86 -3 
+86 0 85 2 86 -2 86 -3 85 -2 86 0 86 1 85 1 
+1331 2467 41 MP stroke
+gr
+
+c8
+0 sg
+1483 1792 mt 
+(Cross Correlation for Two Stimulus Repeats, Sigma =0.001) s
+gs 1331 1887 3429 651 rc
+c9
+-86 0 -85 0 0 139 85 26 86 -28 0 -137 2959 2477 7 MP
+PP
+0 sg
+0 0 -86 0 -85 0 0 139 85 26 86 -28 0 -137 2959 2477 8 MP stroke
+gr
+
+3902 2342 mt 
+(0.22023) s
+1 sg
+0 650 3428 0 0 -650 5841 2537 4 MP
+PP
+-3428 0 0 650 3428 0 0 -650 5841 2537 5 MP stroke
+4 w
+DO
+SO
+6 w
+0 sg
+5841 2537 mt 9269 2537 L
+5841 1887 mt 9269 1887 L
+5841 2537 mt 5841 1887 L
+9269 2537 mt 9269 1887 L
+5841 2537 mt 9269 2537 L
+5841 2537 mt 5841 1887 L
+5841 2537 mt 5841 2502 L
+5841 1887 mt 5841 1921 L
+5705 2682 mt 
+(-20) s
+6269 2537 mt 6269 2502 L
+6269 1887 mt 6269 1921 L
+6133 2682 mt 
+(-15) s
+6698 2537 mt 6698 2502 L
+6698 1887 mt 6698 1921 L
+6562 2682 mt 
+(-10) s
+7126 2537 mt 7126 2502 L
+7126 1887 mt 7126 1921 L
+7023 2682 mt 
+(-5) s
+7555 2537 mt 7555 2502 L
+7555 1887 mt 7555 1921 L
+7522 2682 mt 
+(0) s
+7983 2537 mt 7983 2502 L
+7983 1887 mt 7983 1921 L
+7950 2682 mt 
+(5) s
+8412 2537 mt 8412 2502 L
+8412 1887 mt 8412 1921 L
+8346 2682 mt 
+(10) s
+8840 2537 mt 8840 2502 L
+8840 1887 mt 8840 1921 L
+8774 2682 mt 
+(15) s
+9269 2537 mt 9269 2502 L
+9269 1887 mt 9269 1921 L
+9203 2682 mt 
+(20) s
+5841 2477 mt 5875 2477 L
+9269 2477 mt 9234 2477 L
+5740 2521 mt 
+(0) s
+5841 2182 mt 5875 2182 L
+9269 2182 mt 9234 2182 L
+5640 2226 mt 
+(0.5) s
+5841 1887 mt 5875 1887 L
+9269 1887 mt 9234 1887 L
+5740 1931 mt 
+(1) s
+5841 2537 mt 9269 2537 L
+5841 1887 mt 9269 1887 L
+5841 2537 mt 5841 1887 L
+9269 2537 mt 9269 1887 L
+gs 5841 1887 3429 651 rc
+c8
+86 -1 86 0 86 1 85 0 86 1 86 1 85 1 86 1 
+86 2 85 2 86 3 86 4 86 4 85 8 86 10 86 11 
+85 14 86 14 86 10 85 4 86 -4 86 -10 86 -15 85 -14 
+86 -13 86 -8 85 -7 86 -4 86 -4 85 -2 86 -3 86 -2 
+86 -1 85 -1 86 -1 86 -1 85 -1 86 0 86 0 85 1 
+5841 2466 41 MP stroke
+gr
+
+c8
+0 sg
+5993 1792 mt 
+(Cross Correlation for Two Stimulus Repeats, Sigma =0.002) s
+gs 5841 1887 3429 651 rc
+c9
+-86 0 -85 0 0 97 85 4 86 -4 0 -97 7469 2477 7 MP
+PP
+0 sg
+0 0 -86 0 -85 0 0 97 85 4 86 -4 0 -97 7469 2477 8 MP stroke
+gr
+
+8412 2342 mt 
+(0.14758) s
+1 sg
+0 650 3428 0 0 -650 1331 3581 4 MP
+PP
+-3428 0 0 650 3428 0 0 -650 1331 3581 5 MP stroke
+4 w
+DO
+SO
+6 w
+0 sg
+1331 3581 mt 4759 3581 L
+1331 2931 mt 4759 2931 L
+1331 3581 mt 1331 2931 L
+4759 3581 mt 4759 2931 L
+1331 3581 mt 4759 3581 L
+1331 3581 mt 1331 2931 L
+1331 3581 mt 1331 3546 L
+1331 2931 mt 1331 2965 L
+1195 3726 mt 
+(-20) s
+1759 3581 mt 1759 3546 L
+1759 2931 mt 1759 2965 L
+1623 3726 mt 
+(-15) s
+2188 3581 mt 2188 3546 L
+2188 2931 mt 2188 2965 L
+2052 3726 mt 
+(-10) s
+2616 3581 mt 2616 3546 L
+2616 2931 mt 2616 2965 L
+2513 3726 mt 
+(-5) s
+3045 3581 mt 3045 3546 L
+3045 2931 mt 3045 2965 L
+3012 3726 mt 
+(0) s
+3473 3581 mt 3473 3546 L
+3473 2931 mt 3473 2965 L
+3440 3726 mt 
+(5) s
+3902 3581 mt 3902 3546 L
+3902 2931 mt 3902 2965 L
+3836 3726 mt 
+(10) s
+4330 3581 mt 4330 3546 L
+4330 2931 mt 4330 2965 L
+4264 3726 mt 
+(15) s
+4759 3581 mt 4759 3546 L
+4759 2931 mt 4759 2965 L
+4693 3726 mt 
+(20) s
+1331 3521 mt 1365 3521 L
+4759 3521 mt 4724 3521 L
+1230 3565 mt 
+(0) s
+1331 3226 mt 1365 3226 L
+4759 3226 mt 4724 3226 L
+1130 3270 mt 
+(0.5) s
+1331 2931 mt 1365 2931 L
+4759 2931 mt 4724 2931 L
+1230 2975 mt 
+(1) s
+1331 3581 mt 4759 3581 L
+1331 2931 mt 4759 2931 L
+1331 3581 mt 1331 2931 L
+4759 3581 mt 4759 2931 L
+gs 1331 2931 3429 651 rc
+c8
+86 1 86 0 86 2 85 1 86 1 86 2 85 2 86 3 
+86 2 85 4 86 3 86 3 86 4 85 3 86 3 86 2 
+85 2 86 2 86 1 85 1 86 0 86 -2 86 -1 85 -3 
+86 -2 86 -3 85 -4 86 -4 86 -4 85 -2 86 -3 86 -2 
+86 -3 85 -3 86 -1 86 -2 85 -1 86 -1 86 0 85 0 
+1331 3506 41 MP stroke
+gr
+
+c8
+0 sg
+1483 2836 mt 
+(Cross Correlation for Two Stimulus Repeats, Sigma =0.005) s
+gs 1331 2931 3429 651 rc
+c9
+-86 0 -85 0 0 55 85 1 86 0 0 -56 2959 3521 7 MP
+PP
+0 sg
+0 0 -86 0 -85 0 0 55 85 1 86 0 0 -56 2959 3521 8 MP stroke
+gr
+
+3902 3386 mt 
+(0.083613) s
+1 sg
+0 650 3428 0 0 -650 5841 3581 4 MP
+PP
+-3428 0 0 650 3428 0 0 -650 5841 3581 5 MP stroke
+4 w
+DO
+SO
+6 w
+0 sg
+5841 3581 mt 9269 3581 L
+5841 2931 mt 9269 2931 L
+5841 3581 mt 5841 2931 L
+9269 3581 mt 9269 2931 L
+5841 3581 mt 9269 3581 L
+5841 3581 mt 5841 2931 L
+5841 3581 mt 5841 3546 L
+5841 2931 mt 5841 2965 L
+5705 3726 mt 
+(-20) s
+6269 3581 mt 6269 3546 L
+6269 2931 mt 6269 2965 L
+6133 3726 mt 
+(-15) s
+6698 3581 mt 6698 3546 L
+6698 2931 mt 6698 2965 L
+6562 3726 mt 
+(-10) s
+7126 3581 mt 7126 3546 L
+7126 2931 mt 7126 2965 L
+7023 3726 mt 
+(-5) s
+7555 3581 mt 7555 3546 L
+7555 2931 mt 7555 2965 L
+7522 3726 mt 
+(0) s
+7983 3581 mt 7983 3546 L
+7983 2931 mt 7983 2965 L
+7950 3726 mt 
+(5) s
+8412 3581 mt 8412 3546 L
+8412 2931 mt 8412 2965 L
+8346 3726 mt 
+(10) s
+8840 3581 mt 8840 3546 L
+8840 2931 mt 8840 2965 L
+8774 3726 mt 
+(15) s
+9269 3581 mt 9269 3546 L
+9269 2931 mt 9269 2965 L
+9203 3726 mt 
+(20) s
+5841 3521 mt 5875 3521 L
+9269 3521 mt 9234 3521 L
+5740 3565 mt 
+(0) s
+5841 3226 mt 5875 3226 L
+9269 3226 mt 9234 3226 L
+5640 3270 mt 
+(0.5) s
+5841 2931 mt 5875 2931 L
+9269 2931 mt 9234 2931 L
+5740 2975 mt 
+(1) s
+5841 3581 mt 9269 3581 L
+5841 2931 mt 9269 2931 L
+5841 3581 mt 5841 2931 L
+9269 3581 mt 9269 2931 L
+gs 5841 2931 3429 651 rc
+c8
+86 0 86 2 86 1 85 1 86 0 86 1 85 1 86 1 
+86 1 85 1 86 1 86 1 86 0 85 1 86 1 86 0 
+85 0 86 1 86 0 85 0 86 0 86 -1 86 1 85 -1 
+86 -1 86 0 85 -1 86 0 86 -1 85 -1 86 -1 86 -1 
+86 -1 85 -1 86 -1 86 -1 85 -1 86 -1 86 0 85 -1 
+5841 3499 41 MP stroke
+gr
+
+c8
+0 sg
+6026 2836 mt 
+(Cross Correlation for Two Stimulus Repeats, Sigma =0.01) s
+gs 5841 2931 3429 651 rc
+c9
+-86 0 -85 0 0 36 85 0 86 0 0 -36 7469 3521 7 MP
+PP
+0 sg
+0 0 -86 0 -85 0 0 36 85 0 86 0 0 -36 7469 3521 8 MP stroke
+gr
+
+8412 3386 mt 
+(0.059039) s
+1 sg
+0 650 3428 0 0 -650 1331 4625 4 MP
+PP
+-3428 0 0 650 3428 0 0 -650 1331 4625 5 MP stroke
+4 w
+DO
+SO
+6 w
+0 sg
+1331 4625 mt 4759 4625 L
+1331 3975 mt 4759 3975 L
+1331 4625 mt 1331 3975 L
+4759 4625 mt 4759 3975 L
+1331 4625 mt 4759 4625 L
+1331 4625 mt 1331 3975 L
+1331 4625 mt 1331 4590 L
+1331 3975 mt 1331 4009 L
+1195 4770 mt 
+(-20) s
+1759 4625 mt 1759 4590 L
+1759 3975 mt 1759 4009 L
+1623 4770 mt 
+(-15) s
+2188 4625 mt 2188 4590 L
+2188 3975 mt 2188 4009 L
+2052 4770 mt 
+(-10) s
+2616 4625 mt 2616 4590 L
+2616 3975 mt 2616 4009 L
+2513 4770 mt 
+(-5) s
+3045 4625 mt 3045 4590 L
+3045 3975 mt 3045 4009 L
+3012 4770 mt 
+(0) s
+3473 4625 mt 3473 4590 L
+3473 3975 mt 3473 4009 L
+3440 4770 mt 
+(5) s
+3902 4625 mt 3902 4590 L
+3902 3975 mt 3902 4009 L
+3836 4770 mt 
+(10) s
+4330 4625 mt 4330 4590 L
+4330 3975 mt 4330 4009 L
+4264 4770 mt 
+(15) s
+4759 4625 mt 4759 4590 L
+4759 3975 mt 4759 4009 L
+4693 4770 mt 
+(20) s
+1331 4565 mt 1365 4565 L
+4759 4565 mt 4724 4565 L
+1230 4609 mt 
+(0) s
+1331 4270 mt 1365 4270 L
+4759 4270 mt 4724 4270 L
+1130 4314 mt 
+(0.5) s
+1331 3975 mt 1365 3975 L
+4759 3975 mt 4724 3975 L
+1230 4019 mt 
+(1) s
+1331 4625 mt 4759 4625 L
+1331 3975 mt 4759 3975 L
+1331 4625 mt 1331 3975 L
+4759 4625 mt 4759 3975 L
+gs 1331 3975 3429 651 rc
+c8
+86 -1 86 1 86 0 85 0 86 0 86 0 85 1 86 -1 
+86 0 85 0 86 0 86 0 86 1 85 -1 86 0 86 1 
+85 0 86 0 86 -1 85 1 86 -1 86 0 86 1 85 0 
+86 0 86 -1 85 0 86 1 86 -1 85 0 86 0 86 0 
+86 0 85 0 86 0 86 0 85 0 86 0 86 0 85 0 
+1331 4553 41 MP stroke
+gr
+
+c8
+0 sg
+1516 3880 mt 
+(Cross Correlation for Two Stimulus Repeats, Sigma =0.05) s
+gs 1331 3975 3429 651 rc
+c9
+-86 0 -85 0 0 12 85 1 86 -1 0 -12 2959 4565 7 MP
+PP
+0 sg
+0 0 -86 0 -85 0 0 12 85 1 86 -1 0 -12 2959 4565 8 MP stroke
+gr
+
+3902 4430 mt 
+(0.050909) s
+1 sg
+0 650 3428 0 0 -650 5841 4625 4 MP
+PP
+-3428 0 0 650 3428 0 0 -650 5841 4625 5 MP stroke
+4 w
+DO
+SO
+6 w
+0 sg
+5841 4625 mt 9269 4625 L
+5841 3975 mt 9269 3975 L
+5841 4625 mt 5841 3975 L
+9269 4625 mt 9269 3975 L
+5841 4625 mt 9269 4625 L
+5841 4625 mt 5841 3975 L
+5841 4625 mt 5841 4590 L
+5841 3975 mt 5841 4009 L
+5705 4770 mt 
+(-20) s
+6269 4625 mt 6269 4590 L
+6269 3975 mt 6269 4009 L
+6133 4770 mt 
+(-15) s
+6698 4625 mt 6698 4590 L
+6698 3975 mt 6698 4009 L
+6562 4770 mt 
+(-10) s
+7126 4625 mt 7126 4590 L
+7126 3975 mt 7126 4009 L
+7023 4770 mt 
+(-5) s
+7555 4625 mt 7555 4590 L
+7555 3975 mt 7555 4009 L
+7522 4770 mt 
+(0) s
+7983 4625 mt 7983 4590 L
+7983 3975 mt 7983 4009 L
+7950 4770 mt 
+(5) s
+8412 4625 mt 8412 4590 L
+8412 3975 mt 8412 4009 L
+8346 4770 mt 
+(10) s
+8840 4625 mt 8840 4590 L
+8840 3975 mt 8840 4009 L
+8774 4770 mt 
+(15) s
+9269 4625 mt 9269 4590 L
+9269 3975 mt 9269 4009 L
+9203 4770 mt 
+(20) s
+5841 4565 mt 5875 4565 L
+9269 4565 mt 9234 4565 L
+5740 4609 mt 
+(0) s
+5841 4270 mt 5875 4270 L
+9269 4270 mt 9234 4270 L
+5640 4314 mt 
+(0.5) s
+5841 3975 mt 5875 3975 L
+9269 3975 mt 9234 3975 L
+5740 4019 mt 
+(1) s
+5841 4625 mt 9269 4625 L
+5841 3975 mt 9269 3975 L
+5841 4625 mt 5841 3975 L
+9269 4625 mt 9269 3975 L
+gs 5841 3975 3429 651 rc
+c8
+86 0 86 0 86 0 85 0 86 0 86 0 85 0 86 0 
+86 0 85 0 86 0 86 0 86 0 85 0 86 0 86 0 
+85 0 86 0 86 0 85 0 86 0 86 0 86 0 85 0 
+86 1 86 -1 85 0 86 0 86 0 85 0 86 0 86 0 
+86 0 85 0 86 0 86 0 85 0 86 0 86 0 85 0 
+5841 4559 41 MP stroke
+gr
+
+c8
+0 sg
+6059 3880 mt 
+(Cross Correlation for Two Stimulus Repeats, Sigma =0.1) s
+gs 5841 3975 3429 651 rc
+c9
+-86 0 -85 0 0 6 85 0 86 0 0 -6 7469 4565 7 MP
+PP
+0 sg
+0 0 -86 0 -85 0 0 6 85 0 86 0 0 -6 7469 4565 8 MP stroke
+gr
+
+8412 4430 mt 
+(0.050624) s
+1 sg
+0 650 3428 0 0 -650 1331 5669 4 MP
+PP
+-3428 0 0 650 3428 0 0 -650 1331 5669 5 MP stroke
+4 w
+DO
+SO
+6 w
+0 sg
+1331 5669 mt 4759 5669 L
+1331 5019 mt 4759 5019 L
+1331 5669 mt 1331 5019 L
+4759 5669 mt 4759 5019 L
+1331 5669 mt 4759 5669 L
+1331 5669 mt 1331 5019 L
+1331 5669 mt 1331 5634 L
+1331 5019 mt 1331 5053 L
+1195 5814 mt 
+(-20) s
+1759 5669 mt 1759 5634 L
+1759 5019 mt 1759 5053 L
+1623 5814 mt 
+(-15) s
+2188 5669 mt 2188 5634 L
+2188 5019 mt 2188 5053 L
+2052 5814 mt 
+(-10) s
+2616 5669 mt 2616 5634 L
+2616 5019 mt 2616 5053 L
+2513 5814 mt 
+(-5) s
+3045 5669 mt 3045 5634 L
+3045 5019 mt 3045 5053 L
+3012 5814 mt 
+(0) s
+3473 5669 mt 3473 5634 L
+3473 5019 mt 3473 5053 L
+3440 5814 mt 
+(5) s
+3902 5669 mt 3902 5634 L
+3902 5019 mt 3902 5053 L
+3836 5814 mt 
+(10) s
+4330 5669 mt 4330 5634 L
+4330 5019 mt 4330 5053 L
+4264 5814 mt 
+(15) s
+4759 5669 mt 4759 5634 L
+4759 5019 mt 4759 5053 L
+4693 5814 mt 
+(20) s
+1331 5609 mt 1365 5609 L
+4759 5609 mt 4724 5609 L
+1230 5653 mt 
+(0) s
+1331 5314 mt 1365 5314 L
+4759 5314 mt 4724 5314 L
+1130 5358 mt 
+(0.5) s
+1331 5019 mt 1365 5019 L
+4759 5019 mt 4724 5019 L
+1230 5063 mt 
+(1) s
+1331 5669 mt 4759 5669 L
+1331 5019 mt 4759 5019 L
+1331 5669 mt 1331 5019 L
+4759 5669 mt 4759 5019 L
+gs 1331 5019 3429 651 rc
+c8
+86 0 86 0 86 0 85 0 86 0 86 0 85 0 86 0 
+86 0 85 0 86 -1 86 1 86 0 85 0 86 0 86 0 
+85 0 86 0 86 0 85 0 86 0 86 0 86 0 85 0 
+86 0 86 0 85 0 86 0 86 0 85 0 86 0 86 0 
+86 0 85 0 86 0 86 0 85 0 86 0 86 0 85 0 
+1331 5608 41 MP stroke
+gr
+
+c8
+0 sg
+1549 4924 mt 
+(Cross Correlation for Two Stimulus Repeats, Sigma =0.5) s
+gs 1331 5019 3429 651 rc
+c9
+-86 0 -85 0 0 1 85 0 86 0 0 -1 2959 5609 7 MP
+PP
+0 sg
+0 0 -86 0 -85 0 0 1 85 0 86 0 0 -1 2959 5609 8 MP stroke
+gr
+
+3902 5474 mt 
+(0.064319) s
+1 sg
+0 650 3428 0 0 -650 5841 5669 4 MP
+PP
+-3428 0 0 650 3428 0 0 -650 5841 5669 5 MP stroke
+4 w
+DO
+SO
+6 w
+0 sg
+5841 5669 mt 9269 5669 L
+5841 5019 mt 9269 5019 L
+5841 5669 mt 5841 5019 L
+9269 5669 mt 9269 5019 L
+5841 5669 mt 9269 5669 L
+5841 5669 mt 5841 5019 L
+5841 5669 mt 5841 5634 L
+5841 5019 mt 5841 5053 L
+5705 5814 mt 
+(-20) s
+6269 5669 mt 6269 5634 L
+6269 5019 mt 6269 5053 L
+6133 5814 mt 
+(-15) s
+6698 5669 mt 6698 5634 L
+6698 5019 mt 6698 5053 L
+6562 5814 mt 
+(-10) s
+7126 5669 mt 7126 5634 L
+7126 5019 mt 7126 5053 L
+7023 5814 mt 
+(-5) s
+7555 5669 mt 7555 5634 L
+7555 5019 mt 7555 5053 L
+7522 5814 mt 
+(0) s
+7983 5669 mt 7983 5634 L
+7983 5019 mt 7983 5053 L
+7950 5814 mt 
+(5) s
+8412 5669 mt 8412 5634 L
+8412 5019 mt 8412 5053 L
+8346 5814 mt 
+(10) s
+8840 5669 mt 8840 5634 L
+8840 5019 mt 8840 5053 L
+8774 5814 mt 
+(15) s
+9269 5669 mt 9269 5634 L
+9269 5019 mt 9269 5053 L
+9203 5814 mt 
+(20) s
+5841 5609 mt 5875 5609 L
+9269 5609 mt 9234 5609 L
+5740 5653 mt 
+(0) s
+5841 5314 mt 5875 5314 L
+9269 5314 mt 9234 5314 L
+5640 5358 mt 
+(0.5) s
+5841 5019 mt 5875 5019 L
+9269 5019 mt 9234 5019 L
+5740 5063 mt 
+(1) s
+5841 5669 mt 9269 5669 L
+5841 5019 mt 9269 5019 L
+5841 5669 mt 5841 5019 L
+9269 5669 mt 9269 5019 L
+gs 5841 5019 3429 651 rc
+c8
+86 0 86 0 86 0 85 0 86 0 86 0 85 0 86 0 
+86 0 85 0 86 0 86 0 86 0 85 0 86 0 86 0 
+85 0 86 0 86 0 85 0 86 0 86 0 86 0 85 0 
+86 0 86 0 85 0 86 0 86 0 85 0 86 0 86 0 
+86 0 85 0 86 0 86 0 85 0 86 0 86 0 85 0 
+5841 5609 41 MP stroke
+gr
+
+c8
+0 sg
+6109 4924 mt 
+(Cross Correlation for Two Stimulus Repeats, Sigma =1) s
+gs 5841 5019 3429 651 rc
+c9
+-86 0 -85 0 0 0 85 0 86 0 0 0 7469 5609 7 MP
+PP
+0 sg
+0 0 -86 0 -85 0 0 0 85 0 86 0 0 0 7469 5609 8 MP stroke
+gr
+
+8412 5474 mt 
+(-9.7538) s
+1 sg
+0 650 3428 0 0 -650 1331 6713 4 MP
+PP
+-3428 0 0 650 3428 0 0 -650 1331 6713 5 MP stroke
+4 w
+DO
+SO
+6 w
+0 sg
+1331 6713 mt 4759 6713 L
+1331 6063 mt 4759 6063 L
+1331 6713 mt 1331 6063 L
+4759 6713 mt 4759 6063 L
+1331 6713 mt 4759 6713 L
+1331 6713 mt 1331 6063 L
+1331 6713 mt 1331 6678 L
+1331 6063 mt 1331 6097 L
+1195 6858 mt 
+(-20) s
+1759 6713 mt 1759 6678 L
+1759 6063 mt 1759 6097 L
+1623 6858 mt 
+(-15) s
+2188 6713 mt 2188 6678 L
+2188 6063 mt 2188 6097 L
+2052 6858 mt 
+(-10) s
+2616 6713 mt 2616 6678 L
+2616 6063 mt 2616 6097 L
+2513 6858 mt 
+(-5) s
+3045 6713 mt 3045 6678 L
+3045 6063 mt 3045 6097 L
+3012 6858 mt 
+(0) s
+3473 6713 mt 3473 6678 L
+3473 6063 mt 3473 6097 L
+3440 6858 mt 
+(5) s
+3902 6713 mt 3902 6678 L
+3902 6063 mt 3902 6097 L
+3836 6858 mt 
+(10) s
+4330 6713 mt 4330 6678 L
+4330 6063 mt 4330 6097 L
+4264 6858 mt 
+(15) s
+4759 6713 mt 4759 6678 L
+4759 6063 mt 4759 6097 L
+4693 6858 mt 
+(20) s
+1331 6653 mt 1365 6653 L
+4759 6653 mt 4724 6653 L
+1230 6697 mt 
+(0) s
+1331 6358 mt 1365 6358 L
+4759 6358 mt 4724 6358 L
+1130 6402 mt 
+(0.5) s
+1331 6063 mt 1365 6063 L
+4759 6063 mt 4724 6063 L
+1230 6107 mt 
+(1) s
+1331 6713 mt 4759 6713 L
+1331 6063 mt 4759 6063 L
+1331 6713 mt 1331 6063 L
+4759 6713 mt 4759 6063 L
+gs 1331 6063 3429 651 rc
+c8
+86 0 86 0 86 0 85 0 86 0 86 0 85 0 86 0 
+86 0 85 0 86 0 86 0 86 0 85 0 86 0 86 0 
+85 0 86 0 86 0 85 0 86 0 86 0 86 0 85 0 
+86 0 86 0 85 0 86 0 86 0 85 0 86 0 86 0 
+86 0 85 0 86 0 86 0 85 0 86 0 86 0 85 0 
+1331 6653 41 MP stroke
+gr
+
+c8
+0 sg
+1599 5968 mt 
+(Cross Correlation for Two Stimulus Repeats, Sigma =2) s
+gs 1331 6063 3429 651 rc
+c9
+-86 0 -85 0 0 0 85 0 86 0 0 0 2959 6653 7 MP
+PP
+0 sg
+0 0 -86 0 -85 0 0 0 85 0 86 0 0 0 2959 6653 8 MP stroke
+gr
+
+3902 6518 mt 
+(0.10329) s
+1 sg
+0 650 3428 0 0 -650 5841 6713 4 MP
+PP
+-3428 0 0 650 3428 0 0 -650 5841 6713 5 MP stroke
+4 w
+DO
+SO
+6 w
+0 sg
+5841 6713 mt 9269 6713 L
+5841 6063 mt 9269 6063 L
+5841 6713 mt 5841 6063 L
+9269 6713 mt 9269 6063 L
+5841 6713 mt 9269 6713 L
+5841 6713 mt 5841 6063 L
+5841 6713 mt 5841 6678 L
+5841 6063 mt 5841 6097 L
+5705 6858 mt 
+(-20) s
+6269 6713 mt 6269 6678 L
+6269 6063 mt 6269 6097 L
+6133 6858 mt 
+(-15) s
+6698 6713 mt 6698 6678 L
+6698 6063 mt 6698 6097 L
+6562 6858 mt 
+(-10) s
+7126 6713 mt 7126 6678 L
+7126 6063 mt 7126 6097 L
+7023 6858 mt 
+(-5) s
+7555 6713 mt 7555 6678 L
+7555 6063 mt 7555 6097 L
+7522 6858 mt 
+(0) s
+7983 6713 mt 7983 6678 L
+7983 6063 mt 7983 6097 L
+7950 6858 mt 
+(5) s
+8412 6713 mt 8412 6678 L
+8412 6063 mt 8412 6097 L
+8346 6858 mt 
+(10) s
+8840 6713 mt 8840 6678 L
+8840 6063 mt 8840 6097 L
+8774 6858 mt 
+(15) s
+9269 6713 mt 9269 6678 L
+9269 6063 mt 9269 6097 L
+9203 6858 mt 
+(20) s
+5841 6653 mt 5875 6653 L
+9269 6653 mt 9234 6653 L
+5740 6697 mt 
+(0) s
+5841 6358 mt 5875 6358 L
+9269 6358 mt 9234 6358 L
+5640 6402 mt 
+(0.5) s
+5841 6063 mt 5875 6063 L
+9269 6063 mt 9234 6063 L
+5740 6107 mt 
+(1) s
+5841 6713 mt 9269 6713 L
+5841 6063 mt 9269 6063 L
+5841 6713 mt 5841 6063 L
+9269 6713 mt 9269 6063 L
+gs 5841 6063 3429 651 rc
+c8
+86 0 86 0 86 0 85 0 86 0 86 0 85 0 86 0 
+86 0 85 0 86 0 86 0 86 0 85 0 86 0 86 0 
+85 0 86 0 86 0 85 0 86 0 86 0 86 0 85 0 
+86 0 86 0 85 0 86 0 86 0 85 0 86 0 86 0 
+86 0 85 0 86 0 86 0 85 0 86 0 86 0 85 0 
+5841 6653 41 MP stroke
+gr
+
+c8
+0 sg
+6109 5968 mt 
+(Cross Correlation for Two Stimulus Repeats, Sigma =5) s
+gs 5841 6063 3429 651 rc
+c9
+-86 0 -85 0 0 0 85 0 86 0 0 0 7469 6653 7 MP
+PP
+0 sg
+0 0 -86 0 -85 0 0 0 85 0 86 0 0 0 7469 6653 8 MP stroke
+gr
+
+8412 6518 mt 
+(0.072833) s
+1 sg
+0 650 3428 0 0 -650 1331 7756 4 MP
+PP
+-3428 0 0 650 3428 0 0 -650 1331 7756 5 MP stroke
+4 w
+DO
+SO
+6 w
+0 sg
+1331 7756 mt 4759 7756 L
+1331 7106 mt 4759 7106 L
+1331 7756 mt 1331 7106 L
+4759 7756 mt 4759 7106 L
+1331 7756 mt 4759 7756 L
+1331 7756 mt 1331 7106 L
+1331 7756 mt 1331 7721 L
+1331 7106 mt 1331 7140 L
+1195 7901 mt 
+(-20) s
+1759 7756 mt 1759 7721 L
+1759 7106 mt 1759 7140 L
+1623 7901 mt 
+(-15) s
+2188 7756 mt 2188 7721 L
+2188 7106 mt 2188 7140 L
+2052 7901 mt 
+(-10) s
+2616 7756 mt 2616 7721 L
+2616 7106 mt 2616 7140 L
+2513 7901 mt 
+(-5) s
+3045 7756 mt 3045 7721 L
+3045 7106 mt 3045 7140 L
+3012 7901 mt 
+(0) s
+3473 7756 mt 3473 7721 L
+3473 7106 mt 3473 7140 L
+3440 7901 mt 
+(5) s
+3902 7756 mt 3902 7721 L
+3902 7106 mt 3902 7140 L
+3836 7901 mt 
+(10) s
+4330 7756 mt 4330 7721 L
+4330 7106 mt 4330 7140 L
+4264 7901 mt 
+(15) s
+4759 7756 mt 4759 7721 L
+4759 7106 mt 4759 7140 L
+4693 7901 mt 
+(20) s
+1331 7696 mt 1365 7696 L
+4759 7696 mt 4724 7696 L
+1230 7740 mt 
+(0) s
+1331 7401 mt 1365 7401 L
+4759 7401 mt 4724 7401 L
+1130 7445 mt 
+(0.5) s
+1331 7106 mt 1365 7106 L
+4759 7106 mt 4724 7106 L
+1230 7150 mt 
+(1) s
+1331 7756 mt 4759 7756 L
+1331 7106 mt 4759 7106 L
+1331 7756 mt 1331 7106 L
+4759 7756 mt 4759 7106 L
+gs 1331 7106 3429 651 rc
+c8
+86 0 86 0 86 0 85 0 86 0 86 0 85 0 86 0 
+86 0 85 0 86 0 86 0 86 0 85 0 86 0 86 0 
+85 0 86 0 86 0 85 0 86 0 86 0 86 0 85 0 
+86 0 86 0 85 0 86 0 86 0 85 0 86 0 86 0 
+86 0 85 0 86 0 86 0 85 0 86 0 86 0 85 0 
+1331 7696 41 MP stroke
+gr
+
+c8
+0 sg
+1566 7011 mt 
+(Cross Correlation for Two Stimulus Repeats, Sigma =10) s
+gs 1331 7106 3429 651 rc
+c9
+-86 0 -85 0 0 0 85 0 86 0 0 0 2959 7696 7 MP
+PP
+0 sg
+0 0 -86 0 -85 0 0 0 85 0 86 0 0 0 2959 7696 8 MP stroke
+gr
+
+3902 7561 mt 
+(-0.70213) s
+1 sg
+0 650 3428 0 0 -650 5841 7756 4 MP
+PP
+-3428 0 0 650 3428 0 0 -650 5841 7756 5 MP stroke
+4 w
+DO
+SO
+6 w
+0 sg
+5841 7756 mt 9269 7756 L
+5841 7106 mt 9269 7106 L
+5841 7756 mt 5841 7106 L
+9269 7756 mt 9269 7106 L
+5841 7756 mt 9269 7756 L
+5841 7756 mt 5841 7106 L
+5841 7756 mt 5841 7721 L
+5841 7106 mt 5841 7140 L
+5705 7901 mt 
+(-20) s
+6269 7756 mt 6269 7721 L
+6269 7106 mt 6269 7140 L
+6133 7901 mt 
+(-15) s
+6698 7756 mt 6698 7721 L
+6698 7106 mt 6698 7140 L
+6562 7901 mt 
+(-10) s
+7126 7756 mt 7126 7721 L
+7126 7106 mt 7126 7140 L
+7023 7901 mt 
+(-5) s
+7555 7756 mt 7555 7721 L
+7555 7106 mt 7555 7140 L
+7522 7901 mt 
+(0) s
+7983 7756 mt 7983 7721 L
+7983 7106 mt 7983 7140 L
+7950 7901 mt 
+(5) s
+8412 7756 mt 8412 7721 L
+8412 7106 mt 8412 7140 L
+8346 7901 mt 
+(10) s
+8840 7756 mt 8840 7721 L
+8840 7106 mt 8840 7140 L
+8774 7901 mt 
+(15) s
+9269 7756 mt 9269 7721 L
+9269 7106 mt 9269 7140 L
+9203 7901 mt 
+(20) s
+5841 7696 mt 5875 7696 L
+9269 7696 mt 9234 7696 L
+5740 7740 mt 
+(0) s
+5841 7401 mt 5875 7401 L
+9269 7401 mt 9234 7401 L
+5640 7445 mt 
+(0.5) s
+5841 7106 mt 5875 7106 L
+9269 7106 mt 9234 7106 L
+5740 7150 mt 
+(1) s
+5841 7756 mt 9269 7756 L
+5841 7106 mt 9269 7106 L
+5841 7756 mt 5841 7106 L
+9269 7756 mt 9269 7106 L
+gs 5841 7106 3429 651 rc
+c8
+86 0 86 0 86 0 85 0 86 0 86 0 85 0 86 0 
+86 0 85 0 86 0 86 0 86 0 85 0 86 0 86 0 
+85 0 86 0 86 0 85 0 86 0 86 0 86 0 85 0 
+86 0 86 0 85 0 86 0 86 0 85 0 86 0 86 0 
+86 0 85 0 86 0 86 0 85 0 86 0 86 0 85 0 
+5841 7696 41 MP stroke
+gr
+
+c8
+0 sg
+6076 7011 mt 
+(Cross Correlation for Two Stimulus Repeats, Sigma =30) s
+gs 5841 7106 3429 651 rc
+c9
+-86 0 -85 0 0 0 85 0 86 0 0 0 7469 7696 7 MP
+PP
+0 sg
+0 0 -86 0 -85 0 0 0 85 0 86 0 0 0 7469 7696 8 MP stroke
+gr
+
+8412 7561 mt 
+(0.10888) s
+1 sg
+0 650 3428 0 0 -650 1331 8800 4 MP
+PP
+-3428 0 0 650 3428 0 0 -650 1331 8800 5 MP stroke
+4 w
+DO
+SO
+6 w
+0 sg
+1331 8800 mt 4759 8800 L
+1331 8150 mt 4759 8150 L
+1331 8800 mt 1331 8150 L
+4759 8800 mt 4759 8150 L
+1331 8800 mt 4759 8800 L
+1331 8800 mt 1331 8150 L
+1331 8800 mt 1331 8765 L
+1331 8150 mt 1331 8184 L
+1195 8945 mt 
+(-20) s
+1759 8800 mt 1759 8765 L
+1759 8150 mt 1759 8184 L
+1623 8945 mt 
+(-15) s
+2188 8800 mt 2188 8765 L
+2188 8150 mt 2188 8184 L
+2052 8945 mt 
+(-10) s
+2616 8800 mt 2616 8765 L
+2616 8150 mt 2616 8184 L
+2513 8945 mt 
+(-5) s
+3045 8800 mt 3045 8765 L
+3045 8150 mt 3045 8184 L
+3012 8945 mt 
+(0) s
+3473 8800 mt 3473 8765 L
+3473 8150 mt 3473 8184 L
+3440 8945 mt 
+(5) s
+3902 8800 mt 3902 8765 L
+3902 8150 mt 3902 8184 L
+3836 8945 mt 
+(10) s
+4330 8800 mt 4330 8765 L
+4330 8150 mt 4330 8184 L
+4264 8945 mt 
+(15) s
+4759 8800 mt 4759 8765 L
+4759 8150 mt 4759 8184 L
+4693 8945 mt 
+(20) s
+1331 8740 mt 1365 8740 L
+4759 8740 mt 4724 8740 L
+1230 8784 mt 
+(0) s
+1331 8445 mt 1365 8445 L
+4759 8445 mt 4724 8445 L
+1130 8489 mt 
+(0.5) s
+1331 8150 mt 1365 8150 L
+4759 8150 mt 4724 8150 L
+1230 8194 mt 
+(1) s
+1331 8800 mt 4759 8800 L
+1331 8150 mt 4759 8150 L
+1331 8800 mt 1331 8150 L
+4759 8800 mt 4759 8150 L
+gs 1331 8150 3429 651 rc
+c8
+86 0 86 0 86 0 85 0 86 0 86 0 85 0 86 0 
+86 0 85 0 86 0 86 0 86 0 85 0 86 0 86 0 
+85 0 86 0 86 0 85 0 86 0 86 0 86 0 85 0 
+86 0 86 0 85 0 86 0 86 0 85 0 86 0 86 0 
+86 0 85 0 86 0 86 0 85 0 86 0 86 0 85 0 
+1331 8740 41 MP stroke
+gr
+
+c8
+0 sg
+1533 8055 mt 
+(Cross Correlation for Two Stimulus Repeats, Sigma =100) s
+gs 1331 8150 3429 651 rc
+c9
+-86 0 -85 0 0 0 85 0 86 0 0 0 2959 8740 7 MP
+PP
+0 sg
+0 0 -86 0 -85 0 0 0 85 0 86 0 0 0 2959 8740 8 MP stroke
+gr
+
+3902 8605 mt 
+(-0.75032) s
+
+end %%Color Dict
+
+eplot
+%%EndObject
+
+epage
+end
+
+showpage
+
+%%Trailer
+%%EOF

@@ -1,0 +1,16 @@
+%client side:
+function hidens_startSaving(plugNum, hostAddr, message)
+
+    sockcon = pnet('tcpsocket', 11112); % only create this socket once
+    con=pnet('tcpconnect', hostAddr, 11112);
+    pnet(con,'setwritetimeout', 1);
+    pnet(con,'printf', 'select %d\n', plugNum);
+
+    if ( exist('message') ) 
+        pnet(con,'printf', 'save_start . %s\n', message);
+    else
+        pnet(con,'printf', 'save_start\n');
+    end
+    
+    pnet(con, 'close');
+end

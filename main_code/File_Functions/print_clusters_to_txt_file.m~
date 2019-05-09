@@ -1,0 +1,33 @@
+function print_clusters_to_txt_file(fileDir, filePattern, fileInds, fileOutputName, varargin)
+
+% set output dir to current dir (default)
+outputDir = pwd;
+
+if ~isempty(varargin)
+   for i=1:length(varargin)
+      if strcmp(varargin{i}, 'set_output_dir') 
+        outputDir = varargin{i+1};
+      elseif strcmp(varargin{i}, 'file_inds') 
+          fileInds = varargin{i+1};
+      end
+   end
+end
+
+% get file names 
+fileNames = dir(fullfile(fileDir,filePattern));
+
+% fileInds default
+if isempty(fileInds)
+    fileInds = [1:length(fileNames)];
+end
+
+% open file
+fid = fopen(fullfile(outputDir,fileOutputName),'a');
+
+for i=1:length(fileInds)
+
+
+
+
+
+end

@@ -1,0 +1,23 @@
+function plot_pktpk(neuron)
+
+%This function plots the peak to peak histogram of a sorted neuron.
+%Data are taken from channel with highest pktpk amplitude.
+
+[v ind]=max(abs(max(neuron.template.data)-min(neuron.template.data)));
+% ind = template index with highest pktpk
+
+trcs=neuron.trace{ind}.data;
+pktpks=max(trcs)-min(trcs);
+
+    hist(pktpks,50)
+    xlabel('Peak to peak amplitude [uV]','Fontsize',30)
+    ylabel('Traces count','Fontsize',30)
+    title(['Peak-to-peak Histogram at electrode x = ',int2str(neuron.x(ind)),' and y = ',int2str(neuron.y(ind))],'Fontsize',30);
+    xlim=get(gca,'XLim');
+    ylim=get(gca,'YLim');
+    ytextpos1=ylim(2)-(ylim(2)-ylim(1))/20;
+    ytextpos2=ylim(2)-(ylim(2)-ylim(1))*2/20;
+    xtextpos=xlim(1)+(xlim(2)-xlim(1))*0.3/20;
+    text(xtextpos,ytextpos1,['mean amplitude = ',int2str(mean(pktpks))],'color','r','Fontsize',25)
+    text(xtextpos,ytextpos2,['std amplitude = ',int2str(std(pktpks))],'color','r','Fontsize',25)
+end

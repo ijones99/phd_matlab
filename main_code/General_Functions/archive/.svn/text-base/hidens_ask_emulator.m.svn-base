@@ -1,0 +1,11 @@
+function y=hidens_ask_emulator(str)
+
+ntk_stream_f=which('ntk_stream');
+[pathstr, name, ext, versn] = fileparts(ntk_stream_f);
+
+emulator=[pathstr '/EmulatorTool'];
+
+unixcmd = ['printf "' str '" | ' emulator ' -q 2>/dev/null'];
+
+[s y]=unix(unixcmd);
+

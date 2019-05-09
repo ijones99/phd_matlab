@@ -1,0 +1,104 @@
+suffixName = '_orig_stat_surr';
+flistName = 'flist_orig_stat_surr'
+flist ={}; eval(flistName);
+% elNumbers = [4631 4938 5444 5749 5851 6059 6361 6464]; % %get from white
+% noise checkerboard
+flistFileNameID = get_flist_file_id(flist{1}, suffixName);
+
+flistFileNameID = get_flist_file_id(flist{1}, suffixName);
+% dir names
+dirNameSt = strcat('../analysed_data/',   flistFileNameID,'/03_Neuron_Selection/');
+dirNameCl = strcat('../analysed_data/',   flistFileNameID,'/02_Post_Spikesorting/');
+dirNameEl = strcat('../analysed_data/',   flistFileNameID,'/01_Pre_Spikesorting/');
+dirNameFFile = strcat('../analysed_data/',   flistFileNameID);
+
+% frameno file name
+framenoFileName = strcat('frameno_', flistFileNameID, '.mat');
+% load light timestamp framenos
+load(fullfile(dirNameFFile,framenoFileName));
+
+% shift timestamps for stimulus frames
+frameno = shiftframets(frameno);
+
+% get timestamps
+neurNames = '6172n169';
+selNeuronInds = get_file_inds_from_neur_names(dirNameSt, '*.mat', neurNames);
+tsMatrix  = get_tsmatrix(flistFileNameID, 'sel_by_ind', selNeuronInds)
+tsMatrixOrig = tsMatrix;
+%% create jitter
+% % tsMatrix = tsMatrixOrig;
+% % % create jitter
+% % mu = 0; sigma = .0005; % distribution settings
+% % numSpikes = length(tsMatrix{1}.spikeTimes); % number spikes
+% % jitter = normrnd(mu,sigma,[1,numSpikes]); % create normal distributed j
+
+%% create dataset
+neuronIndNo = 1
+clear X
+% clear selSpikes
+% clear stimDurSec
+for iStimNum = 1:2
+    [selSpikes{iStimNum} , stimDurSec{iStimNum}] = parse_stimulus_repeat_responses_natural_movie(frameno, tsMatrix , neuronIndNo, iStimNum)
+    
+end
+
+spikeTrains = selSpikes{1};
+spikeTrainBase = selSpikes{1}{1};
+%% create dataset
+repeatNum = 50;
+costInfo = {};
+mu = 0; % distribution settings
+numSpikes = length(spikeTrainBase); % number spikes
+spikeTrains = {};
+precisionInfo = {};
+sigmaValues = 1e-3.*[5]; % 1 2 5
+i = 1;
+clear precisionInfo
+for iSigma = sigmaValues
+    
+    for iRepeatNum = 1:repeatNum
+        jitter = normrnd(mu,iSigma,[1,numSpikes]); % create normal distributed j
+        spikeTrains{iRepeatNum} = unique(sort(spikeTrainBase+jitter,'ascend'));
+    end
+    precisionInfo{i}.sigma = iSigma;
+    precisionInfo{i}.spikeTrains = spikeTrains;
+    i=i+1;
+end
+
+% Remove spikes
+clear precisionInfo
+spikeTrainsMod = {};
+percentSpikesToRemove = [0 5 10 25 50 75 90];
+repeatNum = length(originalSpikeTrains);
+sigma = iSigma; % sigma value
+originalSpikeTrains = spikeTrains; % original spiketrains
+
+for i = 1:length(percentSpikesToRemove) % go through different percents removal
+    clear spikeTrainsMod
+    spikeTrainsMod = originalSpikeTrains; % set all groups of spikeTrains equal to original
+    % keep reusing original spike trains
+    numSpikesInTrain = length(originalSpikeTrains{1}); %num spikes in spike train
+    numSpikesToRemove = round((percentSpikesToRemove(i)/100)*numSpikesInTrain); % num spikes to remove
+    
+    %     R = randperm(numSpikesInTrain);%generate random numbers
+    %     spikeIndsToRem = R(1:numSpikesToRemove);%pick the first 1-n numbers
+    for iRepeatNum = 1:repeatNum % go through all of the repeats in each group
+        
+        if percentSpikesToRemove(i) ~= 0 % if some spikes are to be removed, then remove them
+            
+            R = randperm(numSpikesInTrain);%generate random numbers
+            spikeIndsToRem = R(1:numSpikesToRemove);%pick the first 1-n numbers
+            %             spikeIndsToRem
+            %             spikeIndsToRem = randi(numSpikesInTrain ,1,numSpikesToRemove);%random distribution of spike inds
+            spikeTrainsMod{iRepeatNum}(spikeIndsToRem) = [];
+        end
+    end
+    precisionInfo{i}.sigma = iSigma;
+    precisionInfo{i}.percentSpikesRemoved = percentSpikesToRemove(i);
+    precisionInfo{i}.spikeTrains = spikeTrainsMod;
+    
+    
+end
+
+
+

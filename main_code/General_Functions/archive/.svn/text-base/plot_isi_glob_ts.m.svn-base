@@ -1,0 +1,59 @@
+function plot_isi_glob_ts(neuron,varargin)
+
+%PLOT_ISI  plot interspike intervall of neurons
+%
+%   PLOT_ISI(NEUR) plots ISI of neurons. NEUR can be a single neuron (e.g
+%   nnn.neurons{1}, det_neur{1}). This function uses global time stamps.
+%
+%   PLOT_ISI(...,'max_time',TIME) limits the time axis up to TIME [ms] and
+%   provides a better resolution.
+
+maxt=0;
+no_fig=0;
+
+i=1;
+
+while i<=length(varargin)
+    if not(isempty(varargin{i}))
+        if strcmp(varargin{i}, 'max_time')
+            i=i+1;
+            maxt=varargin{i};
+        elseif strcmp(varargin{i}, 'no_figure')
+            no_fig=1;
+        else
+            fprintf('unknown argument at pos %d\n', 1+i);
+        end
+    end
+    i=i+1;
+end
+
+
+sr=20000;
+
+if isfield(neuron,'glob_ts')
+    ts=neuron.glob_ts;
+else
+    ts=neuron.ts;
+end
+
+
+ts=ts/sr*1000; %get ms
+
+isi=diff(sort(ts));
+        
+if maxt>0
+xlim([0 maxt]);
+isi=isi(isi<maxt);
+end
+
+hist(isi,100)
+ylabel('Spike count','Fontsize',30)
+xlabel('ISI [ms]','Fontsize',30)
+title('Interspike Interval Histogram','Fontsize',30);
+
+end
+          
+        
+        
+        
+        

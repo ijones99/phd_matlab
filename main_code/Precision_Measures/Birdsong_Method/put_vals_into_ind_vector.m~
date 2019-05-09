@@ -1,0 +1,10 @@
+function spikeTrain = put_vals_into_ind_vector(inputTs, inputVals, precision)
+
+spikeTrain = single(zeros(1, inputTs(end)*1/precision));
+
+for i=1:2:length(inputTs)
+    spikeTrain(inputTs(i):inputTs(i+1)-1)=
+
+end
+
+end

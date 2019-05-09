@@ -1,0 +1,12 @@
+------- Stimuli Log File 2012-02-16 -------
+
+
+2012-02-16 19:39:38 - begin stimulus: test1
+2012-02-16 19:39:41 - end stimulus: test1
+
+2012-02-16 19:40:16 - begin stimulus: movies
+2012-02-16 19:41:07 - end stimulus: ss_ma_movie
+
+2012-02-16 19:41:12 - begin stimulus: movies
+2012-02-16 19:41:21 - end stimulus: ds_me_movie
+

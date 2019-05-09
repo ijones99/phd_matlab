@@ -1,0 +1,60 @@
+function y=select_channels(x, idx_list)
+
+%SELECT_CHANNELS(NTK2, CHS) trim electrodes in ntk-structure to elctrodes CHS
+%
+%   TYPICAL USE:
+% 
+%   1. If selected and trimed electrodes in e.g. neurons{1}:
+%
+%       [els_ntk, els_neur]=find_common_electrodes(ntk2,neurons{1});
+%       ntk2=select_channels(ntk2,els_ntk);
+%
+%   2. If selected electrodes in a certain range:
+%   
+%       els=select_electrodes_in_range(600, 650, 700, 750); % xmin,xmax,ymin,ymax 
+%       [els_ntk, els_neur]=find_common_electrodes(ntk2,els);
+%       ntk2=select_channels(ntk2,els_ntk);
+%
+%   See also trim_electrodes, select_electrodes_in_range, find_common_electrodes
+
+y=x;
+%y.sig=x.sig(:,idx_list);
+y.sig(:,setdiff(1:size(y.sig,2),idx_list))=[];
+if isfield(x, 'x')
+    y.x=x.x(idx_list);
+end
+if isfield(x, 'y')
+    y.y=x.y(idx_list);
+end
+y.channel_nr=x.channel_nr(idx_list);
+
+if isfield(x, 'std')
+    y.std=x.std(idx_list);
+end
+if isfield(x, 'thr_base')
+    y.thr_base=x.thr_base(idx_list);
+end
+if isfield(x, 'el_idx')
+    y.el_idx=x.el_idx(idx_list);
+end
+if isfield(x, 'prehp_mean')
+    y.prehp_mean=x.prehp_mean(idx_list);
+end
+if isfield(x, 'at_rail_percentage')
+    y.at_rail_percentage=x.at_rail_percentage(idx_list);
+end
+if isfield(x, 'median_thr')
+    y.median_thr=x.median_thr(idx_list);
+end
+if isfield(x, 'noise_sig')
+    y.noise_sig(:,setdiff(1:size(y.noise_sig,2),idx_list))=[];
+end
+if isfield(x, 'noise_std')
+    y.noise_std=x.noise_std(idx_list);
+end
+if isfield(x, 'noise_median_thr')
+    y.noise_median_thr=x.noise_median_thr(idx_list);
+end
+if isfield(x, 'noise_thr_base')
+    y.noise_thr_base=x.noise_thr_base(idx_list);
+end

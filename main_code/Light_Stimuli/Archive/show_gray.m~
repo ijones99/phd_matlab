@@ -1,0 +1,60 @@
+function show_gray(fullScreen)
+% show_gray([0...1]) full screen on or off
+% Press space bar to end
+
+% Make sure this is running on OpenGL Psychtoolbox:
+AssertOpenGL;
+HideCursor
+
+% KbName('KeyNamesLinux') %run this command to get the
+% names of the keys
+RestrictKeysForKbCheck(66) % Restrict response to the space bar
+
+% Values for projector brightness
+blackVal = 0;
+whiteVal = 255;
+darkGrayVal = 115;
+grayVal = 163;
+lightGrayVal = 205;   hidens_stopSaving(0,'bs-hpws03')
+
+% Values for size of stimulus square
+edgeLength = 600;
+
+if fullScreen
+
+    global screenid
+    global win
+
+    % Choose screen with maximum id - the secondary display on a dual-display
+    % setup for display:
+
+    screenid = max(Screen('Screens'));
+
+    win = Screen('OpenWindow', screenid, [0 grayVal grayVal 0]);
+
+    KbWait
+
+    Screen('CloseAll');
+
+else
+
+    whichScreen = 0;
+    window = Screen(whichScreen, 'OpenWindow');
+    Screen(window, 'FillRect', blackVal);
+
+    for i=1
+        m=zeros(edgeLength,edgeLength, 3);
+        m(:,:,2)=ones(edgeLength);
+        m(:,:,3)=m(:,:,2);
+        w(i) = Screen(window, 'MakeTexture', grayVal*m);
+    end
+
+    for i=1
+        Screen('DrawTexture', window, w(i));
+        Screen(window,'Flip');
+    end
+
+    KbWait;
+    Screen('CloseAll');
+end
+end

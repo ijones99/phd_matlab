@@ -1,0 +1,59 @@
+function [idxi idxj]=multifind(I, J, varargin)
+%
+% searches for matching elements
+% 
+% idxi will contain the indicies in I of all elements containd in both I,J
+% idxj indicies in J
+%
+% 'first'    returns only the first entrie of each element
+% 'I'        sorts the indeces according the occurences in 'I'
+% 'J'        sorts the indeces according the occurences in 'J'
+
+multiple_find=1;     %return indeces of all entries, otherwise just the first is returned
+keep_order=0;        %order of returned elements (0-don't care; 1-as in I; 2-as in J)
+
+I=I(:); %ensures input is of format Nx1
+J=J(:);
+
+
+i=1;
+while i<=length(varargin)
+    if not(isempty(varargin{i}))
+        if strcmp(varargin{i}, 'first')
+            multiple_find=0; 
+        elseif strcmp(varargin{i}, 'I')
+            keep_order=1; 
+        elseif strcmp(varargin{i}, 'J')
+            keep_order=2; 
+        else
+            fprintf('multifind: unknown argument at pos %d\n', 2+i);
+        end
+    end
+    i=i+1;
+end
+
+if multiple_find==0
+    [c idxi idxj]=intersect(I,J);
+else
+    if isempty(I) || isempty(J)
+        idxi=[];
+        idxj=[];
+        return;
+    end
+    [idxj idxi]=find(J(:,ones(1,length(I)))==I(:,ones(1,length(J)))');
+end
+
+
+if keep_order==1
+    %sort element to match order in I
+    [idxi,sidx] = sort(idxi);
+    idxj=idxj(sidx);
+elseif keep_order==2
+    %sort element to match order in J
+    [idxj,sidx] = sort(idxj);
+    idxi=idxi(sidx);
+end
+     
+idxi=idxi(:); %ensures output is of format Nx1
+idxj=idxj(:);
+

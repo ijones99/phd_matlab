@@ -1,0 +1,32 @@
+function plot_sorting_el_groups(ntk2, chGroups)
+figure
+hold on
+
+% declare colormap
+cmap = colormap('jet');
+
+% step size in colormap
+colorStepSize = ceil(length(cmap)/length(chGroups));
+
+% find ntk2 indices for plotting x,y
+for i=1:length(chGroups)
+    
+    % find ntk2 indices for plotting x,y
+    for j=1:size(cGroups,2)
+       
+        try
+            [Y elGroupsInd(j)] = ismember(ntk2.channel_nr==elGroups(i,j))
+        catch
+            elGroupsInd(j) = NaN;
+        end
+        
+    end
+    
+    plot(ntk2.y(electrodes_group(i,:), '*', 'color', cmap(i*colorStepSize,:)), ntk2.x(electrodes_group(i,:), '*', 'color', cmap(i*colorStepSize,:)))
+
+    
+end
+% 
+
+
+end

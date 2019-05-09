@@ -1,0 +1,60 @@
+function generate_html_doc
+
+%GENERATE_HTML_DOC  Generate online documentation with m2html
+%
+%   See also OPEN_HTML_DOC, M2HTML
+
+if ~exist('m2html')
+    error('Function m2html not found. Please run the function hidens_add_path or add the path manually: ~/bel.svn/cmosmea_external/matlab/trunk/tools/m2html');
+end
+
+% Store initial directory
+firstDir=pwd;
+
+% Find correct directory:  ~/bel.svn/cmosmea_external/matlab/
+f=which('generate_html_doc');
+[pathstr, name, ext, versn]=fileparts(f);
+cd(pathstr);
+cd ..;
+
+% Directory for the html-help:
+htmlDir='trunk/doc';
+
+% Before regenerating, whole .doc directory is deleted:
+if exist(htmlDir)
+    fprintf('\nDeleting old html-documentation in: \n%s/%s\n',pwd,htmlDir);
+    rmdir(htmlDir,'s')
+end
+
+% Which directories to include in the html-help:
+dirList={};
+dirList{end+1}='trunk';
+dirList{end+1}='trunk/SpikeSorter';
+dirList{end+1}='trunk/Testbench';
+dirList{end+1}='trunk/OptimalFiltering';
+% dirList{end+1}='trunk/lightStimulation';
+
+% dirList{end+1}=
+% dirList{end+1}=
+
+% additional Settings:
+
+show_source='off';
+do_global='on';         % hyperlinks between dirs
+do_graph='off';         % TODO: does not work with 'on'... solution??
+which_template='blue';
+
+% execute m2html function:
+
+fprintf('\nRun m2html...\n')
+m2html('htmlDir', htmlDir, 'mFiles', dirList, 'source', show_source, 'global', do_global, 'graph', do_graph, 'template', which_template)
+
+% open 
+cd(htmlDir)
+open index.html
+
+% return to initial directory
+cd(firstDir)
+
+% done
+end

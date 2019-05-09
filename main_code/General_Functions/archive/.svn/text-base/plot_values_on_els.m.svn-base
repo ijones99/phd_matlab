@@ -1,0 +1,78 @@
+function plot_values_on_els(els,V, varargin)
+
+%PLOT_VALUES_ON_ELS(ELS,V)  plots color map with values in V
+%
+%  PLOT_VALUES_ON_ELS(...,'gridspace',GS) set gridspace value for interpolation,
+%  GS is given in [um]. (Default: 5)
+%
+%  PLOT_VALUES_ON_ELS(...,'colbar_steps',CS) define resolution of colorbar.
+%  (Default: 50 steps)
+%
+%  PLOT_VALUES_ON_ELS(...,'do_figure') opens new figure
+%
+%  PLOT_VALUES_ON_ELS(...,'no_border') Per default, a border is set to get the
+%  same window-size as in plot_neurons. This argument disables the border option.
+%
+%  See also cluster_plotter, plot_neurons
+
+% author: jaeckeld
+
+% Ideas to use:
+%   * SNR
+%   * noise covariance / variance
+%   * PCA vals
+%   * ICA weights
+
+gridspace_um=2;
+do_figure=0;
+no_border=0;
+c_bar_steps=50;
+
+i=1;
+while i<=length(varargin)
+    if not(isempty(varargin{i}))  
+        if strcmp(varargin{i}, 'no_border')
+            no_border=1;
+        elseif strcmp(varargin{i}, 'do_figure')
+            do_figure=1;
+        elseif strcmp(varargin{i}, 'gridspace')
+            i=i+1;
+            gridspace_um=varargin{i};
+        elseif strcmp(varargin{i}, 'colbar_steps')
+            i=i+1;
+            c_bar_steps=varargin{i};
+        else
+            fprintf('unknown argument at pos %d\n', 1+i);
+        end
+    end
+    i=i+1;
+end
+
+if do_figure
+    figure
+end
+
+x=els.x;
+y=els.y;
+
+xlin=linspace(min(x),max(x),(max(x)-min(x))/gridspace_um);
+ylin=linspace(min(y),max(y),(max(y)-min(y))/gridspace_um);
+[XI,YI] = meshgrid(xlin,ylin);
+
+
+box on
+ZI = griddata(x,y,V,XI,YI);
+imagesc(xlin,ylin,ZI);
+hold on;
+axis ij
+axis equal
+plot(x,y,'k.');
+colormap(jet(c_bar_steps))
+colorbar('location','North');
+
+if ~no_border
+    border=11.3583;                         % adjust to like plot_neurons (?)
+    xlim([min(x)-border max(x)+border])
+    ylim([min(y)-border max(y)+border])
+end
+

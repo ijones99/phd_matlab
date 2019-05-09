@@ -1,0 +1,12 @@
+
+
+
+
+selNeuronInds = get_file_inds_from_neur_names(dirName.St, '*.mat', '6172n169');
+
+
+plot_raster_for_natural_movie(flistFileNameID, flist, dateValTxt, dirNameSTA, selNeuronInds, textLabel)
+
+%%
+
+load spiketrainA

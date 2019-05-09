@@ -1,0 +1,220 @@
+%%  HiDens Tutorial II - Spike Sorting and Neruons Processing
+%
+% This part of the tutorial explains briefly how to use the most important Spike
+% Sorting functions and how to handle sorted neurons. This tutorial does not
+% explain the functionality of the Sorter. For that, check the theses of Ueli
+% Wahlen and David Jaeckel.
+
+%% Do Spike Sorting
+% The Spike Sorter is implemented in the function <matlab:helpwin('hidens_neuro_process')
+% *hidens_neuro_process*>. You can run the Spike Sorter on a single file (for
+% example my_recording.ntk) or on a list of filenames flist, as explained in
+% <matlab:open('tutorialA.html') Tutorial A>.
+
+nnn=hidens_neuro_process('my_recording.ntk', 'ica');    % Spike Sorting on single file
+
+for i=1:length(flist)                                   % Spike Sorting on filelist
+    hidens_neuro_process(flist{i}, 'thr_f', 4.5, 'ica', 'save');
+end
+%%
+% The argument 'ica' enables the essential ICA-step of the Sorter. In the
+% example of the filelist, two additional function arguments are defined:
+% with 'thr_f' the threshold detection level is set to 4.5 times the rms-value
+% of the noise which is an important parameter. For all other function arguments
+% check the <matlab:helpwin('hidens_neuro_process') help
+% function>.
+%
+% The last argument 'save' saves the sorting results into *.mat files. This way,
+% many files can be sorted automatically and the results are loaded with
+nnn=[];
+for i=1:length(flist)
+    nnn=hidens_load_neurons(flist{i}, nnn);
+end
+%%
+% The nnn structure contains the Spike Sorting information and a cell with the
+% information on the sorted neurons: nnn.neurons
+% Every neuron nnn.neurons{i} is a struct, and the most important struct entries
+% are briefly explained:
+%
+%   * ts:           Vector with found time stamps, i.e. spiking times (in samples)
+%   * fname:        Recording file name
+%   * x, y, el_idx: x-, y-coordinates and global index of the used electrodes
+%   * event_param:  Timing information, see hidens_neuro_process for more
+%   * trace:        All spiking waveforms at all time stamps
+%   * ica:          ICA Weighting Matrix
+%   * template:     Spike triggered averaged traces, thus templates
+%%
+% The merging function <matlab:helpwin('merge_neurons') *merge_neurons*> decides
+% if two neurons should be merged to one and is an essential part of the Spike Sorting
+% algorithm. If you have neurons from multiple files (as in the flist example)
+% you have to re-merge all neurons after the hidens_neuro_process:
+
+% re-merge neurons:
+global_thr=mean(nnn.thr_base);      % should be according to the amount of noise, but can also be set manually.
+first_new_neuron=1;                
+param=nnn.neurons{1}.event_param;
+interactive_mode=1;                 % enable interactive mode
+nnn.neurons=merge_neurons(nnn.neurons, global_thr, first_new_neuron, param, interactive_mode)
+
+%%
+% In this example, the interactive mode is enables. In this mode you can
+% manually decide if difficult neurons should be merged together, based on
+% footprint information and analysis of the interspike intervall histograms.
+% Note that <matlab:helpwin('hidens_neuro_process') *hidens_neuro_process*> also
+% has an interactive mode.
+
+%% Plotting tools
+% The function *plot_neurons* is a powerfull tool to plot the footprint of one or
+% more neurons. This functions has not (yet?) a help function, but can be used
+% straight forward.
+% Some examples are shown here:
+
+% plot all neurons
+plot_neurons(nnn.neurons)
+
+% plot selected neurons 3, 5, 8
+plot_neurons(nnn.neurons,'neurons', [3 5 8])
+
+% plot neuron 3 with image in the back
+    % TODO
+    
+%% 
+% Similarly to *plot_neurons*, <matlab:helpwin('template_plotter')
+% *template_plotter*> can be used to plot the templates of different neurons one 
+% under the other. Especially useful might be the option 'plot_traces'
+plot_neurons(nnn.neurons,'n_list', [3 5 8], 'plot_traces')
+    
+%%
+% Another visualization function is <matlab:helpwin('plot_isi') *plot_isi*>, which
+% plots the interspike interval histograms of neurons:
+
+plot_isi(nnn.neurons{3});               % plot isih of neuron 3
+plot_isi(nnn.neurons,'max_time',100);   % plot all isih's, up to 100 ms
+
+%% Neuron post-processing
+%
+% Some functions dealing with further processing of the sorted neurons are shown
+% in this section.
+% All these function use a cell containing the neurons-structure (neurons_in)
+% as the first input argument and a cell with the modified neurons (neurons_out)
+% as the output. Only the functionality of the functions is explained here. For
+% further details, use the help of the functions.
+%
+% <matlab:helpwin('triangulate_neuron') *triangulate_neuron*>: Derives
+% location and orientation of the neurons according to their footprint. The
+% derived information is also recognized and visualized by plot_neurons.
+%
+% <matlab:helpwin('hidens_extract_traces') *hidens_extract_traces*>: This
+% function is used to re-extract the templates. Two examples when you might need
+% this function:
+%%
+% # The output-neurons from the hidens_neuro_process() contain the templates from
+% the band-pass filtered data. If you want the unfiltered footprint, you use
+% neurons=hidens_extract_traces(neurons)
+% # If you use testbench data you have initially the simulated recording data
+% file gntk_data1 and the time stamps of the simulated neurons. You can
+% re-extract the templates from the filtered data, for example to build a linear
+% filter, with neurons=hidens_extract_traces(neurons,'hpf',500,'lpf',3000)
+%
+% <matlab:helpwin('discard_and_strip_neurons') *discard_and_strip_neurons*>: Is
+% used to select and discard bad neurons. The selection can be according to
+% noise level, a too small number of neurons, bad ISI profile etc. This function
+% also has an interactive mode.
+%
+% <matlab:helpwin('clean_isih') *clean_isih*>: Some bad time stamps can be
+% identified by having a ISI smaller than the refractory period of a neuron.
+% This functions cleans the neurons by removing specifically the time stamps
+% with a small ISI.
+%
+% <matlab:helpwin('sort_neurons') *sort_neurons*>: Sort order of neurons in the
+% cell acording to number of ts or according to the pk-to-pk amplitude.
+%
+% <matlab:helpwin('trim_electrodes') *trim_electrodes*>: Can be used to change
+% the electrodes in the neurons by scpecifying the desired area of electrodes.
+
+%% Additional useful functions
+%
+% Some additional functions that can be useful dealing with extracted neurons.
+% An overview over this functions is shown here. An usage example of the
+% functions is only given, if the file has no help function:
+%
+% <matlab:helpwin('get_neurons_distance') *get_neurons_distance*>: calculate
+% distance between the footprints of two neurons. Is used by merge_neurons().
+%
+% <matlab:helpwin('find_overlaps') *find_overlaps*>: detect overlaps between
+% neurons.
+%
+% <matlab:helpwin('get_all_distances') *get_all_distances*>: shows and plots all
+% distances between the individual neurons. Good mean to get the similarity
+% between the neurons.
+%
+% <matlab:helpwin('get_template') *get_template*>: Recalc templates from traces.
+%
+% <matlab:helpwin('get_aligned_traces') *get_aligned_traces*>: Returns the
+% aligned traces of a neuron. For example:
+neur = neurons{4}; ch_idx = 20;
+traces=get_aligned_traces(neur, neur.event_param.pre2, neur.event_param.post2, ch_idx);
+%%
+% returns the aligned traces from channel 20 of neur.
+%
+%% Optimal Filtering
+%
+% In adition to the Spike Sorter, an optimal filtering approach was implemented.
+% The idea is that if the footprints of the neurons are known, linear filters
+% can be calculated. The recorded data can then be filtered with the optimal
+% filters and the filtered output shows peaks at the neurons time stamps.
+%
+% This section briefly explains the functions of the optimal filtering. All
+% these functions have nice help documentation. At the end a application example
+% of combining the spike sorter with optimal filters is shown.
+%
+% <matlab:helpwin('get_linear_filters') *get_linear_filters*>: calculate optimal
+% filters for given neurons.
+%
+% <matlab:helpwin('plot_linear_filters') *plot_linear_filters*>: plot
+% footprint-view of linear filters.
+%
+% <matlab:helpwin('plot_filter_answers') *plot_filter_answers*>: Footprint plot
+% of filtering response to a neurons template.
+%
+% <matlab:helpwin('do_linear_filtering') *do_linear_filtering*>: filter data
+% with optimal linear filters.
+%
+% <matlab:helpwin('detect_after_filtering') *detect_after_filtering*>: apply
+% thresholding method after optimal filtering and return neurons with their time
+% stamps. Different methods from the literature are implementes, which you can
+% select.
+%
+% *APPLICATION EXAMPLE: SPIKE SORTING WITH OPTIMAL FILTERING*
+% *--------------------------------------------------------*
+
+clear all
+close all
+
+cd ~/HiDens/recordings/Simulated_Data/packet2/Matlab/
+load ../proc/testpacket2.mat
+
+% shorten data if desired
+TMIN=0; TMAX=10000;
+[gntk_data1 det_neur sigs_ex converted] = shorten_gntk_data(TMIN, TMAX, 'gntk', gntk_data1, 'det_neur', det_neur, 'sigs_ex', sigs_ex, 'converted', converted);
+
+% Do spike sorting to get templates, clean isi and choose only good ones
+nnn=hidens_neuro_process(gntk_data1, 'thr_f', 4,'icathr',5, 'ica','maxloops',5);
+neurons=clean_isih(nnn.neurons,20)
+neurons=discard_and_strip_neurons(neurons,'discard','mintraces',50,'remove')
+
+neurons=hidens_extract_traces(neurons,'hpf',500,'lpf',3000)     % Always re-exrtact to get proper templates !!!
+
+% get filters and apply them
+neurons=get_linear_filters(neurons,gntk_data1,'window_length',200,'no_plots');
+filtered_data=do_linear_filtering(gntk_data1,neurons, 'true_neurs', det_neur);
+out_neur=detect_after_filtering(filtered_data);
+
+% evaluate result (if using testbench data)
+res=evaluate_algo_easy(out_neur,converted);
+
+
+
+
+
+

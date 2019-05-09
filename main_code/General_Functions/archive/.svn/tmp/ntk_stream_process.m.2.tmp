@@ -1,0 +1,330 @@
+function y=ntk_stream_process(ntk, varargin)
+%
+%
+% convert to uV
+% extract connected channels
+% calculate gain/lsb
+%
+% apply filters if not supressed
+%
+
+keep_disconnected=0;
+keep_damaged=0;
+keep_dummy=0;
+ignore_oversampling=0;
+no_filters=0;
+time_align=0;
+show_digibits=0;
+show_projector_frames=0;
+align_precision=5;      
+
+% align_precision: 
+% 20 - no time_align
+% 1 - best time align, hmm..?
+
+
+i=1;
+while i<=length(varargin)
+    if not(isempty(varargin{i}))
+        if strcmp(varargin{i}, 'keep_disconnected')
+            keep_disconnected=1;
+        elseif strcmp(varargin{i}, 'keep_damaged')
+            keep_damaged=1;
+        elseif strcmp(varargin{i}, 'keep_dummy')
+            keep_dummy=1;
+        elseif strcmp(varargin{i}, 'ignore_oversampling')   %over- (or under) sampled channels are treated as normal
+            ignore_oversampling=1;
+        elseif strcmp(varargin{i}, 'keep_all')
+            keep_disconnected=1;
+            keep_damaged=1;
+            keep_dummy=1;
+            ignore_oversampling=1;
+        elseif strcmp(varargin{i}, 'nofiltering')
+            no_filters=1;   
+        elseif strcmp(varargin{i}, 'time_align')
+            time_align=1;   
+        elseif strcmp(varargin{i}, 'images_v1')
+            show_projector_frames=1;   
+            show_digibits=1;   
+        elseif strcmp(varargin{i}, 'digibits')
+            show_digibits=1;   
+        elseif strcmp(varargin{i}, 'time_align_precision')
+            time_align=1;
+            i=i+1;
+            align_precision=varargin{i};
+        else
+            fprintf('unknown argument at pos %d\n', 1+i);
+        end
+    end
+    i=i+1;
+end
+
+if isempty(ntk.design) || strcmp(ntk.design,'inpro')
+    fprintf('assuming INPRO\n');
+    ntk=inpro_settings(ntk);
+end
+
+%copy from input to output
+y.eof=ntk.eof;
+y.pos=ntk.pos;
+
+
+y.fname=ntk.fname;
+y.sr=ntk.sr;
+y.chipid=ntk.chipid;
+y.design=ntk.design;
+y.version=ntk.version;
+y.light=ntk.light;
+y.timestamp=ntk.timestamp;
+y.gain1=ntk.gain1;
+y.gain2=ntk.gain2;
+y.gain3=ntk.gain3;
+y.lp1=ntk.lp1;
+y.lp2=ntk.lp2;
+
+if isfield(ntk, 'recfile_param')
+    y.recfile_param=ntk.recfile_param;
+end
+if isfield(ntk, 'chip_param')
+    y.chip_param=ntk.chip_param;
+end
+if isfield(ntk, 'hhp')
+    %y.hhp=ntk.hhp;
+    warning('use filters.hhp instead!');
+end
+if isfield(ntk, 'llp')
+    %y.llp=ntk.llp;
+    warning('use filters.llp instead!');
+end
+if isfield(ntk, 'images')
+    y.images=ntk.images;
+end
+if isfield(ntk, 'ntkavg')
+    %y.ntkavg=ntk.ntkavg;
+    warning('use filters.ntkavg instead!');
+end
+if isfield(ntk, 'filters')
+    y.filters=ntk.filters;
+end
+if isfield(ntk, 'server')
+    y.server=ntk.server;
+end
+
+if y.gain3<0
+    fprintf('amplifier 3 has invalid gain!!!\n');
+    y=[];
+    return
+end
+
+%gain, lsb
+y.gain=ntk.gain1*ntk.gain2*ntk.gain3;
+y.lsb=ntk.adc_range/(2^ntk.adc_resolution-1)/y.gain*1000000;
+y.range=y.lsb*(2^ntk.adc_resolution-1);
+ntk.channels{1}
+%get connected channels
+keep_channels=[];
+oversampled_channels=[];
+expanded_slot_list=ones(size(ntk.channels))*-1;
+%disconnected_channels=[];
+for i=1:size(ntk.channels,1)
+    if size(ntk.channels{i}.els,1)
+        if ntk.channels{i}.els{1}.dummy
+            fprintf('connected to dummy! idx=%d, c=%d', ntk.channels{i}.els{1}.idx, i);
+            y.x_all(i)=-1;
+            y.y_all(i)=-1;
+            y.el_idx_all(i)=-1;
+            if keep_dummy
+                keep_channels=[keep_channels i];
+                fprintf(', keep it\n');
+            else
+                fprintf('\n');
+            end
+        elseif ntk.channels{i}.els{1}.damaged
+            fprintf('connected to damaged node! idx=%d, c=%d', ntk.channels{i}.els{1}.idx, i);
+            y.x_all(i)=ntk.channels{i}.els{1}.x;
+            y.y_all(i)=ntk.channels{i}.els{1}.y;
+            y.el_idx_all(i)=ntk.channels{i}.els{1}.idx;
+            if keep_damaged
+                keep_channels=[keep_channels i];
+                fprintf(', keep it\n');
+            else
+                fprintf(', discard\n');
+            end
+        elseif length(ntk.channels{i}.sampling_details)~=1
+            fprintf('channel which has oversampling enabled! c=%d', i);
+            y.x_all(i)=ntk.channels{i}.els{1}.x;
+            y.y_all(i)=ntk.channels{i}.els{1}.y;
+            y.el_idx_all(i)=ntk.channels{i}.els{1}.idx;
+            if ignore_oversampling
+                keep_channels=[keep_channels i];
+                fprintf(', ignore oversampling and use as a normal channel\n');
+            else
+                oversampled_channels(end+1)=i;
+                fprintf('\n');
+            end
+        else
+            keep_channels=[keep_channels i];
+            y.x_all(i)=ntk.channels{i}.els{1}.x;
+            y.y_all(i)=ntk.channels{i}.els{1}.y;
+            y.el_idx_all(i)=ntk.channels{i}.els{1}.idx;
+        end
+    else
+        y.x_all(i)=-1;
+        y.y_all(i)=-1;
+        y.el_idx_all(i)=-1;
+        if keep_disconnected
+            keep_channels=[keep_channels i];
+        end
+    end
+    for j=1:length(ntk.channels{i}.sampling_details)
+        expanded_slot_list(ntk.channels{i}.sampling_details{j}.chidx)=ntk.channels{i}.sampling_details{j}.sampling_slot;
+    end
+    if size(ntk.channels{i}.els,1)>1 && keep_channels(end)==i
+        warning('found channel with more than one electrode, use only el 0')
+    end
+end
+
+%don't keep channels for which we don't have data
+[idxi idxj]=multifind(keep_channels, ntk.channel_list+1, 'I');
+keep_channels=idxj';
+idx_temp=find(ntk.channel_list==126,1,'first');
+idx_dc=find(ntk.channel_list==127,1,'first');
+idx_dac1=find(ntk.channel_list==128,1,'first');
+idx_dac2=find(ntk.channel_list==129,1,'first');
+idx_dacext=find(ntk.channel_list==130,1,'first');
+
+idx_digibits=find(ntk.channel_list==130,1,'first');
+
+
+if ntk.inverted  
+    ntk.data=2^ntk.adc_resolution-1-ntk.data;
+end
+
+if not(isempty(idx_temp))
+    y.temp=double(ntk.data(idx_temp,:)');
+end
+if not(isempty(idx_dc))
+    y.dc=double(ntk.data(idx_dc,:)');
+end
+if not(isempty(idx_dac1))
+    y.dac1=double(ntk.data(idx_dac1,:)');
+end
+if not(isempty(idx_dac2))
+    y.dac2=double(ntk.data(idx_dac2,:)');
+end
+if not(isempty(idx_dacext))
+    dacext=ntk.data(idx_dacext,:)';
+    if not(isempty(idx_dac1))
+        y.dac1=y.dac1+256*double(bitand(dacext, 3));
+    end
+    if not(isempty(idx_dac2))
+        y.dac2=y.dac2+64*double(bitand(dacext, 12));
+    end
+    if ~(strcmp(y.design,'hidens') && y.version==2)
+        warning('DAC in HighRes is only supported for HiDens2');
+    end
+else
+    if not(isempty(idx_dac1))
+        y.dac1=y.dac1*4;
+    end
+    if not(isempty(idx_dac2))
+        y.dac2=y.dac2*4;
+    end
+end
+
+% add the digibits here...
+if (show_digibits==1)
+    if not(isempty(idx_digibits))
+        digibits=ntk.data(idx_digibits,:)';
+        y.bits = {};
+        y.bits{1} = bitand(digibits, 1)>0;
+        y.bits{2} = bitand(digibits, 2)>0;
+        y.bits{3} = bitand(digibits, 4)>0;
+        y.bits{4} = bitand(digibits, 8)>0;
+        y.bits{5} = bitand(digibits, 16)>0;
+        y.bits{6} = bitand(digibits, 32)>0;
+        y.bits{7} = bitand(digibits, 64)>0;
+        y.bits{8} = bitand(digibits, 128)>0;
+    end
+end
+
+% calculate here the frame number of the projector stimulation
+if (show_projector_frames==1)
+    last_frame = 0;
+    if (isfield(ntk,'images') )
+        last_frame = ntk.images.last_frame;
+    end
+    y.images.last_frame = last_frame;
+    
+    last_sample = 1;
+    % y.bits{5} % this bit is the indicator, whether stimulation already started...
+    V = find( diff(y.bits{3}) == 1);
+    for sample = V'
+        y.images.frameno(last_sample:sample) = last_frame;
+        last_sample = sample;
+        last_frame  = last_frame + 1;
+    end
+    % finally, show the last frameno in the series
+    y.images.frameno(last_sample:size(ntk.data,2)) = last_frame;
+    y.images.last_frame = last_frame;
+end
+
+%convert to uV
+y.sig=double(ntk.data(keep_channels,:)')*y.lsb;
+
+if not(isempty(oversampled_channels))
+    %do reordering of oversampled data
+    warning('Oversampled channels not handled properly yet, sorry');
+end
+
+y.channel_nr=keep_channels;
+
+
+
+for i=1:size(keep_channels,2)
+    if not(isempty(ntk.channels{keep_channels(i)}.els))
+        y.x(i)=ntk.channels{keep_channels(i)}.els{1}.x;
+        y.y(i)=ntk.channels{keep_channels(i)}.els{1}.y;
+        y.el_idx(i)=ntk.channels{keep_channels(i)}.els{1}.idx;
+    else
+        y.x(i)=-1;
+        y.y(i)=-1;
+        y.el_idx(i)=-1;
+    end
+end
+
+%calc pre hp mean and at-rail-percentage
+if size(y.sig,1)>0
+    y.prehp_mean=mean(y.sig);
+    y.at_rail_percentage=(sum(ntk.data(keep_channels,:)==0 | ntk.data(keep_channels,:)==2^ntk.adc_resolution-1,2)/size(ntk.data,2))';
+end
+
+if not(no_filters)
+    y=hidens_filter(y);
+end
+
+if time_align
+    fprintf('resampling the data to align it in time.\n');
+    fprintf('  * Make sure you don''t have f>fs/2 in your data\n')
+    fprintf('  * Data will be aligned to slot 159. (I.e. not aligned to the sampled DAC)\n');
+    %do resampling channel per channel. Will consume too much memory
+    %otherwise
+    
+    %get upsampling ratio 
+    upsratio=floor(ntk.total_frame_size/align_precision);
+    fprintf('  * Signals will be aligned with a precision of %d frames (=%fus)\n', ntk.total_frame_size/upsratio, 1/ntk.sr/upsratio*1e6);
+
+    for i=1:size(keep_channels,2)
+        if expanded_slot_list(keep_channels(i))<0
+            error('error in realigning channels');
+        end
+        if rem(i, 10)==1
+            fprintf('\nprocess sig %d-%d: ', i, min([i+9, size(keep_channels,2)]))
+        end
+        fprintf('.');
+        upsig=resample(y.sig(:,i),upsratio,1);
+        y.sig(:,i)=upsig((floor((ntk.total_frame_size-1-expanded_slot_list(keep_channels(i)))/(ntk.total_frame_size/upsratio))+1):upsratio:end);
+    end
+    fprintf('\n');
+end
+

@@ -1,0 +1,261 @@
+function y=hidens_generate_event_map(event_data, varargin)
+
+%HIDENS_GENERATE_EVENT_MAP  Plot activity map with event_data generated with hidens_load_events
+%
+%   HIDENS_GENERATE_EVENT_MAP(EVENTS)  plot activity map for EVENT_DATA
+%
+%   HIDENS_GENERATE_EVENT_MAP(EVENTS,ARGUMENTS)  many arguments can be set to
+%   specify plot. See code for more info...
+%
+%   Alternatively, the events in EVENTS can be simply detected with
+%   simple_event_cut and then be converted into suitable data. This is more
+%   straight forward, as the parameters can be set directly and the complicated
+%   hidens_neuro_process is not needed. 
+%
+%      Example:
+%      --------
+%      thr_f=4;
+%      pretime=16;
+%      posttime=16;
+%      allevents=simple_event_cut(ntk2, thr_f, pretime, posttime);
+%      event_data2=convert_events(allevents,ntk2)
+% 
+%      figure; 
+%      hidens_generate_event_map(event_data2,'no_new_fig', 'freqthr', 0.2, 'markerplot', 'border', 15,...
+%      'markerplotfreq', 'legend', 'dist_scale', 'dist_scale_len', 300, 'scalebar_simple');
+%
+%   See also hidens_load_events, simple_event_cut, convert_events
+
+%%
+
+freq_thr=10;
+save_as='';
+bgimgname='';
+do_mesh=0;
+do_imagesc=0;
+do_markerplot=0;
+do_markerplot_freq=0;
+do_bw=0;
+border=100; 
+do_legend=0;
+freq_collims=[1 10 100];
+scalebar_simple=0;
+do_dist_scale=0;
+dist_scale_len=[];
+leg_loc='NorthWest';
+do_fig=1;
+
+i=1;
+while i<=length(varargin)
+    if not(isempty(varargin{i}))  
+        if strcmp(varargin{i}, 'saveas')
+            i=i+1;
+            save_as=varargin{i};
+        elseif strcmp(varargin{i}, 'freqthr')
+            i=i+1;
+            freq_thr=varargin{i};    
+        elseif strcmp(varargin{i}, 'bgimg')
+            i=i+1;
+            bgimgname=varargin{i};
+        elseif strcmp(varargin{i}, 'mesh')
+            do_mesh=1;
+        elseif strcmp(varargin{i}, 'imagesc')
+            do_imagesc=1;
+        elseif strcmp(varargin{i}, 'markerplot')
+            do_markerplot=1;
+        elseif strcmp(varargin{i}, 'markerplotfreq')
+            do_markerplot_freq=1;
+        elseif strcmp(varargin{i}, 'border')
+            i=i+1;
+            border=varargin{i};
+        elseif strcmp(varargin{i}, 'legend')
+            do_legend=1;
+        elseif strcmp(varargin{i}, 'bw')
+            do_bw=1;
+        elseif strcmp(varargin{i}, 'dist_scale')
+            do_dist_scale=1;
+        elseif strcmp(varargin{i}, 'dist_scale_len')
+            i=i+1;
+            dist_scale_len=varargin{i};
+        elseif strcmp(varargin{i}, 'leg_loc')
+            i=i+1;
+            leg_loc=varargin{i};
+        elseif strcmp(varargin{i}, 'scalebar_simple') 
+            scalebar_simple=1;
+        elseif strcmp(varargin{i}, 'no_new_fig') 
+            do_fig=0;
+        else
+            fprintf('unknown argument at pos %d\n', 1+i);
+        end
+    end
+    i=i+1;
+end
+
+
+if not(isempty(bgimgname))
+    bgimg=imread(bgimgname);
+end
+
+freq_cols=cool(length(freq_collims)+1);
+
+
+%%
+% calculate some values
+freq_map=event_data.event_map.cnt./event_data.event_map.time;
+max_freq=max(freq_map);
+active_els=find(freq_map>=freq_thr);
+valid_els=find(event_data.event_map.time>=0);
+xmin=min(event_data.x);
+xmax=max(event_data.x);
+ymin=min(event_data.y);
+ymax=max(event_data.y);
+gridspace_um=30; 
+
+xmin_valid=min(event_data.x(valid_els))-border;
+xmax_valid=max(event_data.x(valid_els))+border;
+ymin_valid=min(event_data.y(valid_els))-border;
+ymax_valid=max(event_data.y(valid_els))+border;
+
+median_min=zeros(1,length(event_data.x));
+median_max=zeros(1,length(event_data.x));
+max_larger_min_ratio=zeros(1,length(event_data.x));
+for i=valid_els
+    median_min(i)=median(event_data.event_map.min{i});
+    median_max(i)=median(event_data.event_map.max{i});
+    if not(isempty(event_data.event_map.min{i}))
+        max_larger_min_ratio(i)=sum(event_data.event_map.max{i}>abs(event_data.event_map.min{i}))/length(event_data.event_map.min{i});
+    end
+end
+
+
+%%
+%interpolate data and display
+
+xlin=linspace(0, xmin+xmax,(xmax+xmin)/gridspace_um);
+ylin=linspace(0, ymin+ymax,(xmax+xmin)/gridspace_um);
+[X,Y] = meshgrid(xlin,ylin);
+Z = griddata(event_data.x(valid_els),event_data.y(valid_els),freq_map(valid_els),X,Y, 'cubic');
+
+if do_mesh
+    mesh(X,Y,Z)
+    hold on
+    plot3(event_data.x(valid_els),event_data.y(valid_els),freq_map(valid_els), 'k.')
+    xlabel('x')
+    ylabel('y')
+    axis ij
+end
+
+%%
+if do_imagesc
+    if do_fig, figure, end
+    imagesc(xlin,ylin,Z);
+    axis ij
+    axis equal
+end
+
+%%
+if do_markerplot
+    markerscale=30/max_freq;
+    if do_fig, figure, end
+    hold on
+    if exist('bgimg','var')
+        image(bgimg);
+    end
+    %xlabel('X [\mum]');
+    %ylabel('Y [\mum]');
+    set(gca,'XTick', [])
+    set(gca,'YTick', [])
+    leg={};
+    h=[];
+    %plot(event_data.x(active_els), event_data.y(active_els), 'ks', 'MarkerFaceColor', 'k', 'MarkerSize', 6);
+    if do_markerplot_freq
+        %for i=active_els
+        %    plot(event_data.x(i), event_data.y(i), 'g.', 'MarkerSize', max([0.001 markerscale*freq_map(i)]));
+        %end
+        freq_collims=[freq_thr freq_collims Inf];
+        for i=2:length(freq_collims)
+            list=freq_map>freq_collims(i-1) & freq_map<freq_collims(i);
+            if any(list)
+                h(i)=plot(event_data.x(list), event_data.y(list), 'ks', 'MarkerSize', 16 , 'MarkerFaceColor', freq_cols(i-1,:), 'MarkerEdgeColor', freq_cols(i-1,:));
+                if i<length(freq_collims)
+                    leg{i}=[num2str(freq_collims(i-1)) ' Hz < f < ' num2str(freq_collims(i)) ' Hz'];
+                else
+                    leg{i}=['f > ' num2str(freq_collims(i-1)) ' Hz'];
+                end
+            else
+                h(i)=0;
+            end
+        end
+    end
+    h(1)=plot(event_data.x(valid_els), event_data.y(valid_els), 'k.', 'MarkerSize', 2);
+    leg{1}=['f < ' num2str(freq_thr) ' Hz'];
+    axis ij
+    axis equal
+    box on
+    xlim([xmin_valid xmax_valid]);
+    ylim([ymin_valid ymax_valid]);
+    if do_legend
+        legend(h(h~=0),leg(h~=0),'Location',leg_loc)
+    end
+    if do_dist_scale
+        border=2000;
+        plot_abs_width=xmax_valid-xmin_valid;
+        scale_dist_len=plot_abs_width*0.1;
+        round_dist=100;
+        scale_dist_len=floor(scale_dist_len/round_dist)*round_dist;
+        if scale_dist_len==0
+            scale_dist_len=round_dist;
+        end
+        if not(isempty(dist_scale_len))
+            scale_dist_len=dist_scale_len;
+        end
+        plot([0 scale_dist_len]+xmin_valid+border, [ymax_valid-border ymax_valid-border], 'Color', 'w', 'LineWidth', 3)
+        if not(scalebar_simple)
+            text(xmin_valid+border+scale_dist_len/2,ymax_valid-border,[num2str(scale_dist_len/1000) 'mm'], 'HorizontalAlignment', 'Center', 'VerticalAlignment', 'Top', 'FontSize', 7);
+        end
+    else
+        xlabel([num2str((xmax_valid-xmin_valid)/1000,2) ' mm']);
+        ylabel([num2str((ymax_valid-ymin_valid)/1000,2) ' mm']);
+    end
+end
+
+set(gca, 'Layer', 'top');
+
+
+%%
+%create image file
+col_backgroung=uint8(0);
+col_pt=uint8(180);
+col_el=uint8(10);
+
+pixel_size=5;   %in um
+ig=zeros(ceil((ymax+ymin+25)/pixel_size), ceil((xmax+xmin)/pixel_size));
+
+%active_els=find(freq_map>=freq_thr);
+for e=active_els
+    ig(floor(event_data.y(e)/pixel_size), floor(event_data.x(e)/pixel_size))=1;
+end
+
+%blur image
+
+disk=double(fspecial('disk',20)>0);
+bl=imfilter(ig,disk)>0;
+
+%corner els: 103, 102, 10915, 10914
+%bl(floor(event_data.y(103)/pixel_size), floor(event_data.x(103)/pixel_size))=1;
+%bl(floor(event_data.y(102)/pixel_size), floor(event_data.x(102)/pixel_size))=1;
+%bl(floor(event_data.y(10915)/pixel_size), floor(event_data.x(10915)/pixel_size))=1;
+%bl(floor(event_data.y(10914)/pixel_size), floor(event_data.x(10914)/pixel_size))=1;
+
+if do_bw
+    if do_fig, figure, end
+    imshow(bl);
+end
+
+%save somewhere?
+if not(isempty(save_as))
+    imwrite(bl, save_as);
+end
+
+y=0;
+

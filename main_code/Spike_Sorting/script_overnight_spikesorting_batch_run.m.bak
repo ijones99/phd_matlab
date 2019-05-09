@@ -1,0 +1,78 @@
+% -----------------------------------
+% --- SPIKE SORTING OF ALL NEURONS IN PATCH ---
+
+% BATCH PROCESSING RUN
+% run overnight, create el_ files. Saves light timestamp data.
+% input: proc/*.ntk output: ./analysed_data/01_Pre_Spikesorting/
+TIME_TO_LOAD = 55; % time to load in minutes
+flistFile = { ...
+    %     'flist_for_birds_dyn_med_and_shuffled_med'...
+    'flist_mov2_orig_stat_surr_med'; ...
+    %     'flist_for_birds_mov_orig_stat_surr_med'...
+    %     'flist_for_mov1_orig_stat_surr_med_birds_mov_90'; ...
+    %     'flist_for_birds_mov_pix_surr_shuff_10_50'; ...
+    %     'flist_for_bars'; ...
+    %     'flist_for_wn_checkerboard' ...
+    %     'flist_for_spots' ...
+    }
+
+flist = {};
+eval(flistFile{1});
+flist
+% get flist filename id
+idNameStartLocation = strfind(flist{1},'T');idNameStartLocation(1)=[];
+flistFileNameID = flist{1}(idNameStartLocation:end-11);
+
+% get directories
+DATA_DIR = '../analysed_data/';
+suffixName = '_white_noise_plus_others';
+FILE_DIR = strcat('../analysed_data/', flistFileNameID,suffixName,'_plus_others/');
+% dir in which to put output files
+
+procElNos = extract_el_numbers_from_files('el_*.mat','flist',flist, 'suffix', ...
+suffixName,'data_dir', '01_Pre_Spikesorting/'  );
+
+% load electrodes numbers to load
+load selElIds
+% selElIds = elNumbers
+% get remaining electrode-name defined groups
+
+
+unprocElInds = find(~ismember(elNumbers,procElNos)>0);
+
+
+%%
+
+% save data
+save unprocElInds.mat unprocElInds
+
+% do sorting
+load unprocElInds.mat
+numKmeansReps = 10;
+patchesToSort = [unprocElInds(1:10)];
+
+% electrodes that constitute the middle patch
+selElsInPatch = selElIds;
+
+for iFlistFile =1:length(flistFile)
+    % load flist, which contains all ntk2 file names
+    flist={};
+    % flist_for_analysis_3;
+    % flist{end+1} =
+    % '../proc/Trace_id843_2012-03-29T13_14_30_12.stream.ntk';
+    
+    eval([flistFile{iFlistFile}]);
+    
+    % SORT PATCHES OF INTEREST
+    selThresholds = [3.5];
+    for iThresh = selThresholds
+                basic_sorting_batch_ctr_all_els(flist ,TIME_TO_LOAD, selElsInPatch, numKmeansReps,  ...
+                    'sel_by_el_number', selElsInPatch(patchesToSort),'add_dir_suffix', ...
+                    flistFile{iFlistFile}(10:end),'set_threshold',iThresh );
+%         basic_sorting_batch_ctr_all_els(flist ,TIME_TO_LOAD, selElsInPatch, numKmeansReps,  ...
+%             'sel_by_el_number', elNumbers(1:10),'add_dir_suffix', ...
+%             flistFile{iFlistFile}(10:end),'set_threshold',iThresh );
+    end
+    %     get_framenos(flist ,TIME_TO_LOAD, selElsInPatch, numKmeansReps, ...
+    %         'sel_patch_number', patchesToSort,'add_dir_suffix', flistFile{iFlistFile}(10:end));
+end

@@ -1,0 +1,9 @@
+function filepreview(pathName, fileName)
+% Displays a preview of the file of interest
+% ijones
+
+numLinesToDisplay = num2str(50);
+
+eval(['!head -', numLinesToDisplay, ' ', pathName,fileName])
+
+end

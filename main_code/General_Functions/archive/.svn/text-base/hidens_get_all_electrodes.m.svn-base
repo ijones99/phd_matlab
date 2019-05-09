@@ -1,0 +1,39 @@
+function y=hidens_get_all_electrodes(version, remove_dummies)
+
+%HIDENS_GET_ALL_ELECTRODES  get electrode coordinates
+%
+%   y=HIDENS_GET_ALL_ELECTRODES(version) returns coordinates of the
+%   electrodes.
+%
+%   y=HIDENS_GET_ALL_ELECTRODES(version, remove_dummies) if remove_dummies =
+%   TRUE, dummie electrodes are not returned. Default is remove_dummies =
+%   FALSE.
+
+% Author: ufrey
+
+if nargin<2
+    remove_dummies=0;
+end
+
+
+emulatorstr=sprintf('hidens %d\nel all\nquit\n', version);
+
+posstr=hidens_ask_emulator(emulatorstr);
+
+pos=textscan(posstr,'%f %f %s %d\n');
+
+y.x=pos{1}'/1000;
+y.y=pos{2}'/1000;
+y.label=pos{3}';
+y.dummy=pos{4}';
+y.el_idx=0:(length(y.x)-1);
+
+if remove_dummies
+    dummyel=(y.dummy~=0);
+    y.x(dummyel)=[];
+    y.y(dummyel)=[];
+    y.label(dummyel)=[];
+    y.dummy(dummyel)=[];
+    y.el_idx(dummyel)=[];
+end
+

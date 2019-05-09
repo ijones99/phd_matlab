@@ -1,0 +1,30 @@
+function out=NEO(sig,varargin)
+
+%OUT=NEO(sig)  Nonlinear Energy Operator
+%
+%   NEO(sig,'method',M) M can be NEO (default) or SNEO for smothed NEO
+%
+%   NEO(sig,'method','SNEO','L', L) L set the window width
+%
+%   See also neo_ica_sorter
+
+[method,L]=process_options(varargin,'method','NEO','L',10)
+
+
+neoo=zeros(size(sig));
+
+for j=1:size(sig,2)
+    for i=2:size(sig,1)-1
+        neoo(i,j)=sig(i,j)^2-sig(i-1,j)*sig(i+1,j);
+    end
+end
+
+if strcmp(method,'SNEO')
+w = bartlett(L);  
+    for i=1:size(neoo,2)
+        fi(:,i)=filter(w,1,neoo(:,i));
+        
+    end
+    neoo=fi;
+end
+out=neoo;

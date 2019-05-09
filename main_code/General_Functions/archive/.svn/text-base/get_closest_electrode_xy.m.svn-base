@@ -1,0 +1,26 @@
+function [idx, dist]=get_closest_electrode_xy(x, y, p, cnt)
+%
+% returns the distance and the index for the closest electrode
+% to the point p
+% 
+% args:
+%       x: is a list of x-coordinates
+%       y: is a list of y-coordinates
+%       p: x-y coordinate of point p
+%       cnt: default is 1. If >1, the cnt number of closest neurons are
+%            returned
+%
+if nargin<4
+    cnt=1;
+end
+
+len=length(x);
+if length(y)~=len
+    error('x and y must have the same length')
+end
+
+x=[x p(1)];
+y=[y p(2)];
+
+[idx, dist]=get_closest_electrode(x, y, length(x), 0, cnt);
+

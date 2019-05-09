@@ -1,0 +1,34 @@
+function change_spikes_params
+
+fileNamePattern = 'el*mat';
+
+fileNames = dir(fileNamePattern);
+
+
+% go through each file and rename
+for i=1:length(fileNames)
+    
+    i
+    % load file
+    load(fileNames(i).name);
+    
+    % turn on ISI display
+    spikes.params.display.show_isi=1;
+    
+    avgWaveformMainEl = mean(cl_5559.waveforms(:,:,1));
+    spikes.main_el_avg_amp = max(avgWaveformMainEl) - min(avgWaveformMainEl);
+    % new name to assign to struct
+    periodLoc = strfind(fileNames(i).name,'.');
+    newName = fileNames(i).name(1:periodLoc-1);
+    
+    eval([newName,'=spikes;']);
+    
+    clear spikes
+    
+    % save file with alterations
+    save(fileNames(i).name, newName);
+        
+end
+
+
+end

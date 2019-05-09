@@ -1,0 +1,47 @@
+------- Stimuli Presentation Log File, 2012-08-03 -------
+
+
+20120803T113959 (2012-08-03 11:39:59) - begin stimulus:StimParams_09_WnCheckerboardTest.mat
+20120803T114114 (2012-08-03 11:41:14) - begin stimulus:StimParams_09_WnCheckerboardTest.mat
+20120803T114115 (2012-08-03 11:41:15) - end stimulus:StimParams_09_WnCheckerboardTest.mat
+
+20120803T114318 (2012-08-03 11:43:18) - begin stimulus:StimParams_09_WnCheckerboardTest.mat
+20120803T114320 (2012-08-03 11:43:20) - end stimulus:StimParams_09_WnCheckerboardTest.mat
+
+20120803T114449 (2012-08-03 11:44:49) - begin stimulus:StimParams_09_WnCheckerboardTest.mat
+20120803T114453 (2012-08-03 11:44:53) - end stimulus:StimParams_09_WnCheckerboardTest.mat
+
+20120803T114601 (2012-08-03 11:46:01) - begin stimulus:StimParams_09_WnCheckerboardTest.mat
+20120803T114603 (2012-08-03 11:46:03) - end stimulus:StimParams_09_WnCheckerboardTest.mat
+
+20120803T114840 (2012-08-03 11:48:40) - begin stimulus:StimParams_09_WnCheckerboardTest.mat
+20120803T114843 (2012-08-03 11:48:43) - end stimulus:StimParams_09_WnCheckerboardTest.mat
+
+20120803T164700 (2012-08-03 16:47:00) - begin stimulus:StimParams_09_WnCheckerboardTest.mat
+20120803T170705 (2012-08-03 17:07:05) - end stimulus:StimParams_09_WnCheckerboardTest.mat
+
+20120803T171712 (2012-08-03 17:17:12) - begin stimulus:StimParams_10_Wn100PerCheckerboard.mat
+20120803T173801 (2012-08-03 17:38:01) - begin stimulus:StimParams_10_Wn100PerCheckerboard.mat
+20120803T182306 (2012-08-03 18:23:06) - end stimulus:StimParams_10_Wn100PerCheckerboard.mat
+
+20120803T184239 (2012-08-03 18:42:39) - begin stimulus:/birds_bridge_ij/400umApertureOriginal_Movie movie
+20120803T190024 (2012-08-03 19:00:24) - end stimulus:/birds_bridge_ij/400umApertureOriginal_Movie movie
+
+20120803T190142 (2012-08-03 19:01:42) - begin stimulus:/birds_bridge_ij/400umApertureStat_Surr_Median_Whole_Movie movie
+20120803T191928 (2012-08-03 19:19:28) - end stimulus:/birds_bridge_ij/400umApertureStat_Surr_Median_Whole_Movie movie
+
+20120803T192046 (2012-08-03 19:20:46) - begin stimulus:/birds_bridge_ij/400umApertureDynamic_Surr_Median_Each_Frame movie
+20120803T193832 (2012-08-03 19:38:32) - end stimulus:/birds_bridge_ij/400umApertureDynamic_Surr_Median_Each_Frame movie
+
+20120803T193950 (2012-08-03 19:39:50) - begin stimulus:/birds_bridge_ij/400umApertureDynamic_Surr_Shuffled_Median_Each_Frame movie
+20120803T195736 (2012-08-03 19:57:36) - end stimulus:/birds_bridge_ij/400umApertureDynamic_Surr_Shuffled_Median_Each_Frame movie
+
+20120803T195856 (2012-08-03 19:58:56) - begin stimulus:/birds_bridge_ij/400umAperturePixelated_Surr_Shuffled_50_Percent_Each_Frame movie
+20120803T201641 (2012-08-03 20:16:41) - end stimulus:/birds_bridge_ij/400umAperturePixelated_Surr_Shuffled_50_Percent_Each_Frame movie
+
+20120803T201654 (2012-08-03 20:16:54) - begin stimulus:StimParams_SpotsIncrSize.mat
+20120803T202509 (2012-08-03 20:25:09) - end stimulus:StimParams_SpotsIncrSize.mat
+
+20120803T202521 (2012-08-03 20:25:21) - begin stimulus:StimParams_Bars.mat
+20120803T203738 (2012-08-03 20:37:38) - end stimulus:StimParams_Bars.mat
+

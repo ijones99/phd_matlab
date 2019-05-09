@@ -1,0 +1,30 @@
+------- Stimuli Presentation Log File, 2012-12-18 -------
+
+
+20121218T122047 (2012-12-18 12:20:47) - begin stimulus:StimParams_10_Wn100PerCheckerboard_short.mat
+20121218T123253 (2012-12-18 12:32:53) - end stimulus:StimParams_10_Wn100PerCheckerboard_short.mat
+
+20121218T123307 (2012-12-18 12:33:07) - begin stimulus:StimParams_10_Wn100PerCheckerboard.mat
+20121218T131759 (2012-12-18 13:17:59) - begin stimulus:StimParams_10_Wn100PerCheckerboard_short.mat
+20121218T133005 (2012-12-18 13:30:05) - end stimulus:StimParams_10_Wn100PerCheckerboard_short.mat
+
+20121218T133018 (2012-12-18 13:30:18) - begin stimulus:StimParams_10_Wn100PerCheckerboard.mat
+20121218T141524 (2012-12-18 14:15:24) - end stimulus:StimParams_10_Wn100PerCheckerboard.mat
+
+20121218T141601 (2012-12-18 14:16:01) - begin stimulus:/labelb12ariell/500umApertureStat_Surr_Median_Whole_Movie movie
+20121218T143346 (2012-12-18 14:33:46) - end stimulus:/labelb12ariell/500umApertureStat_Surr_Median_Whole_Movie movie
+
+20121218T143359 (2012-12-18 14:33:59) - begin stimulus:StimParams_SpotsIncrSize.mat
+20121218T143721 (2012-12-18 14:37:21) - begin stimulus:/labelb12ariell/500umApertureOriginal_Movie movie
+20121218T145507 (2012-12-18 14:55:07) - end stimulus:/labelb12ariell/500umApertureOriginal_Movie movie
+
+20121218T145534 (2012-12-18 14:55:34) - begin stimulus:/labelb12ariell/500umApertureDynamic_Surr_Median_Each_Frame movie
+20121218T151320 (2012-12-18 15:13:20) - end stimulus:/labelb12ariell/500umApertureDynamic_Surr_Median_Each_Frame movie
+
+20121218T151345 (2012-12-18 15:13:45) - begin stimulus:/labelb12ariell/500umApertureDynamic_Surr_Shuffled_Median_Each_Frame movie
+20121218T153517 (2012-12-18 15:35:17) - begin stimulus:StimParams_10_Wn100PerCheckerboard_short.mat
+20121218T153718 (2012-12-18 15:37:18) - begin stimulus:StimParams_10_Wn100PerCheckerboard_short.mat
+20121218T153814 (2012-12-18 15:38:14) - begin stimulus:StimParams_10_Wn100PerCheckerboard.mat
+20121218T162320 (2012-12-18 16:23:20) - end stimulus:StimParams_10_Wn100PerCheckerboard.mat
+
+20121218T162357 (2012-12-18 16:23:57) - begin stimulus:/labelb12ariell/500umApertureOriginal_Movie movie

@@ -1,0 +1,9 @@
+function y=hidens_get_size(version)
+
+emulatorstr=sprintf('hidens %d\nsize\nquit\n', version);
+
+posstr=hidens_ask_emulator(emulatorstr);
+
+devsize=textscan(posstr,'%f %f\n');
+
+y=[devsize{1} devsize{2}]/1000;

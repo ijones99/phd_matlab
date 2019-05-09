@@ -1,0 +1,129 @@
+function show_image
+% show_gray([0...1]) full screen on or off
+
+%%
+umToPixConv = 1.79;
+% -------------------- Stimulus Variables ------------------
+stimulusFrameDuration = .2;
+objCoordsXY = [0,0];
+flipIm = 1;
+bkgndEdgeLength = 1000;
+paramSeq = [.01 .1 1 10]
+numRepetitions = 100;
+interSessionInterval = 5; %seconds between series of 
+
+horizontalPosition = 0; % block contains 3 squares [-1, 0 ,1] = [left, middle, right]
+verticalPosition = -1; % block contains 3 squares [1, 0 ,-1] = [top, middle, bottom]
+horizDistBtwnBlockCenters = 6*16/umToPixConv; % ctr-to-ctr distance between elec configs (horizontal), converted to pixels
+vertDistBtwnBlockCenters = (1/4)*17*18.5/umToPixConv; % quarter positions within
+% 17x6 elec configurations , converted to pixels
+
+subPosition = [horizontalPosition*horizDistBtwnBlockCenters  vertDistBtwnBlockCenters*verticalPosition*(-1) ]
+
+% Make sure this is running on OpenGL Psychtoolbox:
+AssertOpenGL;
+
+% KbName('KeyNamesLinux') %run this command to get the
+% names of the keys
+RestrictKeysForKbCheck(66) % Restrict response to the space bar
+
+HideCursor
+
+%Brightness Values
+blackVal = 0;
+whiteVal = 255;
+darkGrayVal = 115;
+grayVal = 163;
+lightGrayVal = 205;
+
+% get screen id and open a gray window
+screenid = max(Screen ('Screens'));
+window = Screen('OpenWindow', screenid, [0 grayVal grayVal  0]);
+
+% make gray full screen
+screenSize = get(0,'ScreenSize');
+fullScreenImage = ones(bkgndEdgeLength,bkgndEdgeLength,3) ;
+fullScreenImage(:,:,1) = 0;
+w(1) = Screen(window, 'MakeTexture',  fullScreenImage*(grayVal)   );
+
+% list image names
+figFileNames = {'a_norm.png'}
+
+% perform flip and rotation of image
+for i=2
+    [imageLoaded map alpha] = imread(figFileNames{i-1});
+    if flipIm
+        imageModified = zeros(size(imageLoaded,2), size(imageLoaded,1),3 ) ;
+        imageModified(:,:,3) = rot90(flipud(imageLoaded(:,:,3)),-1);
+        imageModified(:,:,2) = rot90(flipud(imageLoaded(:,:,2)),-1);
+    else
+        imageModified = zeros(size(imageLoaded) ) ;
+        imageModified(:,:,2) = imageLoaded(:,:,2);
+        imageModified(:,:,3) = imageLoaded(:,:,3);
+    end
+    
+end
+
+% create
+j = 2;
+for i=paramSeq
+    letterAreaPix = length(find(imageModified(:,:,2) == 0));
+    percentArea = i; % percent of the area
+    selArea = (percentArea/100)*letterAreaPix;
+    edgeLengthOfArea = sqrt(selArea);
+    HSIZE = [ ceil(edgeLengthOfArea) ceil(edgeLengthOfArea)];
+    SIGMA = 5;
+    h = fspecial('gaussian',HSIZE,SIGMA);
+    imageFiltered = imcomplement(imfilter(imcomplement( imageModified ),h));
+    w(j) = Screen(window, 'MakeTexture',  imageFiltered*(grayVal/whiteVal)   );
+    j = j+1;
+end
+
+
+maxX = screenSize(3); maxY =screenSize(4) ;
+% objCoordsXY = [maxY - size(imageModified,1), maxX - size(imageModified,2)];
+objCoordsXY(2)=-objCoordsXY(2); %account for fact that y-axis is reversed
+objCoordsXY = objCoordsXY/umToPixConv + [ maxX/2 maxY/2 ]; % thus, (0,0) will be the middle of the screen
+objCoordsXY = objCoordsXY + subPosition;
+
+imWidth = size(imageModified,2);
+imHeight = size(imageModified,1);
+
+%Create coordinates:
+correctionForRectWindow = (maxX - maxY)/2;
+% Screen('DrawTexture', window, w(1), [], sourceRect, [], [], [], [], [], [], []);
+% Screen(window,'Flip');
+
+if flipIm
+    
+    %     objCoordsXY = [ (maxX - origobjCoordsXY(2) - imWidth/2 - correctionForRectWindow ), (maxY - origobjCoordsXY(1)-imHeight/2 + correctionForRectWindow)   ];% however, must rotate and flip coords
+    objCoordsXY = [ (objCoordsXY(2)+correctionForRectWindow ), ( objCoordsXY(1)-correctionForRectWindow   )   ];% however, must rotate and flip coords
+    
+end
+objCoordsXY = objCoordsXY + [- imWidth/2   -imHeight/2]; % Make sure image is positioned from center
+
+sourceRect = [objCoordsXY(1),objCoordsXY(2), objCoordsXY(1)+size(imageModified,2),objCoordsXY(2 )+size(imageModified,1)]
+
+for i=1+1:1+length(paramSeq)
+    for j=1:numRepetitions
+        Screen('DrawTexture', window, w(j), [], sourceRect, [], [], [], [], [], [], []);
+        Screen(window,'Flip');
+        pause(stimulusFrameDuration)
+        Screen('DrawTexture', window, w(1), [], sourceRect, [], [], [], [], [], [], []);
+        Screen(window,'Flip');
+        pause(stimulusFrameDuration)
+    end
+end
+
+
+% Screen('DrawTexture', window, w(1), [], sourceRect, [], [], [], [], [], [], []);
+% Screen(window,'Flip');
+% pause(stimulusFrameDuration)
+
+beep
+pause(.3)
+
+KbWait;
+Screen('CloseAll');
+
+end

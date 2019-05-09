@@ -1,0 +1,29 @@
+function dataOut = extract_freq_data( event_data )
+
+freq_thr=10;
+
+% change to cell
+if not(iscell(event_data))
+    event_data = {event_data}
+end
+
+
+for i=1:length(event_data)
+if i==1
+    freq_map=event_data{i}.event_map.cnt./event_data{i}.event_map.time;
+else
+    freq_map=event_data{i}.event_map.cnt./event_data{i}.event_map.time+freq_map;
+    
+end
+end
+
+dataOut.freq_map = freq_map;
+dataOut.x = event_data{1}.x;
+dataOut.y = event_data{1}.y;
+
+active_els=find(freq_map>=freq_thr);
+% valid_els=find(event_data.event_map.time>=0);
+
+
+
+end

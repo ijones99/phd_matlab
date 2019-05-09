@@ -1,0 +1,23 @@
+function write_neuropos_file(els,cname)
+
+% WRITE_NEUROPOS_FILE(ELS,FNAME)  ELS is a struct containing .x .z .el_idx
+% values for the desired electrodes. The files are placed in the folder
+% /elConfigs/FNAME, FNAME is a string with the filename
+
+
+cost_neuron=25;
+configDir='elConfigs';
+
+% generate dir if necessar
+if not(exist(configDir))
+    mkdir(configDir)
+end
+
+fid = fopen([configDir,'/',cname, '.neuropos.nrk'], 'wt');
+
+for i=1:length(els.x)
+
+    fprintf(fid, ['Neuron RGC',int2str(i),': ',int2str(els.x(i)),'/',int2str(els.y(i)),', ', int2str(cost_neuron),'/',int2str(cost_neuron),'\n']);
+       
+end
+fclose(fid)

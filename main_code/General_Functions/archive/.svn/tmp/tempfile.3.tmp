@@ -1,0 +1,56 @@
+function out=convert_events(allevents, ntk2)
+
+%CONVERT_EVENTS  convert events to be used with hidens_generate_event_map
+%
+%   EVENTS=CONVERT_EVENTS(EVS,NTK2) converts EVS, which is the output of
+%   simple_event_cut into EVENTS, suitable to plot an event map with
+%   hidens_generate_event_map.
+%   See help text of hidens_generate_event_map for example.
+%
+%   See also hidens_generate_event_map
+
+els=hidens_get_all_electrodes(2);
+siz=size(els.x);
+
+event_data.x=els.x;
+event_data.y=els.y;
+
+map.time=ones(siz)*-1;
+map.min=cell(siz);
+map.max=cell(siz);
+map.ts=cell(siz);
+map.cnt=zeros(siz);
+map.fname=ntk2.fname;
+
+% compute cnt:
+
+for i=1:length(allevents.el_idx)
+    
+    idx=find(allevents.ch==i);
+<<<<<<< .mine
+    glb_idx=allevents.glob_ch_idx(idx(i))+1; % added +1 for conversion
+    
+    map.cnt(glb_idx)=length(idx);
+    map.ts(glb_idx)={allevents.ts(idx)};
+    map.min(glb_idx)={allevents.min(idx)};
+    map.max(glb_idx)={allevents.max(idx)};
+    map.time(glb_idx)=allevents.time/ntk2.sr;
+    
+=======
+    if not(isempty(idx))
+        glb_idx=allevents.glob_ch_idx(idx(1));
+        map.cnt(glb_idx)=length(idx);
+        map.ts(glb_idx)={allevents.ts(idx)};
+        map.min(glb_idx)={allevents.min(idx)};
+        map.max(glb_idx)={allevents.max(idx)};
+        map.time(glb_idx)=allevents.time/ntk2.sr;
+    end
+>>>>>>> .r6657
+end
+    
+event_data.event_map=map;
+
+out=event_data;
+    
+
+

@@ -1,0 +1,53 @@
+Stimuli Overview:
+
+Common Settings:
+- 1200 um x 1200 um stimulus area
+
+
+
+Moving Bars:
+- 8 directions
+- speed: 1200 um/sec
+- dimensions: 500 um x 1000 um
+- brightness: [0, 255] (full range)
+- background: middle gray
+- repeats: 20
+
+Noise_Movie:
+- Source: based on Piscobo 2013 paper.
+- spatial filter:  >= 50 um ~ 1.7 cpd (cycles per degree)
+- temporal filter: < 10 Hz
+- frame rate: 4 Hz
+- duration: 45 mins
+
+Movies:
+- unchanged (not rotated and flipped this time)
+- repeats: 30
+
+Marching Square:
+- dimensions: 500 um x 500 um
+- step size: 30 um
+- movement range: 900 um
+- background: middle gray, covers entire screen
+- brightness: [0, 255] (full range)
+- repeats: 10
+- presentation time: 1 sec
+
+Drifting Half Sine Wave:
+- 8 directions
+- speed: 1200 um/sec
+- brightness: [0, 255] (full range)
+- background: middle gray
+- repeats: 20
+
+White Noise Checkerboard:
+- square size: 40 um
+- # checkers: 30 x 30
+- frame rate: 30 Hz
+- duration: 45 mins
+- brightness: 0 and 25%
+    
+Random Dots:
+- percent of area: 15
+- size range: 50 um to 1000 um
+- brightness: [0, 255] (full range)

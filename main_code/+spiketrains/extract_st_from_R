@@ -1,0 +1,18 @@
+cellOut = extract_st_to_cell(R, rIdx)
+
+% timestamps
+currDataset = R{rIdx(1),rIdx(2)}; 
+
+% find clusters
+if isempty(clusNo)
+    uniqueClus = unique(currDataset(:,1))';
+else
+    uniqueClus
+end
+tsMatrix = {};
+
+% Create out matrix
+for i=1:length(uniqueClus)
+    tsMatrix{i}.clus_num = uniqueClus(i);    
+    tsMatrix{i}.ts = currDataset(find(currDataset(:,1)==uniqueClus(i)),2)';
+end

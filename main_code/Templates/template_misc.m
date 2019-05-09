@@ -1,0 +1,1 @@
+set(gcf,'name',inputStructName,'numbertitle','off')

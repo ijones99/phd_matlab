@@ -1,0 +1,4 @@
+------- Stimuli Presentation Log File, 2012-07-31 -------
+
+
+20120731T104405 (2012-07-31 10:44:05) - begin stimulus:/birds_bridge_ij/400umApertureOriginal_Movie movie

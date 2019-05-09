@@ -1,0 +1,116 @@
+function hidens_add_paths( branch )
+
+%HIDENS_ADD_PATH Add HiDens toolbox to your path and save the modified path
+%   in the pathdef.m file in your home.
+%
+%   You need to execute this to be able to use ntk_* functions
+%   Note: you don't need to execute it from the folder where it is located.
+%
+%   HIDENS_ADD_PATH   enables the HiDens toolbox from your
+%   local trunk at bel.svn/cmosmea_external/matlab/trunk/
+%
+%   HIDENS_ADD_PATH('trunk') same as HIDENS_ADD_PATH, but deletes all previous
+%   paths containing 'cmosmea_external/matlab/'
+%
+%   HIDENS_ADD_PATH( branchName ) enables the HiDens toolbox from your
+%   local branch at bel.svn/cmosmea_external/matlab/branches/branchName/
+%
+%   Note: to properly add the toolbox, the root of your svn is not crucial.
+%   However, it is crucial that matlab resides under:
+%   cmosmea_external/matlab
+%
+
+doDelete=0;
+
+% Get the name of the folder where hidens_add_paths is located
+
+%% Parse input argument, if any
+if (nargin>0)
+    % to be on the save side, if somebody specifies 'trunk' as the branch
+    % specifying 'trunk' is not necessary, since this is the default
+    if ( strcmp(branch, 'trunk') )
+        branch = ['trunk' ];
+        doDelete=1;
+    else
+        branch = ['branches/' branch];
+        doDelete=1;
+    end
+else
+    branch = ['trunk'];
+end
+
+
+f=which('hidens_add_paths');
+
+%% Get the old path and remove the HiDens Toolboxes, if any.
+% get the old path
+
+if doDelete
+    
+    a=path;
+    % separate each directory, use ':' as delimiter to get an array
+    b = strread(a,'%s','delimiter',':');
+    % find a all paths which match the cmosmea_external/match string
+    c=b(find(cellfun( @(p) ~isempty(regexp(p, 'cmosmea_external/matlab')) , b) ) );
+    % remove all paths which match the cmosmea_external/match string
+    cellfun( @(p) rmpath(p), c);
+    
+end
+
+%%  Extract the base path to the matlab svn location
+%f=which('hidens_add_paths');
+[pathstr, name, ext, versn]=fileparts(f);
+matlab_base_string = regexp(pathstr, '(.+cmosmea_external/matlab/).+', 'tokens');
+pathstr = matlab_base_string{1}{1};
+% setting the pathstr to fit with the branch or trunk
+pathstr = [pathstr branch];
+
+
+%% List all directories
+disp('Adding folders to your path...')
+addpath(pathstr)
+addpath([pathstr '/SpikeSorter'])
+addpath([pathstr '/heart_cell'])
+addpath([pathstr '/misc'])
+addpath([pathstr '/neuron'])
+addpath([pathstr '/Testbench'])
+addpath([pathstr '/OptimalFiltering'])
+<<<<<<< .mine
+addpath([pathstr '/lightStimulation'])
+=======
+addpath([pathstr '/lightStimulation'])
+
+addpath([pathstr '/dini'])      % Patrick Dini's stuff
+addpath([pathstr '/dini/gui2_0'])
+addpath([pathstr '/dini/mysql_matlab'])
+addpath([pathstr '/dini/python'])
+
+>>>>>>> .r9584
+% addpath([pathstr '/misc/FPGA_Filter'])
+
+addpath([pathstr '/html'])
+addpath([pathstr '/Testbench/html'])
+
+addpath([pathstr '/tools/m2html']);
+addpath([pathstr '/tools/KlustaKwik/KlustaKwik/linux-pentium'])
+addpath([pathstr '/tools/ICA/FastICA_25'])
+addpath([pathstr '/tools/mex_mysql'])
+addpath([pathstr '/tools/normxcorr'])
+addpath([pathstr '/tools/povray'])
+addpath([pathstr '/tools/external_functions'])
+addpath([pathstr '/tools/external_functions/cm_and_cb_utilities'])
+addpath([pathstr '/conductivity'])
+addpath([pathstr '/tcpip_server'])
+addpath([pathstr '/tcpip_server/tcp_udp_ip'])
+
+if (exist('/usr/local/hima/hidens/matlab/mex_ntkparser') )
+    addpath /usr/local/hima/hidens/matlab/mex_ntkparser
+elseif  (exist('/usr/local/hidens/matlab/mex_ntkparser') )
+    addpath /usr/local/hidens/matlab/mex_ntkparser
+else
+    disp('Could not find you mex_ntkparser directory. Please add manually')
+end
+
+disp('Saving path to ~/pathdef.m...')
+savepath('~/pathdef.m')
+

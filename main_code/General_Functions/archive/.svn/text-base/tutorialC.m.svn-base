@@ -1,0 +1,43 @@
+%%  HiDens Tutorial III - Additional tools
+%
+% The last part of the tutorial gives an overwiew over useful functions that
+% were not shown in parts A and B. 
+
+%% Functions related to electrodes
+%
+% <matlab:helpwin('hidens_get_all_electrodes') *hidens_get_all_electrodes*>:
+% returns a struct with the coordinates of all electrodes. Example how to load
+% and plot the elctrodes:
+
+el=hidens_get_all_electrodes(2)     % for chip version 2
+plot(ntk2.x, ntk2.y, '.')
+axis ij
+axis equal
+%%
+% <matlab:helpwin('get_closest_electrode_xy') *get_closest_electrode_xy*> and
+% <matlab:helpwin('get_farest_electrode_xy') *get_farest_electrode_xy*> give you
+% the closest resp. farest electrode in list of electrodes to a scpecified
+% point:
+
+els=hidens_get_all_electrodes(2)     % for chip version 2
+p=[300 350];
+[n_idx n_dist]=get_closest_electrode_xy(els.x,els.y,p)
+[f_idx f_dist]=get_farest_electrode_xy(els.x,els.y,p)
+
+% n_idx / f_idx: index of the closest resp. farest electrode
+
+%%
+% <matlab:helpwin('find_common_electrodes') *find_common_electrodes*> finds the
+% common electrodes for two structures with *.el_idx entries. These structures
+% can be single neurons, ntk-data, simulated_data... Use this function in order
+% to prevent confilict when comparing different data.
+
+%%
+% <matlab:helpwin('plot_electrode_map') *plot_electrode_map*> plots a map of the
+% elctrodes used, with the according indices.
+
+%% Others
+%
+% All kind of useful functions should be briefly explained here, in order to
+% simplify the usage for new users...
+

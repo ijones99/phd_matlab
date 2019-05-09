@@ -1,0 +1,28 @@
+function rgcs = filter_based_sort_ums_output(flistName, rgcs, varargin)
+% sort_ums_output(flistName, varargin)
+
+
+global spikes_saved    
+
+
+for i=1:length(rgcs)
+eval(['splitmerge_tool(', inputStructName ,')']);
+% wait for user input after sorting
+fprintf('File %d of %d done\n', i , length(fileNames));
+aa = input('Save and proceed?');
+end
+
+set(gcf,'name',inputStructName,'numbertitle','off')
+
+
+
+
+
+
+eval([outputStructName,'=spikes_saved;']);
+
+
+close all
+
+
+end

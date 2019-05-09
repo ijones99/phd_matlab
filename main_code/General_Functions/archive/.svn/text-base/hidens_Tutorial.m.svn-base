@@ -1,0 +1,19 @@
+%% HiDens Tutorial
+% This Tutorial gives an overwiev over the HiDens MATLAB package and explains
+% the most important functions and how to use them. 
+% You will use these functions to load, process and visualize data that was
+% recorded with the HiDens chip and to apply the spike sorting algorithm.
+%
+% The tutorial is divided in three pages:
+%
+% # How to load and process raw recorded data is shown in
+% *<matlab:open('tutorialA.html') Processing raw data>*
+% # How to do spike sorting and all functions dealing with sorted neurons are
+% shown in *<matlab:open('tutorialB.html') Spike Sorting and Neruons Processing>*
+% # Additional usefull functions are explained in 
+% *<matlab:open('tutorialC.html') Additional tools>*
+
+%%
+% A tutorial on how to use the testbench can be found
+% *<matlab:open('TB_Tutorial.html') here>*.
+

@@ -1,0 +1,21 @@
+function [idx, dist]=get_farest_electrode_xy(x, y, p)
+% 
+% returns the distance and the index for the farest electrode
+% to the point p
+% 
+% args:
+%       x: is a list of x-coordinates
+%       y: is a list of y-coordinates
+%       p: x-y coordinate of point p
+%
+
+len=length(x);
+if length(y)~=len
+    error('x and y must have the same length')
+end
+
+x=[x p(1)];
+y=[y p(2)];
+
+[idx, dist]=get_farest_electrode(x, y, length(x));
+

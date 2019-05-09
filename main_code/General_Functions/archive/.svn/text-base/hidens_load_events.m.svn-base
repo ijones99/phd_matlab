@@ -1,0 +1,78 @@
+function y=hidens_load_events(flist, thr_f, varargin)
+
+%HIDENS_LOAD_EVENTS  Generate event data for plotting with hidens_generate_event_map
+%
+%   EVENTS=HIDENS_LOAD_EVENTS(FLIST,THR_F)  generate events for files in FLIST.
+%   THR_F is the threshold factor.
+%   
+%   EVENTS=HIDENS_LOAD_EVENTS(...,VAR)  VAR can be any arguments accepted by
+%   hidens_neuro_process and are directly passed to that function.
+%
+%   *COMMENT:*
+%   This function goes through hidens_neuro_process, which is complicated. An
+%   alternative way to do this can be found in the help text of
+%   hidens_generate_event_map
+%
+%   See also hidens_generate_event_map, convert_events
+
+event_data=[];
+event_chs=[];
+event_data.el_idx=[];
+event_data.min=[];
+event_data.max=[];
+event_data.ts=[];
+event_data.fname=cell(0,0);
+event_data.finfo=cell(0,0);
+event_chs.el_idx=[];
+event_chs.time_s=[];
+
+passargin={'thr_f' thr_f 'events'};
+
+for i=1:length(varargin)
+    passargin{end+1}=varargin{i};
+end
+    
+for i=1:length(flist)
+    res=hidens_neuro_process(flist{i}, passargin{:});
+    if not(isempty(res))
+        
+        event_data.el_idx=[event_data.el_idx res.event_data.el_idx];
+        event_data.min=[event_data.min res.event_data.min];
+        event_data.max=[event_data.max res.event_data.max];
+        event_data.ts=[event_data.ts res.event_data.ts];
+        event_data.fname{end+1}=res.event_data.fname;
+        event_data.finfo{end+1}=res.event_data.finfo;
+        event_chs.el_idx=[event_chs.el_idx res.event_chs.el_idx];
+        event_chs.time_s=[event_chs.time_s res.event_chs.time_s];
+        
+    end
+end
+%event_chs.time_s
+all=hidens_get_all_electrodes(1);
+
+event_map.time=-1*ones(1,length(all.x));
+event_map.time(event_chs.el_idx+1)=0;
+for i=1:length(event_chs.el_idx)
+    event_map.time(event_chs.el_idx(i)+1)=event_map.time(event_chs.el_idx(i)+1)+event_chs.time_s(i);
+end
+
+event_map.min=cell(1,length(all.x));
+event_map.max=cell(1,length(all.x));
+event_map.ts=cell(1,length(all.x));
+event_map.cnt=zeros(1,length(all.x));
+
+event_map.fname=event_data.fname;
+event_map.finfo=event_data.finfo;
+
+for i=1:length(all.x)
+    idx=find(event_data.el_idx==i-1);
+    event_map.cnt(i)=length(idx);
+    event_map.min{i}=event_data.min(idx);
+    event_map.max{i}=event_data.max(idx);
+    event_map.ts{i}=event_data.ts(idx);
+end
+
+
+y.x=all.x;
+y.y=all.y;
+y.event_map=event_map;

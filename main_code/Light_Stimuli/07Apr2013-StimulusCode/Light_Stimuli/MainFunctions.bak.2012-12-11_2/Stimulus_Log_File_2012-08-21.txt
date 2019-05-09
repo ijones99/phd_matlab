@@ -1,0 +1,8 @@
+------- Stimuli Presentation Log File, 2012-08-21 -------
+
+
+20120821T115158 (2012-08-21 11:51:58) - begin stimulus:StimParams_09_WnCheckerboardTest.mat
+20120821T115740 (2012-08-21 11:57:40) - begin stimulus:StimParams_09_WnCheckerboardTest.mat
+20120821T121746 (2012-08-21 12:17:46) - end stimulus:StimParams_09_WnCheckerboardTest.mat
+
+20120821T122056 (2012-08-21 12:20:56) - begin stimulus:/birds_bridge_ij/400umApertureOriginal_Movie movie

@@ -1,0 +1,55 @@
+%Ian L Jones 16.06.2010
+
+
+%enter path where recorded files are located
+%CHANGE THIS ACCORDING TO YOUR LOCATION
+file_path = '/net/bs-filesvr01/export/group/hima/recordings/HiDens/Roska/26Mar2010_DSGCs/proc/';
+
+%name of flist file
+flist_file_name = 'flist1.m';
+
+%get list of all files in proc folder
+file_structs = dir(strcat(file_path,'*stream.ntk'));
+
+%remove first two entries, since they are directory links
+file_structs(1) = [];
+file_structs(1) = [];
+
+%number of files
+num_files = size(file_structs,1);
+
+file_names = ' ';
+
+%convert to cell array
+file_names = cellstr(file_names);
+
+for i=1:num_files
+   
+   %put all strings into the cell array
+ 
+   file_names(i,:) =  cellstr(file_structs(i).name)
+    
+end
+
+%prefix for file listing in flist file
+flist_entry_prefix = cellstr( repmat('flist{end+1}=''',num_files,1));
+
+%suffix for file listing in flist file
+flist_entry_suffix = cellstr(repmat(''';',num_files,1));
+
+flist_elements = ' ' ;
+%convert the flist list of files to cell format
+flist_elements  = cellstr(flist_elements);
+
+%add the necessary pre- and suffix to each line
+flist_elements = strcat(flist_entry_prefix,file_names, flist_entry_suffix);
+
+%write to file
+fid = fopen(flist_file_name,'w');
+for i=1:num_files
+fprintf(fid,'%s ',flist_elements{i});
+fprintf(fid,'\n');
+i
+end
+fclose(fid);
+

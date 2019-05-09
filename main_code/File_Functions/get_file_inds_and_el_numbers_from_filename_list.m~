@@ -1,0 +1,23 @@
+function [fileInds elNumbers] = ...
+    get_file_inds_and_el_numbers_from_filename_list(dirName, fileNameList, fileNamePattern)
+
+numberItems = length(fileNameList);
+fileInds = zeros(1, numberItems);
+elNumbers = zeros(1, numberItems);
+
+filesInDir = ls(fullfile(dirName,fileNamePattern));
+
+% cycle through the list
+for iFileNameList=1:numberItems
+    % cycle through the files in the directory
+    for iFileInDir = 1:length(filesInDir)
+        % compare list to files in Dir
+        if strfind(filesInDir(iFileInDir).name, fileNameList(iFileNameList))
+            fileInds(iFileNameList) = iFileInDir;
+            
+            elNumbers(iFileNameList) = filesInDir(iFileInDir).name
+        end
+    end
+end
+
+end

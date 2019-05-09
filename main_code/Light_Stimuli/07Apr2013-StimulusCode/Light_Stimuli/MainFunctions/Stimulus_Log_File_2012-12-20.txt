@@ -1,0 +1,72 @@
+------- Stimuli Presentation Log File, 2012-12-20 -------
+
+
+20121220T094654 (2012-12-20 09:46:54) - begin stimulus:StimParams_SpotsIncrSize.mat
+20121220T094726 (2012-12-20 09:47:26) - begin stimulus:StimParams_Bars.mat
+20121220T094931 (2012-12-20 09:49:31) - begin stimulus:StimParams_Bars.mat
+20121220T122817 (2012-12-20 12:28:17) - begin stimulus:StimParams_10_Wn100PerCheckerboard_short.mat
+20121220T122941 (2012-12-20 12:29:41) - begin stimulus:StimParams_10_Wn100PerCheckerboard_short.mat
+20121220T124147 (2012-12-20 12:41:47) - end stimulus:StimParams_10_Wn100PerCheckerboard_short.mat
+
+20121220T124201 (2012-12-20 12:42:01) - begin stimulus:StimParams_10_Wn100PerCheckerboard.mat
+20121220T132706 (2012-12-20 13:27:06) - end stimulus:StimParams_10_Wn100PerCheckerboard.mat
+
+20121220T132743 (2012-12-20 13:27:43) - begin stimulus:/labelb12ariell/500umApertureOriginal_Movie movie
+20121220T134529 (2012-12-20 13:45:29) - end stimulus:/labelb12ariell/500umApertureOriginal_Movie movie
+
+20121220T134554 (2012-12-20 13:45:54) - begin stimulus:/labelb12ariell/500umApertureStat_Surr_Median_Whole_Movie movie
+20121220T140340 (2012-12-20 14:03:40) - end stimulus:/labelb12ariell/500umApertureStat_Surr_Median_Whole_Movie movie
+
+20121220T140406 (2012-12-20 14:04:06) - begin stimulus:/labelb12ariell/500umApertureDynamic_Surr_Median_Each_Frame movie
+20121220T142152 (2012-12-20 14:21:52) - end stimulus:/labelb12ariell/500umApertureDynamic_Surr_Median_Each_Frame movie
+
+20121220T142217 (2012-12-20 14:22:17) - begin stimulus:/labelb12ariell/500umApertureDynamic_Surr_Shuffled_Median_Each_Frame movie
+20121220T144003 (2012-12-20 14:40:03) - end stimulus:/labelb12ariell/500umApertureDynamic_Surr_Shuffled_Median_Each_Frame movie
+
+20121220T144028 (2012-12-20 14:40:28) - begin stimulus:/labelb12ariell/500umAperturePixelated_Surr_Shuffled_50_Percent_Each_Frame movie
+20121220T145814 (2012-12-20 14:58:14) - end stimulus:/labelb12ariell/500umAperturePixelated_Surr_Shuffled_50_Percent_Each_Frame movie
+
+20121220T145840 (2012-12-20 14:58:40) - begin stimulus:/labelb12ariell/500umAperturePixelated_Surr_Shuffled_90_Percent_Each_Frame movie
+20121220T151626 (2012-12-20 15:16:26) - end stimulus:/labelb12ariell/500umAperturePixelated_Surr_Shuffled_90_Percent_Each_Frame movie
+
+20121220T151638 (2012-12-20 15:16:38) - begin stimulus:StimParams_SpotsIncrSize.mat
+20121220T152454 (2012-12-20 15:24:54) - end stimulus:StimParams_SpotsIncrSize.mat
+
+20121220T152508 (2012-12-20 15:25:08) - begin stimulus:StimParams_Bars.mat
+20121220T154843 (2012-12-20 15:48:43) - begin stimulus:StimParams_Bars.mat
+20121220T160411 (2012-12-20 16:04:11) - end stimulus:StimParams_Bars.mat
+
+20121220T160425 (2012-12-20 16:04:25) - begin stimulus:StimParams_Marching_Sqr.mat
+20121220T165954 (2012-12-20 16:59:54) - begin stimulus:StimParams_10_Wn100PerCheckerboard_short.mat
+20121220T170042 (2012-12-20 17:00:42) - begin stimulus:StimParams_10_Wn100PerCheckerboard_short.mat
+20121220T170539 (2012-12-20 17:05:39) - begin stimulus:StimParams_10_Wn100PerCheckerboard_short.mat
+20121220T174442 (2012-12-20 17:44:42) - begin stimulus:StimParams_10_Wn100PerCheckerboard_short.mat
+20121220T175241 (2012-12-20 17:52:41) - begin stimulus:StimParams_10_Wn100PerCheckerboard_short.mat
+20121220T175400 (2012-12-20 17:54:00) - begin stimulus:StimParams_10_Wn100PerCheckerboard_short.mat
+20121220T180606 (2012-12-20 18:06:06) - end stimulus:StimParams_10_Wn100PerCheckerboard_short.mat
+
+20121220T180619 (2012-12-20 18:06:19) - begin stimulus:StimParams_10_Wn100PerCheckerboard.mat
+20121220T185125 (2012-12-20 18:51:25) - end stimulus:StimParams_10_Wn100PerCheckerboard.mat
+
+20121220T185203 (2012-12-20 18:52:03) - begin stimulus:/labelb12ariell/500umApertureOriginal_Movie movie
+20121220T190948 (2012-12-20 19:09:48) - end stimulus:/labelb12ariell/500umApertureOriginal_Movie movie
+
+20121220T191013 (2012-12-20 19:10:13) - begin stimulus:/labelb12ariell/500umApertureStat_Surr_Median_Whole_Movie movie
+20121220T192759 (2012-12-20 19:27:59) - end stimulus:/labelb12ariell/500umApertureStat_Surr_Median_Whole_Movie movie
+
+20121220T192827 (2012-12-20 19:28:27) - begin stimulus:/labelb12ariell/500umApertureDynamic_Surr_Median_Each_Frame movie
+20121220T194612 (2012-12-20 19:46:12) - end stimulus:/labelb12ariell/500umApertureDynamic_Surr_Median_Each_Frame movie
+
+20121220T194638 (2012-12-20 19:46:38) - begin stimulus:/labelb12ariell/500umApertureDynamic_Surr_Shuffled_Median_Each_Frame movie
+20121220T200423 (2012-12-20 20:04:23) - end stimulus:/labelb12ariell/500umApertureDynamic_Surr_Shuffled_Median_Each_Frame movie
+
+20121220T200449 (2012-12-20 20:04:49) - begin stimulus:/labelb12ariell/500umAperturePixelated_Surr_Shuffled_50_Percent_Each_Frame movie
+20121220T202235 (2012-12-20 20:22:35) - end stimulus:/labelb12ariell/500umAperturePixelated_Surr_Shuffled_50_Percent_Each_Frame movie
+
+20121220T202300 (2012-12-20 20:23:00) - begin stimulus:/labelb12ariell/500umAperturePixelated_Surr_Shuffled_90_Percent_Each_Frame movie
+20121220T204046 (2012-12-20 20:40:46) - end stimulus:/labelb12ariell/500umAperturePixelated_Surr_Shuffled_90_Percent_Each_Frame movie
+
+20121220T204059 (2012-12-20 20:40:59) - begin stimulus:StimParams_SpotsIncrSize.mat
+20121220T204914 (2012-12-20 20:49:14) - end stimulus:StimParams_SpotsIncrSize.mat
+
+20121220T204928 (2012-12-20 20:49:28) - begin stimulus:StimParams_Bars.mat

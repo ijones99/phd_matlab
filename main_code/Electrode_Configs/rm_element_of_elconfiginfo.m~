@@ -1,0 +1,23 @@
+function elConfigInfo = rm_element_of_elconfiginfo(elConfigInfo, elNumber)
+
+% get field names
+structFieldNames= fieldnames(elConfigInfo);
+
+% fields to be removed
+fieldNumbers = [1 2 3 7];
+
+% find index corr. to electrode number
+try
+I = find(elConfigInfo.selElNos == elNumber)
+
+
+ for i=1:length(fieldNumbers)
+    eval(['elConfigInfo.',structFieldNames{fieldNumbers(i)}, '(',num2str(I),')=[]'])  
+     
+     
+ end
+catch
+   fprintf('Electrode not found=
+end
+
+end

@@ -1,0 +1,17 @@
+function channelList = convertelectrodestochannels(electrodeOfInterest, electrode_list, ntk2)
+    
+    %initialized channelList
+    channelList = zeros(5);
+
+    %find the closest electrodes to the inputted electrode
+    rowInElectrodeList = find(electrode_list(:,1) == electrodeOfInterest);
+    electrodeNumbers = electrode_list(rowInElectrodeList,:);
+    
+    %convert a vector of channel numbers to electrode numbers.
+    for m = 1:size(electrodeNumbers,2)
+        channelList(m) = ntk2.channel_nr(find(ntk2.el_idx == electrodeNumbers(m) ));
+    end
+
+    
+
+end

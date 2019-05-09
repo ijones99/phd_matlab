@@ -1,0 +1,157 @@
+% load flist, which contains all ntk2 file names
+flist={};
+% flist_for_analysis_3;
+% flist{end+1} = '../proc/Trace_id843_2012-03-29T13_14_30_12.stream.ntk';
+flist_for_movies_only
+
+% -----------------------------------
+% --- SPIKE SORTING OF ALL NEURONS IN PATCH ---
+
+% BATCH PROCESSING RUN
+% run overnight, create el_ files. Saves light timestamp data.
+% input: proc/*.ntk output: ./analysed_data/01_Pre_Spikesorting/
+
+TIME_TO_LOAD = 200; % time to load in minutes
+% electrodes that constitute the middle patch
+selElsInPatch = [6984 6986 6988 6985 7089 7091 ...
+    7189 7088 7090 7087 7191 7193 7291 7190 ...
+    7192 7292 7293 7295 7392 7394 7294 7393 7497 ...
+    7396 7494 7496 7395 7495 7599 7498 7596 7598 ...
+    7600 7499 7595 7597 7701 7703 ...
+    ];
+
+flistName = {};
+
+for i=1:length(flist)
+    flistName{end+1}=flist{i}
+end
+% SORT PATCHES OF INTEREST
+numKmeansReps = 5;
+%
+basic_sorting_batch_ctr_all_els(flistName ,TIME_TO_LOAD, selElsInPatch, numKmeansReps, ...
+'sel_patch_number', [ 5    10    14 ]);
+% load flist, which contains all ntk2 file names
+flist={};
+% flist_for_analysis_3;
+% flist{end+1} = '../proc/Trace_id843_2012-03-29T13_14_30_12.stream.ntk';
+flist_for_bars
+
+% -----------------------------------
+% --- SPIKE SORTING OF ALL NEURONS IN PATCH ---
+
+% BATCH PROCESSING RUN
+% run overnight, create el_ files. Saves light timestamp data.
+% input: proc/*.ntk output: ./analysed_data/01_Pre_Spikesorting/
+
+TIME_TO_LOAD = 200; % time to load in minutes
+% electrodes that constitute the middle patch
+selElsInPatch = [6984 6986 6988 6985 7089 7091 ...
+    7189 7088 7090 7087 7191 7193 7291 7190 ...
+    7192 7292 7293 7295 7392 7394 7294 7393 7497 ...
+    7396 7494 7496 7395 7495 7599 7498 7596 7598 ...
+    7600 7499 7595 7597 7701 7703 ...
+    ];
+
+flistName = {};
+
+for i=1:length(flist)
+    flistName{end+1}=flist{i}
+end
+% SORT PATCHES OF INTEREST
+numKmeansReps = 5;
+
+basic_sorting_batch_ctr_all_els(flistName ,TIME_TO_LOAD, selElsInPatch, numKmeansReps, ...
+'sel_patch_number', [1:19]);
+%% SORT PATCHES OF INTEREST BASEL ON ELECTRODE NUMBERS OF INTEREST
+TIME_TO_LOAD = 90; %minutes
+numKmeansReps = 8;
+flist = {}; flist_for_movies;
+mainEls = [7701]
+[elsInPatch chsInPatch  indsInPatch] = get_electrodes_sorting_patches_overlapping(ntk2, 7,'sel_main_els', mainEls)
+basic_sorting_batch_ctr_all_els(flist ,TIME_TO_LOAD, elsInPatch{1}, numKmeansReps);
+
+%%
+% SUPERVISED SORTING
+% manual: create the cl_ files
+sort_ums_output(flistName, 'loading_mode', 'all_in_dir');
+% sort_ums_output(flistName, 'loading_mode', 'sel_in_dir','neur_inds', 4);
+
+%% EXTRACT TIME STAMPS & MAX 
+% auto: create st_ files & create neuronIndList.mat file with names of all
+% ...neurons found.
+extract_spiketimes_from_cl_files(flistName )
+
+%% SPIKE COMPARISONS
+% produces heatmaps
+[heatMap] = create_ts_matching_heatmaps(flistName);
+
+%% SELECT UNIQUE AND BEST NEURONS
+% This function plots all of the neuron spike trains for the unique neurons
+fileNo = 1;
+selNeuronInds = get_list_of_unique_neurs(0.15, flistName, 'do_plot')
+selNeuronInds = get_list_of_unique_neurs(0.15, flistName)
+%%
+%plot matches to specific neurons
+plot_matches_for_sel_neurs(selNeuronInds, heatMap)
+
+% Plot raster plot response to moving bar 
+load ../analysed_data/16_07_02_39/selNeuronInds.mat
+fileNo = 1;
+raster_plot_for_moving_bar(fileNo, flist{fileNo}, selNeuronInds)
+
+% PLOT RASTER PLOTS
+% plots the raster plots for one stimulus
+% set to ON and OFF
+neuronIndsToCompare = [43]% 66]; 
+raster_plot_for_slit(fileNo, flist{fileNo}, neuronIndsToCompare)
+
+% -- SELECTION OF SPECIFIC NEURONS -- %
+
+% SELECT UNIQUE AND BEST NEURONS
+flistName = flist{fileNo};
+
+% EXAMINE QUALITY OF SORTING
+% must first load neuronIndsToCompare
+neuronIndsToCompare = sort(neuronIndsToCompare);
+for i=10:length(neuronIndsToCompare)
+fileNo = 1;
+plot_cluster_characteristics(neuronIndsToCompare(i), ...
+    neuronIndsToCompare,1,flist{fileNo} )
+% plot_cluster_characteristics(i, neuronIndsToCompare,1,flist{fileNo} )
+end
+
+
+% BATCH SORT NEURONS OF INTEREST
+% calls basic_sorting_batch_single_neur.m
+% creates el_ files
+selFileNameNos = [1];
+neursToProcess = neuronIndsToCompare
+get_spikes_from_ntk2(selFileNameNos, neursToProcess)
+
+%% INTERACTIVELY SORT NEURONS OF INTEREST
+
+fileNo = [1:15];
+load ../analysed_data/16_07_02_39/selNeuronInds.mat
+uniqueNeuronsIndSel = get_unique_electrode_numbers(flistName, selNeuronInds)
+sort_ums_output(flist(fileNo), 'loading_mode', 'sel_in_list',uniqueNeuronsIndSel(1))
+review_clusters(flist(fileNo), 'loading_mode', 'sel_in_dir',[12:14])
+% sort_ums_output(flist{fileNo}, 'loading_mode', 'all_in_dir')
+% BATCH SORT WHITE NOISE FILESflist
+% calls basic_sorting_batch_single_neur.m
+% creates el_ files
+
+
+
+%%
+neursToProcess = [56 24];
+flist = {};
+flist_for_analysis;
+flistName = flist{end-1};
+TIME_TO_LOAD = 60;
+basic_sorting_batch_single_neur_wn_chunk(neursToProcess, flistName,  TIME_TO_LOAD)
+
+% -----------------------------------
+% --- GENERAL FUNCTIONS --- %
+
+convert_inds_to_chs
+convert_inds_to_inds

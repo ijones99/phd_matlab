@@ -1,0 +1,59 @@
+function y=recalc_active_els(neurons, varargin)
+
+% RECALC_ACTIVE_ELS  calculate active Electrodes
+%
+%   NEURONS=RECALC_ACTIVE_ELS(NEURONS) calculate active els and add index_vector
+%   .active_els
+%
+%   NEURONS=RECALC_ACTIVE_ELS(...'activef',AF) factor for calculation
+%
+%   NEURONS=RECALC_ACTIVE_ELS(...'best_n',N) take the best N electrodes
+%
+
+y=neurons;
+
+n_list=1:length(neurons);
+rms_noise=8;
+active_els_f=0.5;
+best_n=[];
+
+
+i=1;
+while i<=length(varargin)
+    if not(isempty(varargin{i}))  
+        if strcmp(varargin{i}, 'neurons')
+            i=i+1;
+            n_list=varargin{i};    
+        elseif strcmp(varargin{i}, 'noise')
+            i=i+1;
+            rms_noise=varargin{i}; 
+        elseif strcmp(varargin{i}, 'activef')
+            i=i+1;
+            active_els_f=varargin{i}; 
+        elseif strcmp(varargin{i}, 'best_n')
+            i=i+1;
+            best_n=varargin{i}; 
+        else
+            fprintf('unknown argument at pos %d\n', 1+i);
+        end
+    end
+    i=i+1;
+end
+
+active_channel_lim_ps=active_els_f*rms_noise;
+
+    
+for n=n_list
+    c_val=sqrt(sum(y{n}.template.data.^2));
+    sq_t_len=sqrt(size(y{n}.template.data,1));
+    
+    if ~isempty(best_n)
+        [a b]=sort(c_val,'descend');
+        y{n}.active_els=b(1:best_n);
+    else
+        y{n}.active_els=find(c_val>active_channel_lim_ps*sq_t_len);
+    end
+end
+
+
+

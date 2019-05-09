@@ -1,0 +1,15 @@
+20121108T155709 (2012-11-08 15:57:09) - begin stimulus:StimParams_10_Wn100PerCheckerboard.mat
+20121108T155811 (2012-11-08 15:58:11) - begin stimulus:StimParams_10_Wn100PerCheckerboard.mat
+20121108T164316 (2012-11-08 16:43:16) - end stimulus:StimParams_10_Wn100PerCheckerboard.mat
+
+20121108T164747 (2012-11-08 16:47:47) - begin stimulus:/labelb12ariell/500umApertureOriginal_Movie movie
+20121108T165138 (2012-11-08 16:51:38) - begin stimulus:/labelb12ariell/500umApertureOriginal_Movie movie
+20121108T170924 (2012-11-08 17:09:24) - end stimulus:/labelb12ariell/500umApertureOriginal_Movie movie
+
+20121108T170949 (2012-11-08 17:09:49) - begin stimulus:/labelb12ariell/500umApertureStat_Surr_Median_Whole_Movie movie
+20121108T172735 (2012-11-08 17:27:35) - end stimulus:/labelb12ariell/500umApertureStat_Surr_Median_Whole_Movie movie
+
+20121108T172800 (2012-11-08 17:28:00) - begin stimulus:/labelb12ariell/500umApertureDynamic_Surr_Median_Each_Frame movie
+20121108T174546 (2012-11-08 17:45:46) - end stimulus:/labelb12ariell/500umApertureDynamic_Surr_Median_Each_Frame movie
+
+20121108T174612 (2012-11-08 17:46:12) - begin stimulus:/labelb12ariell/500umApertureDynamic_Surr_Shuffled_Median_Each_Frame movie

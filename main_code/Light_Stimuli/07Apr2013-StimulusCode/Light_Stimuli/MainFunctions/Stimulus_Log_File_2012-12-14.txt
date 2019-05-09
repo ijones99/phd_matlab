@@ -1,0 +1,6 @@
+------- Stimuli Presentation Log File, 2012-12-14 -------
+
+
+20121214T001231 (2012-12-14 00:12:31) - begin stimulus:/labelb12ariell/500umApertureStat_Surr_Median_Whole_Movie movie
+20121214T003017 (2012-12-14 00:30:17) - end stimulus:/labelb12ariell/500umApertureStat_Surr_Median_Whole_Movie movie
+

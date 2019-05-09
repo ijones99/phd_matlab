@@ -1,0 +1,32 @@
+20121030T131248 (2012-10-30 13:12:48) - begin stimulus:StimParams_10_Wn100PerCheckerboard.mat
+20121030T131345 (2012-10-30 13:13:45) - begin stimulus:StimParams_10_Wn100PerCheckerboard.mat
+20121030T132355 (2012-10-30 13:23:55) - begin stimulus:StimParams_10_Wn100PerCheckerboard.mat
+20121030T140900 (2012-10-30 14:09:00) - end stimulus:StimParams_10_Wn100PerCheckerboard.mat
+
+20121030T141006 (2012-10-30 14:10:06) - begin stimulus:/labelb12ariell/500umApertureOriginal_Movie movie
+20121030T142751 (2012-10-30 14:27:51) - end stimulus:/labelb12ariell/500umApertureOriginal_Movie movie
+
+20121030T142818 (2012-10-30 14:28:18) - begin stimulus:/labelb12ariell/500umApertureStat_Surr_Median_Whole_Movie movie
+20121030T144603 (2012-10-30 14:46:03) - end stimulus:/labelb12ariell/500umApertureStat_Surr_Median_Whole_Movie movie
+
+20121030T144629 (2012-10-30 14:46:29) - begin stimulus:/labelb12ariell/500umApertureDynamic_Surr_Median_Each_Frame movie
+20121030T150415 (2012-10-30 15:04:15) - end stimulus:/labelb12ariell/500umApertureDynamic_Surr_Median_Each_Frame movie
+
+20121030T150441 (2012-10-30 15:04:41) - begin stimulus:/labelb12ariell/500umApertureDynamic_Surr_Shuffled_Median_Each_Frame movie
+20121030T152226 (2012-10-30 15:22:26) - end stimulus:/labelb12ariell/500umApertureDynamic_Surr_Shuffled_Median_Each_Frame movie
+
+20121030T152252 (2012-10-30 15:22:52) - begin stimulus:/labelb12ariell/500umAperturePixelated_Surr_Shuffled_10_Percent_Each_Frame movie
+20121030T154038 (2012-10-30 15:40:38) - end stimulus:/labelb12ariell/500umAperturePixelated_Surr_Shuffled_10_Percent_Each_Frame movie
+
+20121030T154103 (2012-10-30 15:41:03) - begin stimulus:/labelb12ariell/500umAperturePixelated_Surr_Shuffled_50_Percent_Each_Frame movie
+20121030T155849 (2012-10-30 15:58:49) - end stimulus:/labelb12ariell/500umAperturePixelated_Surr_Shuffled_50_Percent_Each_Frame movie
+
+20121030T155915 (2012-10-30 15:59:15) - begin stimulus:/labelb12ariell/500umAperturePixelated_Surr_Shuffled_90_Percent_Each_Frame movie
+20121030T161700 (2012-10-30 16:17:00) - end stimulus:/labelb12ariell/500umAperturePixelated_Surr_Shuffled_90_Percent_Each_Frame movie
+
+20121030T161713 (2012-10-30 16:17:13) - begin stimulus:StimParams_SpotsIncrSize.mat
+20121030T162529 (2012-10-30 16:25:29) - end stimulus:StimParams_SpotsIncrSize.mat
+
+20121030T162541 (2012-10-30 16:25:41) - begin stimulus:StimParams_Bars.mat
+20121030T163757 (2012-10-30 16:37:57) - end stimulus:StimParams_Bars.mat
+

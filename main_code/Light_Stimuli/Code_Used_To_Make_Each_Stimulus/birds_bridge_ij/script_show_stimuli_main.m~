@@ -1,0 +1,30 @@
+% Script Show Stimuli
+%% Stimulus preparation
+% ------- Constants -----------
+frameRate = 30; % Movie playback rate in frames/sec
+clipRepeatCount = 1;
+delayBetweenRepeats = 0; % seconds
+frameCount = 50; % if specifying number of frames
+
+
+movieDir = strcat('/local0/scratch/ijones/Natural_Movie_Frames/birds_bridge');
+
+
+%% Start playing stimuli
+
+% #1) NEW STIM: movie with median of whole movie surround
+% ---- constants ----
+movieFilePattern = 'ps_rbc*.bmp';
+% clear frames
+clear frames
+% load frames
+% [frames frameCount frameNames] = load_im_frames(movieDir,'rot_and_flip', ...
+%     'set_frame_count',900, 'movie_file_pattern', movieFilePattern);
+[frames frameCount frameNames] = load_im_frames(movieDir, ...
+    'set_frame_count',900, 'movie_file_pattern', movieFilePattern);
+
+%% play movie        
+
+play_m  ovie(frames, frameCount, frameRate, clipRepeatCount, delayBetweenRepeats);
+      
+     

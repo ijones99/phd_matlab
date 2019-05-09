@@ -1,0 +1,36 @@
+20120821T123347 (2012-08-21 12:33:47) - begin stimulus:StimParams_10_Wn100PerCheckerboard.mat
+20120821T123657 (2012-08-21 12:36:57) - begin stimulus:StimParams_10_Wn100PerCheckerboard.mat
+20120821T132203 (2012-08-21 13:22:03) - end stimulus:StimParams_10_Wn100PerCheckerboard.mat
+
+20120821T132531 (2012-08-21 13:25:31) - begin stimulus:/labelb12ariell/500umApertureOriginal_Movie movie
+20120821T134316 (2012-08-21 13:43:16) - end stimulus:/labelb12ariell/500umApertureOriginal_Movie movie
+
+20120821T134342 (2012-08-21 13:43:42) - begin stimulus:/labelb12ariell/500umApertureStat_Surr_Median_Whole_Movie movie
+20120821T140127 (2012-08-21 14:01:27) - end stimulus:/labelb12ariell/500umApertureStat_Surr_Median_Whole_Movie movie
+
+20120821T140153 (2012-08-21 14:01:53) - begin stimulus:/labelb12ariell/500umApertureDynamic_Surr_Median_Each_Frame movie
+20120821T141939 (2012-08-21 14:19:39) - end stimulus:/labelb12ariell/500umApertureDynamic_Surr_Median_Each_Frame movie
+
+20120821T142005 (2012-08-21 14:20:05) - begin stimulus:/labelb12ariell/500umApertureDynamic_Surr_Shuffled_Median_Each_Frame movie
+20120821T143751 (2012-08-21 14:37:51) - end stimulus:/labelb12ariell/500umApertureDynamic_Surr_Shuffled_Median_Each_Frame movie
+
+20120821T143817 (2012-08-21 14:38:17) - begin stimulus:/labelb12ariell/500umAperturePixelated_Surr_Shuffled_10_Percent_Each_Frame movie
+20120821T145603 (2012-08-21 14:56:03) - end stimulus:/labelb12ariell/500umAperturePixelated_Surr_Shuffled_10_Percent_Each_Frame movie
+
+20120821T145628 (2012-08-21 14:56:28) - begin stimulus:/labelb12ariell/500umAperturePixelated_Surr_Shuffled_50_Percent_Each_Frame movie
+20120821T151414 (2012-08-21 15:14:14) - end stimulus:/labelb12ariell/500umAperturePixelated_Surr_Shuffled_50_Percent_Each_Frame movie
+
+20120821T151440 (2012-08-21 15:14:40) - begin stimulus:/labelb12ariell/500umAperturePixelated_Surr_Shuffled_90_Percent_Each_Frame movie
+20120821T153226 (2012-08-21 15:32:26) - end stimulus:/labelb12ariell/500umAperturePixelated_Surr_Shuffled_90_Percent_Each_Frame movie
+
+20120821T153238 (2012-08-21 15:32:38) - begin stimulus:StimParams_SpotsIncrSize.mat
+20120821T154054 (2012-08-21 15:40:54) - end stimulus:StimParams_SpotsIncrSize.mat
+
+20120821T154106 (2012-08-21 15:41:06) - begin stimulus:StimParams_Bars.mat
+20120821T155355 (2012-08-21 15:53:55) - begin stimulus:StimParams_SpotsIncrSize.mat
+20120821T155820 (2012-08-21 15:58:20) - begin stimulus:StimParams_SpotsIncrSize.mat
+20120821T160636 (2012-08-21 16:06:36) - end stimulus:StimParams_SpotsIncrSize.mat
+
+20120821T160648 (2012-08-21 16:06:48) - begin stimulus:StimParams_Bars.mat
+20120821T161904 (2012-08-21 16:19:04) - end stimulus:StimParams_Bars.mat
+

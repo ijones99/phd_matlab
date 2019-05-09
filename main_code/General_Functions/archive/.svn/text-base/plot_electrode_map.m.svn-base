@@ -1,0 +1,69 @@
+function plot_electrode_map(ntk,varargin)
+
+%PLOT_ELECTRODE_MAP  Plot map of actual electrodes
+%
+%  PLOT_ELECTRODE_MAP(VAR)  plots a map of electrodes in the variable VAR.
+%  VAR can be a ntk2 or an nnn variable, containing the entries VAR.x,
+%  VAR.y and VAR.el_idx.
+%  The channel indices are also shown on the map.
+%
+%  PLOT_ELECTRODE_MAP(VAR,'elidx')  plots the electrodes showing the
+%  electrode indices .el_idx
+%
+%  PLOT_ELECTRODE_MAP(VAR,'no_idx')  does not plot any index.
+%
+%  PLOT_ELECTRODE_MAP(VAR,'plot_all')  plot all electrodes.
+%
+% Author: jaeckeld
+
+glob_idx=0;
+loc_idx=1;
+plot_all=0;
+
+
+i=1;
+while i<=length(varargin)
+    if not(isempty(varargin{i}))
+        if strcmp(varargin{i}, 'el_idx')
+            glob_idx=1;
+            loc_idx=0;
+        elseif strcmp(varargin{i}, 'no_idx')
+            glob_idx=0;
+            loc_idx=0;
+        elseif strcmp(varargin{i}, 'plot_all')
+            plot_all=1;
+        else
+            fprintf('unknown argument at pos %d\n', 1+i);
+        end
+    end
+    i=i+1;
+end
+
+v=2;
+if plot_all
+    el=hidens_get_all_electrodes(v);
+    plot(el.x,el.y,'b.','Markersize',1)
+end
+axis ij
+axis equal
+xlabel( 'x [um]')
+ylabel( 'y [um]')
+% box on
+hold on
+plot(ntk.x,ntk.y,'r.') % do plot
+
+for j=1:length(ntk.el_idx)
+    if glob_idx
+        textl=ntk.el_idx(j);
+        text(ntk.x(j),ntk.y(j),num2str(textl), 'HorizontalAlignment', 'Left', 'VerticalAlignment', 'Bottom', 'FontSize', 9, 'Color', [0.2 0.2 0.2]);
+    elseif loc_idx
+        textl=j;
+        text(ntk.x(j),ntk.y(j),num2str(textl), 'HorizontalAlignment', 'Left', 'VerticalAlignment', 'Bottom', 'FontSize', 9, 'Color', [0.2 0.2 0.2]);
+    end
+end
+
+if ~plot_all
+    border=11.3583;                         % adjust to like plot_neurons (?)
+    xlim([min(ntk.x)-border max(ntk.x)+border])
+    ylim([min(ntk.y)-border max(ntk.y)+border])
+end

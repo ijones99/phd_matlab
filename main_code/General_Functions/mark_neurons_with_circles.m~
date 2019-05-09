@@ -1,0 +1,61 @@
+%% Plot circles where neurons are
+
+neuronCenterTracker = zeros(length(neuronsCollected),2);
+duplicateCounter = [];
+figure, hold on
+for i=1:length(neuronsCollected)
+    % find location of max amp signal (template)
+    [I,refLoc] = max(max(neuronsCollected{i}.template.data,[],1)- min(neuronsCollected{i}.template.data,[],1))
+    
+    % plot(neuronsCollected{i}.x, neuronsCollected{i}.y, '.k' );
+    
+    % draw circles
+    cX=neuronsCollected{i}.x(refLoc); cY=neuronsCollected{i}.y(refLoc); r=8; N=256;
+    % add slight offset
+    cX = (rand(1)/300+1)*cX;cY = (rand(1)/300+1)*cY;
+    
+    t=(0:N)*2*pi/N;
+    rndclr=[rand, rand, rand];
+    
+    if isfield(neuronsCollected,'rgc_type' )
+        switch neuronsCollected{i}.rgc_type
+            case 'on'
+                circlePlot = plot( r*cos(t)+cX, r*sin(t)+cY,'r');
+            case 'off'
+                circlePlot = plot( r*cos(t)+cX, r*sin(t)+cY,'c');
+                %         case 'on-off'
+                %             circlePlot = plot( r*cos(t)+cX, r*sin(t)+cY,'b');
+            case 'on-off'
+                circlePlot = plot( r*cos(t)+cX, r*sin(t)+cY,'g');
+            case 'unidentified'
+                circlePlot = plot( r*cos(t)+cX, r*sin(t)+cY,'k');
+                %         case 'unidentified'
+                %             circlePlot = plot( r*cos(t)+cX, r*sin(t)+cY,'c');
+            otherwise
+                circlePlot = plot( r*cos(t)+cX, r*sin(t)+cY,'y');
+        end
+    else
+        circlePlot = plot( r*cos(t)+cX, r*sin(t)+cY,'b');
+    end
+    
+    set(circlePlot, 'LineWidth', 2);
+    text( cX, cY,num2str(i));
+    plot(neuronsCollected{i}.x, neuronsCollected{i}.y, '.k' );
+    % [reference location, neuron id number]
+    neuronCenterTracker(i,:) = [refLoc, i ];
+end
+[Y,I] = sort(neuronCenterTracker,1,'ascend');
+neuronCenterTracker = neuronCenterTracker([I(:,1)],:);
+% find duplicates for electrodes
+duplicateCounter={};
+for n=1:length(neuronsCollected)
+    if length(neuronCenterTracker(find(neuronCenterTracker(:,1)==n),2))>1
+        duplicateCounter{end+1} = neuronCenterTracker(find(neuronCenterTracker(:,1)==n),2);
+    end
+end
+
+%reverse Y axis
+set(gca,'YDir','reverse')
+title(strcat('Found Neurons: ',strrep(neuronsCollected{1}.fname,'_','-')))
+
+%% save data

@@ -1,0 +1,14 @@
+function switch_db_status 
+clear db_status ;
+db_status = mysql('status');
+
+switch (db_status)
+     case(0)
+         msg = 'Database: connection is open and functioning\n' ;   
+     case (1)
+         msg = 'Database: connection is closed\n' ;  
+     otherwise
+         msg = 'Database: should be open but we cannot ping the server\n' ;  
+ end 
+fprintf(msg) ;
+

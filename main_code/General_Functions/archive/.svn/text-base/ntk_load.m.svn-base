@@ -1,0 +1,158 @@
+function [ntk2 ntk]=ntk_load(ntk_in, load_chunk_size, varargin)
+%
+% use this function to load a chunck from an ntk file (measured and
+% simulated)
+%
+%
+
+
+ntkstreamproc_args={};
+nofilters=0;
+noconfig=0;
+verbose=0;
+
+i=1;
+while i<=length(varargin)
+    if not(isempty(varargin{i}))
+        if strcmp(varargin{i}, 'keep_all')
+            ntkstreamproc_args{end+1}=varargin{i};  %#ok<AGROW>
+        elseif strcmp(varargin{i}, 'keep_disconnected')
+            ntkstreamproc_args{end+1}=varargin{i};  %#ok<AGROW>
+        elseif strcmp(varargin{i}, 'keep_damaged')
+            ntkstreamproc_args{end+1}=varargin{i};  %#ok<AGROW>
+        elseif strcmp(varargin{i}, 'keep_dummy')
+            ntkstreamproc_args{end+1}=varargin{i};  %#ok<AGROW>
+        elseif strcmp(varargin{i}, 'keep_only')
+            ntkstreamproc_args{end+1}=varargin{i};  %#ok<AGROW>
+            i=i+1;
+            ntkstreamproc_args{end+1}=varargin{i};  %#ok<AGROW>
+        elseif strcmp(varargin{i}, 'ignore_oversampling')
+            ntkstreamproc_args{end+1}=varargin{i};  %#ok<AGROW>
+        elseif strcmp(varargin{i}, 'time_align')
+            ntkstreamproc_args{end+1}=varargin{i};  %#ok<AGROW>
+        elseif strcmp(varargin{i}, 'time_align_precision')
+            ntkstreamproc_args{end+1}=varargin{i};  %#ok<AGROW>
+            i=i+1;
+            ntkstreamproc_args{end+1}=varargin{i}; %#ok<AGROW>
+        elseif strcmp(varargin{i}, 'nofiltering')
+            ntkstreamproc_args{end+1}=varargin{i};  %#ok<AGROW>
+            nofilters=1;
+        elseif strcmp(varargin{i}, 'digibits')
+            ntkstreamproc_args{end+1}=varargin{i};  %#ok<AGROW>
+        elseif strcmp(varargin{i}, 'images_v1')
+            ntkstreamproc_args{end+1}=varargin{i};  %#ok<AGROW>
+        elseif strcmp(varargin{i}, 'noconfig') %don't generate filters
+            noconfig=1;
+        elseif strcmp(varargin{i}, 'calc_mean') %calculate prehp mean
+            ntkstreamproc_args{end+1}=varargin{i};  %#ok<AGROW>
+        elseif strcmp(varargin{i}, 'calc_at_rail') %calculate at rail percentage
+            ntkstreamproc_args{end+1}=varargin{i};  %#ok<AGROW>
+        elseif strcmp(varargin{i}, 'verbose') %don't generate filters
+            verbose=1;
+        else
+            fprintf('unknown argument at pos %d\n', 2+i);
+        end
+    end
+    i=i+1;
+end
+
+
+
+if not(isfield(ntk_in, 'simul'))               %load data
+    
+    ntkstream_args={};
+    if noconfig
+        ntkstream_args{end+1}='noconfig';
+    end
+    if verbose
+        ntkstream_args{end+1}='verbose';
+    end
+    
+    MAX_CHUNK=3*60*20000;
+    if load_chunk_size>MAX_CHUNK && isfield(ntk_in, 'nrcmds')
+        fprintf('loading data in loop mode, please don''t use frame data in ntk\n');
+        
+        % load first chunk
+        ntk=ntk_stream(ntk_in,MAX_CHUNK, ntkstream_args{:});
+        ntk.images = ntk_in.images;
+        %rotate channels if needed
+        ntk=ntk_stream_rotate(ntk);
+        ntk2=ntk_stream_process(ntk, ntkstreamproc_args{:});
+        ntk.images.last_frame = ntk2.images.last_frame;
+        ntk_in=ntk;
+        
+        while size(ntk2.sig, 1)<load_chunk_size && ~ntk.eof
+            next_load_chunck=min([MAX_CHUNK load_chunk_size-size(ntk2.sig, 1)]);
+            ntk=ntk_stream(ntk_in,next_load_chunck, ntkstream_args{:});
+            if ntk.nrcmds>0
+                error('cannot load files with commands in loop mode');
+            end
+            ntk.images = ntk_in.images;
+            ntk=ntk_stream_rotate(ntk);
+            ntk3=ntk2;
+            ntk2=ntk_stream_process(ntk, ntkstreamproc_args{:});
+            ntk.images.last_frame = ntk2.images.last_frame;
+            ntk2.temp=[ntk3.temp; ntk2.temp];
+            ntk2.dc=[ntk3.dc; ntk2.dc];
+            ntk2.dac1=[ntk3.dac1; ntk2.dac1];
+            ntk2.dac2=[ntk3.dac2; ntk2.dac2];
+            ntk2.digibits=[ntk3.digibits; ntk2.digibits]; 
+            ntk2.sig=[ntk3.sig; ntk2.sig];
+            ntk2.frame_no=[ntk3.frame_no ntk2.frame_no];
+            if isfield(ntk2.images, 'frameno')
+                ntk2.images.frameno=[ntk3.images.frameno ntk2.images.frameno];
+            end
+            ntk_in=ntk;
+        end
+            
+        
+        
+    else
+        ntk=ntk_stream(ntk_in,load_chunk_size, ntkstream_args{:});
+        ntk.images = ntk_in.images;
+        %rotate channels if needed
+        ntk=ntk_stream_rotate(ntk);
+        ntk2=ntk_stream_process(ntk, ntkstreamproc_args{:});
+        ntk.images.last_frame = ntk2.images.last_frame;
+    end
+    
+else               %testbench
+    ntk=ntk_in;
+    ntk2.sig = ntk.sig(ntk.pos:min(ntk.pos+load_chunk_size-1,size(ntk.sig,1)),:);    
+    ntk2.sr=ntk.sr;
+    ntk2.recfile_param=ntk.recfile_param;
+    ntk2.channel_nr=ntk.channel_nr;
+    ntk2.x=ntk.x;
+    ntk2.y=ntk.y;
+    ntk2.x_all=ntk.x;
+    ntk2.y_all=ntk.y;
+    ntk2.fname=ntk.fname;
+    ntk2.lsb=ntk.lsb;
+    ntk2.el_idx=ntk.el_idx;
+    ntk2.el_idx_all=ntk.el_idx;
+    ntk2.filters=ntk.filters;
+    
+    if isfield(ntk2,'frame_no')
+        ntk2.frame_no=ntk.frame_no;
+    else
+        ntk2.frame_no=ntk.pos:min(ntk.pos+load_chunk_size-1,size(ntk.sig,1));
+    end
+    ntk.pos=ntk.pos+load_chunk_size;
+    ntk2.pos=ntk.pos;
+    
+    if (ntk2.pos>=size(ntk.sig,1))
+        ntk.eof=1;
+    end
+
+    if not(nofilters)
+        ntk2=hidens_filter(ntk2);
+    end
+
+    if size(ntk2.sig,1)>0
+        ntk2.prehp_mean=128*ones(1,size(ntk2.sig,2));
+    end
+end
+
+
+
+

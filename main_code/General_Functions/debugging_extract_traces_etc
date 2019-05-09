@@ -1,0 +1,6 @@
+
+
+blank_neuron{1}.ts_fidx  = ones(size(manualTs))
+blank_neuron{1}.ts = double(ntk2.frame_no(manualTs));
+blank_neuron{1}.fname = ntk2.fname;
+blank_neuron{1}.ts_pos = ones(size(blank_neuron{1}.ts));

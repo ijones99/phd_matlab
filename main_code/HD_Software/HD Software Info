@@ -1,0 +1,24 @@
+Hi Michele and Ian,
+ 
+the hd sorter gui for the rapid finding of templates is in a kind of usable state. I think before I go on and spend a lot of time into features that you guys maybe dont need it would be better to start with the first iteration. So if you happen to have time during this week to test the tool, that would be great. Of course we can also test it together and you give me feedback directly. Michele and I did that on Friday, but maybe Ian needs a bit of a heads up explanation of what it does.
+ 
+Here is how you can use it.
+ 
+Update you SVN: \hima_internal\cmosmea\trunk\matlab
+ 
+Go into the folder and run the setup.m. That should set your path correctly but only for the current session.
+ 
+Then get a not too big H5 file for the first test. For me that looks like that
+tmp_path = 'C:\LocalData\Michele\';
+fname = 'Trace_id858_2011-11-03T17_16_27_11.stream.h5';
+ffile = fullfile(tmp_path, fname);
+ 
+Then start the gui:
+f = hdsort('UserData', ffile);
+ 
+First, prefiltering and preprocessing has to be done. That runs on my laptop on the file mentioned around 3-4 minutes. If your file is much bigger, it will of course take longer.
+Second, a gui should pop up with a lot of black crosses in one of the axes. If that works, the worst part is done :)
+ 
+ 
+Cheers,
+Felix

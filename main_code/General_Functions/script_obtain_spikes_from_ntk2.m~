@@ -1,0 +1,19 @@
+function get_spikes_from_ntk2(selFileNameNos)
+% script isolate spikes from ntk2 file
+
+% get file names
+flist = {};
+flist_for_analysis
+
+% define neurons to process
+
+% obtained from script_get_list_of_unique_neurs.m
+neursToProcess = neuronIndsToCompare;
+
+% go through each file
+for i =1:length(selFileNameNos)
+    basic_sorting_batch_single_neur(neursToProcess, flist{selFileNameNos(i)},1);
+    fprintf(['File %d of %d processed\n'], i/);
+end
+
+end

@@ -1,0 +1,138 @@
+function basic_sorting_batch
+
+% % indices that will be used to go through spike soritng
+% clear all;close all
+% electrodes_group=1:5;
+% for z=2:20
+%     electrodes_group(z,:)=electrodes_group(z-1,:)+5;
+% ends
+% electrodes_group(21,:)=98:102;
+
+% author: ijones.
+
+
+
+clear all;close all
+
+indSpec = 1;
+chSpec = ~indSpec;
+
+SORT_ALL = 0;
+
+LOOP_OFFSET = 0; %use if the numbers do not start at 1. Default 0;
+rgcs_coordinates=[]; % structure with final coordinates
+%% settings
+TIME_TO_LOAD = 120;%mins
+
+% load flist with all file names
+
+flist={};
+flist_for_analysis;
+
+for flistFileNo = 1+LOOP_OFFSET:length(flist)+LOOP_OFFSET
+%% LOAD SELECTED DATA
+clear indsInPatch indsInPatch
+
+% get ntk2 data field values; load minimal size of ntk2
+siz=1;
+ntk_init=initialize_ntkstruct(flist{flistFileNo},'hpf', 500, 'lpf', 3000);
+[ntk2_init ntk_init]=ntk_load(ntk_init, siz, 'images_v1');
+
+elsInPatch{1}=[5662 5559 5764 5866 5867]; 
+
+% frames to load
+siz=1*60*2e4
+
+
+% Convert ind to chs
+% [ elsInPatch chsInPatch] = convert_inds_to_chs(ntk2_init,indsInPatch, 1 )
+[  chsInPatch] = convert_elidx_to_chs(ntk2_init,elsInPatch{1}, 1)
+
+
+[ntk2 ntk]=ntk_load(ntk, siz, 'keep_only',  chsInPatch{1}, 'images_v1');
+
+%         [ntk2 ntk]=ntk_load(ntk, siz, 'keep_only',  unique([chsInPatch{1:length(chsInPatch)}]), 'images_v1');
+%         chsInPatch=[114 115 31 55 20 21 116 ...
+%             68 81 92 79 3 67 ...
+%             123 124 98 97 33 125 ...
+%             62 7 102 100 61 96 ...
+%             18 2 104 57 106 107 ...
+%             19 110 54 80 52 111 78]
+
+
+% remove noisy channels and flat channels
+ntk2=detect_valid_channels(ntk2,1);
+% trace name
+trace_name=ntk2.fname;
+% frequency sampling
+Fs=ntk2.sr;
+% light time stamps
+light_ts=(find(diff(double(ntk2.images.frameno))==1)+860);
+
+%% EXTRACT DATA FOR SPIKE SORTING ***ALL*** CHANNELS
+if SORT_ALL
+    % trace name
+    trace_name=ntk2.fname;
+    % frequency sampling
+    Fs=ntk2.sr;
+    % light time stamps
+    light_ts=(find(diff(double(ntk2.images.frameno))==1)+860);
+    %directions of the bar in degrees
+    
+    % GET GROUPINGS OF ELECTRODES
+    TIMEOUT = 50
+    for i= 1:TIMEOUT
+        try
+            [elsInPatch chsInPatch  indsInPatch] = get_electrodes_sorting_patches(ntk2, 6);
+        catch
+            disp('Error calling figure')
+        end
+    end
+    
+end
+
+%% RECALC INDICES FOR SELECTED CHANNELS
+clear indsInPatch
+indsInPatch{1} = 0;
+for i=1:length(chsInPatch)
+   for j=1:length(chsInPatch{i})
+    indsInPatch{i}(j) = find(ntk2.channel_nr == chsInPatch{i}(j));
+       
+       
+   end
+end
+
+
+%% SPIKE SORTING
+for i=1+LOOP_OFFSET:length(indsInPatch)+LOOP_OFFSET
+    fileDone = 1;
+    save('../Matlab/file_completed.mat','fileDone');
+    
+    
+    tic
+    
+    close all
+    clear data spikes
+    % channels to be analyzed
+    data={ntk2.sig(:,indsInPatch{i})};
+    % create parameters
+    spikes = [];
+    spikes = ss_default_params(Fs);
+    spikes.clus_of_interest=[];
+    spikes.template_of_interest=[];
+    
+    % detect spikes
+    spikes = ss_detect(data,spikes);
+    % align spikes
+    spikes = ss_align(spikes);
+    % cluster spikes
+    spikes = ss_kmeans(spikes);
+    spikes = ss_energy(spikes);
+    spikes = ss_aggregate(spikes);
+    
+    save(strcat('../analysed_data/agg_spikes_',num2str(i),'_', ntk2.fname(end-21:end-11),'.mat'), 'spikes' )
+    fprintf('-----------------------------------------------------')
+    toc
+end
+
+end

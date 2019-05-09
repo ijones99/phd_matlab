@@ -1,0 +1,43 @@
+------- Stimuli Presentation Log File, 2012-08-07 -------
+
+
+20120807T150351 (2012-08-07 15:03:51) - begin stimulus:StimParams_10_Wn100PerCheckerboard.mat
+20120807T150439 (2012-08-07 15:04:39) - begin stimulus:StimParams_09_WnCheckerboardTest.mat
+20120807T152444 (2012-08-07 15:24:44) - end stimulus:StimParams_09_WnCheckerboardTest.mat
+
+20120807T153040 (2012-08-07 15:30:40) - begin stimulus:StimParams_10_Wn100PerCheckerboard.mat
+20120807T161545 (2012-08-07 16:15:45) - end stimulus:StimParams_10_Wn100PerCheckerboard.mat
+
+20120807T165533 (2012-08-07 16:55:33) - begin stimulus:/birds_bridge_ij/400umApertureOriginal_Movie movie
+20120807T171319 (2012-08-07 17:13:19) - end stimulus:/birds_bridge_ij/400umApertureOriginal_Movie movie
+
+20120807T171437 (2012-08-07 17:14:37) - begin stimulus:/birds_bridge_ij/400umApertureStat_Surr_Median_Whole_Movie movie
+20120807T173223 (2012-08-07 17:32:23) - end stimulus:/birds_bridge_ij/400umApertureStat_Surr_Median_Whole_Movie movie
+
+20120807T173342 (2012-08-07 17:33:42) - begin stimulus:/birds_bridge_ij/400umApertureDynamic_Surr_Median_Each_Frame movie
+20120807T175128 (2012-08-07 17:51:28) - end stimulus:/birds_bridge_ij/400umApertureDynamic_Surr_Median_Each_Frame movie
+
+20120807T175247 (2012-08-07 17:52:47) - begin stimulus:/birds_bridge_ij/400umApertureDynamic_Surr_Shuffled_Median_Each_Frame movie
+20120807T181032 (2012-08-07 18:10:32) - end stimulus:/birds_bridge_ij/400umApertureDynamic_Surr_Shuffled_Median_Each_Frame movie
+
+20120807T181152 (2012-08-07 18:11:52) - begin stimulus:/birds_bridge_ij/400umAperturePixelated_Surr_Shuffled_10_Percent_Each_Frame movie
+20120807T182938 (2012-08-07 18:29:38) - end stimulus:/birds_bridge_ij/400umAperturePixelated_Surr_Shuffled_10_Percent_Each_Frame movie
+
+20120807T183058 (2012-08-07 18:30:58) - begin stimulus:/birds_bridge_ij/400umAperturePixelated_Surr_Shuffled_50_Percent_Each_Frame movie
+20120807T184843 (2012-08-07 18:48:43) - end stimulus:/birds_bridge_ij/400umAperturePixelated_Surr_Shuffled_50_Percent_Each_Frame movie
+
+20120807T185004 (2012-08-07 18:50:04) - begin stimulus:/birds_bridge_ij/400umAperturePixelated_Surr_Shuffled_90_Percent_Each_Frame movie
+20120807T190749 (2012-08-07 19:07:49) - end stimulus:/birds_bridge_ij/400umAperturePixelated_Surr_Shuffled_90_Percent_Each_Frame movie
+
+20120807T190909 (2012-08-07 19:09:09) - begin stimulus:/birds_bridge_ij/600umApertureStat_Surr_Median_Whole_Movie movie
+20120807T192655 (2012-08-07 19:26:55) - end stimulus:/birds_bridge_ij/600umApertureStat_Surr_Median_Whole_Movie movie
+
+20120807T192815 (2012-08-07 19:28:15) - begin stimulus:/Mouse_Cage_Movies/Movie5Original_Movie movie
+20120807T194601 (2012-08-07 19:46:01) - end stimulus:/Mouse_Cage_Movies/Movie5Original_Movie movie
+
+20120807T194613 (2012-08-07 19:46:13) - begin stimulus:StimParams_SpotsIncrSize.mat
+20120807T195430 (2012-08-07 19:54:30) - end stimulus:StimParams_SpotsIncrSize.mat
+
+20120807T195442 (2012-08-07 19:54:42) - begin stimulus:StimParams_Bars.mat
+20120807T200658 (2012-08-07 20:06:58) - end stimulus:StimParams_Bars.mat
+

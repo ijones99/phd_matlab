@@ -1,0 +1,46 @@
+function [idx, dist]=get_farest_electrode(x, y, idx_list, exclude_idx_list)
+%
+% return the distance and the index for the farest electrode
+% 
+% args:
+%       x: is a list of x-coordinates
+%       y: is a list of y-coordinates
+%       idx_list: all idx-dist pairs for the specified idx are returned
+%       exclude_idx_list: if 1, then the points in idx_list will not be
+%                         compared against each other
+%
+
+len=length(x);
+if length(y)~=len
+    error('x and y must have the same length')
+end
+
+if nargin<3
+    idx_list=1:len;
+end
+if nargin<4
+    exclude_idx_list=0;
+end
+
+inv_idx_list=1:length(x);
+
+if exclude_idx_list
+    inv_idx_list(idx_list)=[];
+end
+
+dist2=(x(inv_idx_list)'*ones(1,length(idx_list))-(x(idx_list)'*ones(1,length(inv_idx_list)))').^2+(y(inv_idx_list)'*ones(1,length(idx_list))-(y(idx_list)'*ones(1,length(inv_idx_list)))').^2;
+if ~exclude_idx_list
+    dist2(sub2ind(size(dist2), idx_list, 1:length(idx_list)))=0;
+end
+[dminv2 idx]=max(dist2);
+dist=sqrt(dminv2);
+
+
+
+
+
+
+
+
+
+

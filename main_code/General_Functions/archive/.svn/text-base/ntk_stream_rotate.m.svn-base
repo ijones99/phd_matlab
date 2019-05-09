@@ -1,0 +1,15 @@
+function y=ntk_stream_rotate(x)
+
+y=x;
+
+%do channel swapping
+if isfield(y.recfile_param, 'ch_swap')
+    ch_swap=[];
+    for i=0:15
+        ch_swap=[ch_swap 8*i+([2:8 1])];
+    end
+    for i=1:y.recfile_param.ch_swap
+        disp('rotate channels...');
+        y.data=y.data(ch_swap,:);
+    end
+end

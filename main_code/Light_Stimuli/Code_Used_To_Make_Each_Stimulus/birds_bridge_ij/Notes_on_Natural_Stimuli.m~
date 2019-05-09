@@ -1,0 +1,22 @@
+% script: Notes on Natural Stimuli
+
+% get info about movie frames: e.g. median of each frame and whole movie
+script_get_attributes_for_stimuli
+
+% script to run the stimuli
+script_show_stimuli_main
+
+% loads in the frames
+[frames frameCount frameNames] = load_im_frames(movieDir,'rot_and_flip', ...
+    'set_frame_count',30, 'movie_file_pattern', movieFilePattern);
+[frames frameCount frameNames] = load_im_frames(movieDir, ...
+    'set_frame_count',900, 'movie_file_pattern', movieFilePattern);
+
+% shuffle pixel values
+% Function: retains matrix dimensions
+shuffle_values(pixels,'percent_shuffle', .5)
+
+% create white noise
+frame = make_whitenoise_frame(brightness, contrast, edgeLengthSize, numPixelsEdge)
+
+% save frames to file

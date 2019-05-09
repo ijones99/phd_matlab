@@ -1,0 +1,12 @@
+function pixVal = get_lookup_table_value(percentValue, lookupTable)
+
+
+    powerValue = (max(lookupTable) - min(lookupTable))*percentValue/100 + min(lookupTable);
+
+    find(abs(lookupTable-3.234) == min(abs(lookupTable-3.234)))
+
+
+
+
+
+end

@@ -1,0 +1,81 @@
+% script_make_na_input_struct
+% 
+% ---------------------------------------------
+% datafile
+%     Describes the file that contains the data.
+% site
+%     Describes the physical location(s) from which the data was obtained.
+... In our framework, a data set should only contain multiple sites only if 
+...the sites were recorded simultaneously. Data from sites that were recorded
+... sequentially should appear in separate file pairs.
+% category
+%     Describes the groups in which the spike trains are partitioned. 
+... This is required because the spike trains must be classified into
+... discrete categories for use with the toolkit.
+% trace
+%     Describes the spike trains contained in the data file. 
+% ---------------------------------------------
+
+% Get the timestamps
+% each group of stimuli contains several repetitions
+numRepsPerGroup = 5; % number of repetitions per stimulus group
+numStimGroups = 3; % number of such groups
+stimGroupAllReps = [0:numRepsPerGroup:numRepsPerGroup*(numStimGroups-1)]+stimGroup;
+% the group numbers for the stimulus of interest
+%
+% data
+iNeuron = 4;
+% all spikes for this neur
+spiketrainEntire = tsMatrix{iNeuron}.spikeTimes;
+stimGroup = [[1 6 11]+0 [1 6 11]+1 [1 6 11]+2  [1 6 11]+3 [1 6 11]+4 ] ;
+numStartStopTsPerStimulusCluster = 11; 
+
+indStimTsBasicPattern = [1 3 5 7 9];
+indStimTs = [];
+for i=1:length(stimGroup)
+    indStimTs = [indStimTs indStimTsBasicPattern+11*(stimGroup(i)-1) ];
+end
+
+selSpikes = {};
+for iRep = 1:length(indStimTs)
+    
+    stimStartTs = stimFramesTsStartStop(indStimTs(iRep))/acqRate;
+    stimStopTs = stimFramesTsStartStop(indStimTs(iRep)+1)/acqRate;
+    
+    selSpikes{iRep,1} = double(get_selected_spikes(spiketrainEntire, stimStartTs, stimStopTs, 'align_to_zero'));
+%     dlmwrite('data/test.stad', selSpikes{iRep}, 'delimiter', ' ','-append');
+    
+end
+% ---------------------------------------------
+% make output struct
+
+clear X
+% Number of stimulus classes in experiment
+X.M = 1;
+
+% Number of sites in experiment. 
+X.N = 1;
+
+% Array of structures with recording site information
+X.sites.label = {'movie_stim'};
+X.sites.recording_tag = {'episodic'};
+X.sites.time_scale = 1;
+X.sites.time_resolution = 1.0000e-04;
+X.sites.si_unit = 'none';
+X.sites.si_prefix = 1;
+
+% trials
+numTrials = length(selSpikes);
+
+for i=1:numTrials
+    X.categories.trials(i).start_time = 0;
+    X.categories.trials(i).end_time = 9.7649;
+    X.categories.trials(i).Q = int32(length(selSpikes{i}));
+    X.categories.trials(i).list = selSpikes{i}';
+    
+end
+
+% Array of structures with categorized response data
+X.categories.label = {'movie_stim'}
+X.categories.P = numTrials';
+X.categories.trials = X.categories.trials';
